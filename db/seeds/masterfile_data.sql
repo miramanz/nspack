@@ -9,7 +9,7 @@ INSERT INTO public.address_types(address_type) VALUES ('Delivery Address');
 
 -- ROLES
 INSERT INTO roles (name) VALUES ('IMPLEMENTATION_OWNER');
-INSERT INTO roles (name) VALUES ('TRANSPORTER');
+-- INSERT INTO roles (name) VALUES ('TRANSPORTER');
 INSERT INTO roles (name) VALUES ('OTHER');
-INSERT INTO roles (name) VALUES ('CUSTOMER');
-INSERT INTO roles (name) VALUES ('SUPPLIER');
+-- INSERT INTO roles (name) VALUES ('CUSTOMER');
+-- INSERT INTO roles (name) VALUES ('SUPPLIER');

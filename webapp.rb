@@ -140,7 +140,8 @@ class Nspack < Roda
       if @registered_mobile_device
         r.redirect @rmd_start_page || '/rmd/home'
       else
-        r.redirect '/pack_material/summary'
+        # r.redirect '/packhouse/portal'
+        view(inline: '<p>Welcome<p>')
       end
     end
 

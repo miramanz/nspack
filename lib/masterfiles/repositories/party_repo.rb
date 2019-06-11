@@ -17,25 +17,11 @@ module MasterfilesApp
                      label: :name,
                      value: :id,
                      order_by: :name
-    build_for_select :customer_types,
-                     label: :type_code,
-                     value: :id,
-                     no_active_check: true,
-                     order_by: :type_code
-    build_for_select :supplier_types,
-                     label: :type_code,
-                     value: :id,
-                     no_active_check: true,
-                     order_by: :type_code
 
     crud_calls_for :organizations, name: :organization, wrapper: Organization
     crud_calls_for :people, name: :person, wrapper: Person
     crud_calls_for :addresses, name: :address, wrapper: Address
     crud_calls_for :contact_methods, name: :contact_method, wrapper: ContactMethod
-    crud_calls_for :customer_types, name: :customer_type, wrapper: CustomerType
-    crud_calls_for :customers, name: :customer, wrapper: Customer
-    crud_calls_for :supplier_types, name: :supplier_type, wrapper: SupplierType
-    crud_calls_for :suppliers, name: :supplier, wrapper: Supplier
 
     def for_select_contact_method_types
       DevelopmentApp::ContactMethodTypeRepo.new.for_select_contact_method_types
@@ -48,12 +34,14 @@ module MasterfilesApp
     def find_party(id)
       hash = DB['SELECT parties.* , fn_party_name(?) AS party_name FROM parties WHERE parties.id = ?', id, id].first
       return nil if hash.nil?
+
       Party.new(hash)
     end
 
     def find_party_role(id)
       hash = DB['SELECT party_roles.* , fn_party_role_name(?) AS party_name FROM party_roles WHERE party_roles.id = ?', id, id].first
       return nil if hash.nil?
+
       PartyRole.new(hash)
     end
 
@@ -61,6 +49,7 @@ module MasterfilesApp
       params = attrs.to_h
       role_ids = params.delete(:role_ids)
       return { error: { roles: ['You did not choose a role'] } } if role_ids.empty?
+
       params[:medium_description] = params[:short_description] unless params[:medium_description]
       params[:long_description] = params[:short_description] unless params[:long_description]
       party_id = DB[:parties].insert(party_type: 'O')
@@ -76,6 +65,7 @@ module MasterfilesApp
     def find_organization(id)
       hash = DB[:organizations].where(id: id).first
       return nil if hash.nil?
+
       hash = add_dependent_ids(hash)
       hash = add_party_name(hash)
       hash[:role_names] = DB[:roles].where(id: hash[:role_ids]).select_map(:name)
@@ -87,6 +77,7 @@ module MasterfilesApp
     def delete_organization(id)
       children = DB[:organizations].where(parent_id: id)
       return { error: 'This organization is set as a parent' } if children.any?
+
       party_id = party_id_from_organization(id)
       DB[:party_roles].where(party_id: party_id).delete
       DB[:organizations].where(id: id).delete
@@ -98,6 +89,7 @@ module MasterfilesApp
       params = attrs.to_h
       role_ids = params.delete(:role_ids)
       return { error: 'Choose at least one role' } if role_ids.empty?
+
       party_id = DB[:parties].insert(party_type: 'P')
       person_id = DB[:people].insert(params.merge(party_id: party_id))
       role_ids.each do |r_id|
@@ -111,6 +103,7 @@ module MasterfilesApp
     def find_person(id)
       hash = find_hash(:people, id)
       return nil if hash.nil?
+
       hash = add_dependent_ids(hash)
       hash = add_party_name(hash)
       hash[:role_names] = DB[:roles].where(id: hash[:role_ids]).select_map(:name)
@@ -127,6 +120,7 @@ module MasterfilesApp
     def find_contact_method(id)
       hash = DB[:contact_methods].where(id: id).first
       return nil if hash.nil?
+
       contact_method_type_id = hash[:contact_method_type_id]
       contact_method_type_hash = DB[:contact_method_types].where(id: contact_method_type_id).first
       hash[:contact_method_type] = contact_method_type_hash[:contact_method_type]
@@ -136,6 +130,7 @@ module MasterfilesApp
     def find_address(id)
       hash = find_hash(:addresses, id)
       return nil if hash.nil?
+
       address_type_id = hash[:address_type_id]
       address_type_hash = find_hash(:address_types, address_type_id)
       hash[:address_type] = address_type_hash[:address_type]
@@ -264,11 +259,13 @@ module MasterfilesApp
 
       hash = DB[query, AppConst::ROLE_IMPLEMENTATION_OWNER, AppConst::IMPLEMENTATION_OWNER].first
       raise Crossbeams::FrameworkError, "IMPLEMENTATION OWNER \"#{AppConst::ROLE_IMPLEMENTATION_OWNER}\" is not defined/active" if hash.nil?
+
       MasterfilesApp::PartyRole.new(hash)
     end
 
     def assign_roles(id, role_ids, type = 'O')
       return { error: 'Choose at least one role' } if role_ids.empty?
+
       party_details = party_details_by_type(id, type)
       current_role_ids = party_details[:party_roles].select_map(:role_id)
 
@@ -309,15 +306,6 @@ module MasterfilesApp
       ).map { |r| [r[:fn_party_role_name], r[:id]] }
     end
 
-    # Customers & Suppliers
-    def for_select_supplier_parties
-      parties_except_for_role(AppConst::ROLE_SUPPLIER)
-    end
-
-    def for_select_customer_parties
-      parties_except_for_role(AppConst::ROLE_CUSTOMER)
-    end
-
     def parties_except_for_role(role)
       query = <<~SQL
         SELECT fn_party_name(p.id), p.id
@@ -326,90 +314,6 @@ module MasterfilesApp
         AND p.active = true
       SQL
       DB[query].all.map { |r| [r[:fn_party_name] || 'Unknown party name', r[:id]] }
-    end
-
-    def create_customer(attrs)
-      params = attrs.to_h
-      customer_type_ids = params.delete(:customer_type_ids)
-      return { error: { customer_type_ids: ['You did not choose any customer types'] } } if customer_type_ids.empty?
-
-      party_id = params.delete(:party_id)
-      party_role_id = create_party_role(party_id, AppConst::ROLE_CUSTOMER)[:id]
-      return { error: { base: ['You already have this party set up as a customer'] } } if party_role_id.nil?
-
-      customer_id = create(:customers, params.merge(party_role_id: party_role_id))
-      customer_type_ids.each do |r_id|
-        DB[:customers_customer_types].insert(
-          customer_id: customer_id,
-          customer_type_id: r_id
-        )
-      end
-      { success: true, id: customer_id }
-    end
-
-    def update_customer(id, attrs)
-      params = attrs.to_h
-      customer_type_ids = params.delete(:customer_type_ids)
-      return { error: { customer_type_ids: ['You did not choose any customer types'] } } if customer_type_ids.empty?
-
-      DB[:customers_customer_types].where(customer_id: id).delete
-      customer_type_ids.each do |r_id|
-        DB[:customers_customer_types].insert(
-          customer_id: id,
-          customer_type_id: r_id
-        )
-      end
-      update(:customers, id, params)
-      { success: true, id: id }
-    end
-
-    def delete_customer(id)
-      customer = find_hash(:customers, id)
-      DB[:customers_customer_types].where(customer_id: id).delete
-      DB[:customers].where(id: id).delete
-      DB[:party_roles].where(id: customer[:party_role_id]).delete
-    end
-
-    def create_supplier(attrs)
-      params = attrs.to_h
-      supplier_type_ids = params.delete(:supplier_type_ids)
-      return { error: { supplier_type_ids: ['You did not choose any supplier types'] } } if supplier_type_ids.empty?
-
-      party_id = params.delete(:party_id)
-      party_role_id = create_party_role(party_id, AppConst::ROLE_SUPPLIER)[:id]
-      return { error: { base: ['You already have this party set up as a supplier'] } } if party_role_id.nil?
-
-      supplier_id = create(:suppliers, params.merge(party_role_id: party_role_id))
-      supplier_type_ids.each do |r_id|
-        DB[:suppliers_supplier_types].insert(
-          supplier_id: supplier_id,
-          supplier_type_id: r_id
-        )
-      end
-      { success: true, id: supplier_id }
-    end
-
-    def update_supplier(id, attrs)
-      params = attrs.to_h
-      supplier_type_ids = params.delete(:supplier_type_ids)
-      return { error: { supplier_type_ids: ['You did not choose any supplier types'] } } if supplier_type_ids.empty?
-
-      DB[:suppliers_supplier_types].where(supplier_id: id).delete
-      supplier_type_ids.each do |r_id|
-        DB[:suppliers_supplier_types].insert(
-          supplier_id: id,
-          supplier_type_id: r_id
-        )
-      end
-      update(:suppliers, id, params)
-      { success: true, id: id }
-    end
-
-    def delete_supplier(id)
-      supplier = find_hash(:suppliers, id)
-      DB[:suppliers_supplier_types].where(supplier_id: id).delete
-      DB[:suppliers].where(id: id).delete
-      DB[:party_roles].where(id: supplier[:party_role_id]).delete
     end
 
     def create_party_role(party_id, role_name)
@@ -426,51 +330,6 @@ module MasterfilesApp
         person_id: (org_type ? nil : respective_id)
       )
       { success: true, id: party_role_id }
-    end
-
-    def for_select_customers
-      DB['SELECT customers.id, fn_party_role_name(customers.party_role_id) as party_name
-          FROM customers'].all.map { |r| [r[:party_name], r[:id]] }
-    end
-
-    def for_select_suppliers
-      DB['SELECT suppliers.id, fn_party_role_name(suppliers.party_role_id) as party_name
-          FROM suppliers'].all.map { |r| [r[:party_name], r[:id]] }
-    end
-
-    def find_customer(id)
-      hash = find_hash(:customers, id)
-      return nil if hash.nil?
-      hash[:party_name] = DB['SELECT fn_party_role_name(?)', hash[:party_role_id]].single_value
-      hash[:customer_type_ids] = customers_customer_type_ids(id)
-      hash[:customer_types] = customers_customer_type_names(hash[:customer_type_ids])
-      Customer.new(hash)
-    end
-
-    def customers_customer_type_ids(customer_id)
-      DB[:customers_customer_types].where(customer_id: customer_id).select_map(:customer_type_id)
-    end
-
-    def customers_customer_type_names(customer_type_ids)
-      DB[:customer_types].where(id: customer_type_ids).select_map(:type_code)
-    end
-
-    def find_supplier(id, by_party_role: false)
-      opt = by_party_role ? { party_role_id: id } : { id: id }
-      hash = where_hash(:suppliers, opt)
-      return nil if hash.nil?
-      hash[:party_name] = DB['SELECT fn_party_role_name(?)', hash[:party_role_id]].single_value
-      hash[:supplier_type_ids] = suppliers_supplier_type_ids(id)
-      hash[:supplier_types] = suppliers_supplier_type_names(hash[:supplier_type_ids])
-      Supplier.new(hash)
-    end
-
-    def suppliers_supplier_type_ids(supplier_id)
-      DB[:suppliers_supplier_types].where(supplier_id: supplier_id).select_map(:supplier_type_id)
-    end
-
-    def suppliers_supplier_type_names(supplier_type_ids)
-      DB[:supplier_types].where(id: supplier_type_ids).select_map(:type_code)
     end
 
     private
