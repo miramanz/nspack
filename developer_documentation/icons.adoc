@@ -1,0 +1,26 @@
+= Icons
+:toc:
+
+link:/developer_documentation/start.adoc[Back to documentation home]
+
+== Icons
+
+Icons are used in three ways:
+
+* In grid action list menu items
+* By using one of the icons defined in Crossbeams::Layout
+* By embedding SVG inline in HTML
+
+=== Grid Icons
+
+link:/development/grid_icons[Grid icon list]
+
+=== Layout Icons
+
+link:/development/layout_icons[Layout icon list]
+
+=== Embedded Icons
+
+You should generally not need to do this.
+
+If you do, the `svg` tag should get a class of `cbl-icon` to display at the correct size and aligned with text.

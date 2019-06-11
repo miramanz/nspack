@@ -1,0 +1,36 @@
+---
+:dataminer_definition: fruit_actual_counts_for_packs
+:actions:
+- :url: "/masterfiles/fruit/fruit_actual_counts_for_packs/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/fruit/fruit_actual_counts_for_packs/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/fruit/fruit_actual_counts_for_packs/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+- :url:  "/masterfiles/fruit/fruit_actual_counts_for_packs/$:id$/fruit_size_references/new"
+  :text: add size reference
+  :icon: add
+  :title: New Size Reference
+  :popup: true
+- :url: "/list/fruit_size_references/with_params?key=standard&fruit_size_references.fruit_actual_counts_for_pack_id=$:id$"
+  :text: size references list
+  :icon: list
+:page_controls:
+- :control_type: :link
+  :url: "/list/std_fruit_size_counts"
+  :text: Back
+  :style: :back_button
+:conditions:
+  :standard:
+    - :col: fruit_actual_counts_for_packs.std_fruit_size_count_id
+      :op: =
+      :val: $:fruit_actual_counts_for_packs.std_fruit_size_count_id$

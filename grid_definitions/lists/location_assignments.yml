@@ -1,0 +1,24 @@
+---
+:dataminer_definition: location_assignments
+:actions:
+- :url: "/masterfiles/locations/location_assignments/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/locations/location_assignments/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/locations/location_assignments/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/locations/location_assignments/new"
+  :text: New Assignment
+  :style: :button
+  :behaviour: :popup

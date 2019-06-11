@@ -1,0 +1,50 @@
+---
+:dataminer_definition: locations
+:tree:
+  :tree_column: path_array
+  :tree_caption: Location Hierarchy
+  :suppress_node_counts: false
+  :groupDefaultExpanded: -1
+:actions:
+- :url: "/masterfiles/locations/locations/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/locations/locations/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/locations/locations/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+- :separator: true
+- :url: "/masterfiles/locations/locations/$:id$/add_child"
+  :text: New sub-location
+  :icon: add-solid
+  :title: New sub-location
+  :popup: true
+- :url: "/list/location_location_assignments/multi?key=locations&id=$:id$"
+  :text: Assignments
+  :icon: list
+  :popup: true
+- :url: "/list/location_location_storage_types/multi?key=locations&id=$:id$"
+  :text: Storage Types
+  :icon: list
+  :popup: true
+- :separator: true
+- :url: "/masterfiles/locations/locations/$:id$/print_barcode"
+  :text: Print barcode
+  :icon: printer
+  :title: Print barcode
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/locations/locations/new"
+  :text: New Location
+  :style: :button
+  :behaviour: :popup  
+  :hide_if_sql_returns_true: SELECT EXISTS(SELECT id FROM locations)
