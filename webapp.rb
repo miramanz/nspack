@@ -346,7 +346,6 @@ class Nspack < Roda
                                      :ag_grid,
                                      :selectr,
                                      :sortable,
-                                     :konva,
                                      :lodash,
                                      :multi,
                                      :sweetalert)

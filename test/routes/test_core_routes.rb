@@ -73,7 +73,6 @@ class TestCoreRoutes < RouteTester
     assert last_response.body.include?('AG-Grid')
     assert last_response.body.include?('Selectr')
     assert last_response.body.include?('Sortable')
-    assert last_response.body.include?('Konva')
     assert last_response.body.include?('Lodash')
     assert last_response.body.include?('Multi')
     assert last_response.body.include?('Sweet Alert2')

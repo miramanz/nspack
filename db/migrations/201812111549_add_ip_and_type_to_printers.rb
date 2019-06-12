@@ -6,7 +6,6 @@ Sequel.migration do
       add_column :active, :boolean, default: true
 
       add_index [:server_ip, :printer_code], name: :printers_ip_code, unique: true
-      drop_index :printer_code, name: :printers_unique_code
     end
 
 
@@ -20,7 +19,6 @@ Sequel.migration do
       drop_column :server_ip
       drop_column :printer_use
       drop_column :active
-      add_index [:printer_code], name: :printers_unique_code, unique: true
     end
 
     alter_table(:printer_applications) do

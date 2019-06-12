@@ -11,10 +11,6 @@ module MasterfilesApp
       assert_respond_to repo, :for_select_organizations
       assert_respond_to repo, :for_select_people
       assert_respond_to repo, :for_select_roles
-      assert_respond_to repo, :for_select_customer_types
-      assert_respond_to repo, :for_select_customers
-      assert_respond_to repo, :for_select_supplier_types
-      assert_respond_to repo, :for_select_suppliers
 
       assert_respond_to repo, :for_select_contact_method_types
       assert_respond_to repo, :for_select_address_types
@@ -25,10 +21,6 @@ module MasterfilesApp
       test_crud_calls_for :people, name: :person, wrapper: Person
       test_crud_calls_for :addresses, name: :address, wrapper: Address
       test_crud_calls_for :contact_methods, name: :contact_method, wrapper: ContactMethod
-      test_crud_calls_for :customer_types, name: :customer_type, wrapper: CustomerType
-      test_crud_calls_for :customers, name: :customer, wrapper: Customer
-      test_crud_calls_for :supplier_types, name: :supplier_type, wrapper: SupplierType
-      test_crud_calls_for :suppliers, name: :supplier, wrapper: Supplier
     end
 
     def test_find_party
@@ -281,68 +273,6 @@ module MasterfilesApp
       assert party_role_created
     end
 
-    def test_create_customer
-      party_id = create_party
-      attrs = {
-        party_id: party_id,
-        customer_type_ids: [],
-        erp_customer_number: 123_456_789
-      }
-      actual = repo.create_customer(attrs)
-      exp = { error: { customer_type_ids: ['You did not choose any customer types'] } }
-      assert_equal exp, actual
-
-      type_ids = []
-      2.times do
-        type_ids << create_customer_type[:id]
-      end
-      party_role_info = create_party_role('O', AppConst::ROLE_CUSTOMER)
-      attrs[:customer_type_ids] = type_ids
-      attrs[:party_id] = party_role_info[:party_id]
-      actual = repo.create_customer(attrs)
-      exp = { error: { base: ['You already have this party set up as a customer'] } }
-      assert_equal exp, actual
-
-      attrs[:customer_type_ids] = type_ids
-      attrs[:party_id] = party_id
-      actual = repo.create_customer(attrs)
-      type_links = DB[:customers_customer_types].where(customer_id: actual[:id])
-      refute_empty type_links
-      assert_equal 2, type_links.count
-      assert actual[:success]
-    end
-
-    def test_create_supplier
-      party_id = create_party
-      attrs = {
-        party_id: party_id,
-        supplier_type_ids: [],
-        erp_supplier_number: 123_456_789
-      }
-      actual = repo.create_supplier(attrs)
-      exp = { error: { supplier_type_ids: ['You did not choose any supplier types'] } }
-      assert_equal exp, actual
-
-      type_ids = []
-      2.times do
-        type_ids << create_supplier_type[:id]
-      end
-      party_role_info = create_party_role('O', AppConst::ROLE_SUPPLIER)
-      attrs[:supplier_type_ids] = type_ids
-      attrs[:party_id] = party_role_info[:party_id]
-      actual = repo.create_supplier(attrs)
-      exp = { error: { base: ['You already have this party set up as a supplier'] } }
-      assert_equal exp, actual
-
-      attrs[:supplier_type_ids] = type_ids
-      attrs[:party_id] = party_id
-      actual = repo.create_supplier(attrs)
-      type_links = DB[:suppliers_supplier_types].where(supplier_id: actual[:id])
-      refute_empty type_links
-      assert_equal 2, type_links.count
-      assert actual[:success]
-    end
-
     def test_create_party_role
       org = create_organization
       role_id = create_role(name: 'Given Role Name')[:id]
@@ -350,124 +280,6 @@ module MasterfilesApp
 
       party_role = repo.where_hash(:party_roles, role_id: role_id)
       assert org[:party_id], party_role[:party_id]
-    end
-
-    def test_update_customer
-      customer = create_customer
-      attrs = {
-        customer_type_ids: [],
-        erp_customer_number: 123_456_789
-      }
-      actual = repo.update_customer(customer[:id], attrs)
-      exp = { error: { customer_type_ids: ['You did not choose any customer types'] } }
-      assert_equal exp, actual
-
-      attrs[:customer_type_ids] = customer[:customer_type_ids]
-      assert repo.update_customer(customer[:id], attrs)
-    end
-
-    def test_update_supplier
-      supplier = create_supplier
-      attrs = {
-        supplier_type_ids: [],
-        erp_supplier_number: 123_456_789
-      }
-      actual = repo.update_supplier(supplier[:id], attrs)
-      exp = { error: { supplier_type_ids: ['You did not choose any supplier types'] } }
-      assert_equal exp, actual
-
-      attrs[:supplier_type_ids] = supplier[:supplier_type_ids]
-      assert repo.update_supplier(supplier[:id], attrs)
-    end
-
-    def test_delete_customer
-      customer = create_customer
-      assert DB[:customers_customer_types].where(customer_id: customer[:id]).first
-      assert DB[:customers].where(id: customer[:id]).first
-      assert DB[:party_roles].where(id: customer[:party_role_id]).first
-
-      repo.delete_customer(customer[:id])
-      refute DB[:customers_customer_types].where(customer_id: customer[:id]).first
-      refute DB[:customers].where(id: customer[:id]).first
-      refute DB[:party_roles].where(id: customer[:party_role_id]).first
-    end
-
-    def test_delete_supplier
-      supplier = create_supplier
-      assert DB[:suppliers_supplier_types].where(supplier_id: supplier[:id]).first
-      assert DB[:suppliers].where(id: supplier[:id]).first
-      assert DB[:party_roles].where(id: supplier[:party_role_id]).first
-
-      repo.delete_supplier(supplier[:id])
-      refute DB[:suppliers_supplier_types].where(supplier_id: supplier[:id]).first
-      refute DB[:suppliers].where(id: supplier[:id]).first
-      refute DB[:party_roles].where(id: supplier[:party_role_id]).first
-    end
-
-    def test_customers_customer_type_ids
-      customer = create_customer
-      actual = repo.customers_customer_type_ids(customer[:id])
-      assert_equal customer[:customer_type_ids], actual
-    end
-
-    def test_customers_customer_type_names
-      customer = create_customer
-      actual = repo.customers_customer_type_names(customer[:customer_type_ids])
-      exp = DB[:customer_types].where(id: customer[:customer_type_ids][0]).first[:type_code]
-      assert_equal exp, actual[0]
-    end
-
-    def test_suppliers_supplier_type_ids
-      supplier = create_supplier
-      actual = repo.suppliers_supplier_type_ids(supplier[:id])
-      assert_equal supplier[:supplier_type_ids], actual
-    end
-
-    def test_suppliers_supplier_type_names
-      supplier = create_supplier
-      actual = repo.suppliers_supplier_type_names(supplier[:supplier_type_ids])
-      exp = DB[:supplier_types].where(id: supplier[:supplier_type_ids][0]).first[:type_code]
-      assert_equal exp, actual[0]
-    end
-
-    def test_for_select_customers
-      5.times do
-        create_customer
-      end
-      actual = repo.for_select_customers
-      assert actual.count == 5
-      assert actual[0].is_a?(Array)
-      assert actual[0].count == 2
-    end
-
-    def test_for_select_suppliers
-      5.times do
-        create_supplier
-      end
-      actual = repo.for_select_suppliers
-      assert actual.count == 5
-      assert actual[0].is_a?(Array)
-      assert actual[0].count == 2
-    end
-
-    def test_find_customer
-      customer = create_customer
-      full_customer = repo.find_customer(customer[:id])
-      refute full_customer.supplier?
-      assert full_customer.party_name
-      assert full_customer.customer_type_ids
-      assert full_customer.customer_types
-      assert full_customer.is_a?(Customer)
-    end
-
-    def test_find_supplier
-      supplier = create_supplier
-      full_supplier = repo.find_supplier(supplier[:id])
-      assert full_supplier.supplier?
-      assert full_supplier.party_name
-      assert full_supplier.supplier_type_ids
-      assert full_supplier.supplier_types
-      assert full_supplier.is_a?(Supplier)
     end
 
     def test_add_party_name
@@ -521,8 +333,6 @@ module MasterfilesApp
       create_contact_method
       create_party_address
       create_party_contact_method
-      create_supplier
-      create_customer
     end
 
     private

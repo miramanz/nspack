@@ -51,6 +51,7 @@ module MasterfilesApp
     def create_role(opts = {})
       existing_id = @fixed_table_set[:roles][:"#{opts[:name].downcase}"] if opts[:name]
       return existing_id unless existing_id.nil?
+
       default = {
         name: Faker::Lorem.unique.word,
         active: true
@@ -120,62 +121,6 @@ module MasterfilesApp
         contact_method_id: create_contact_method
       }
       DB[:party_contact_methods].insert(default.merge(opts))
-    end
-
-    def create_supplier_type
-      type_code = Faker::Lorem.unique.word
-      id = DB[:supplier_types].insert(type_code: type_code)
-      {
-        id: id,
-        type_code: type_code
-      }
-    end
-
-    def create_customer_type
-      type_code = Faker::Lorem.unique.word
-      id = DB[:customer_types].insert(type_code: type_code)
-      {
-        id: id,
-        type_code: type_code
-      }
-    end
-
-    def create_supplier(opts = {})
-      party_role_id = create_party_role[:id]
-      supplier_type_id = create_supplier_type[:id]
-      default = {
-        party_role_id: party_role_id,
-        erp_supplier_number: Faker::Lorem.unique.word
-      }
-      supplier_id = DB[:suppliers].insert(default.merge(opts))
-      DB[:suppliers_supplier_types].insert(
-        supplier_id: supplier_id,
-        supplier_type_id: supplier_type_id
-      )
-      {
-        id: supplier_id,
-        party_role_id: party_role_id,
-        supplier_type_ids: [supplier_type_id]
-      }
-    end
-
-    def create_customer(opts = {})
-      party_role_id = create_party_role[:id]
-      customer_type_id = create_customer_type[:id]
-      default = {
-        party_role_id: party_role_id,
-        erp_customer_number: Faker::Lorem.unique.word
-      }
-      customer_id = DB[:customers].insert(default.merge(opts))
-      DB[:customers_customer_types].insert(
-        customer_id: customer_id,
-        customer_type_id: customer_type_id
-      )
-      {
-        id: customer_id,
-        party_role_id: party_role_id,
-        customer_type_ids: [customer_type_id]
-      }
     end
   end
 end

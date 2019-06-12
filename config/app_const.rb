@@ -8,14 +8,12 @@ class AppConst
 
   # Constants for roles:
   ROLE_IMPLEMENTATION_OWNER = 'IMPLEMENTATION_OWNER'
-  ROLE_CUSTOMER = 'CUSTOMER'
-  ROLE_SUPPLIER = 'SUPPLIER'
+  # ROLE_CUSTOMER = 'CUSTOMER'
+  # ROLE_SUPPLIER = 'SUPPLIER'
   # ROLE_TRANSPORTER = 'TRANSPORTER'
 
   # Routes that do not require login:
-  BYPASS_LOGIN_ROUTES = [
-    '/masterfiles/config/label_templates/published'
-  ].freeze
+  BYPASS_LOGIN_ROUTES = [].freeze
 
   # Menu
   FUNCTIONAL_AREA_RMD = 'RMD'
@@ -40,8 +38,8 @@ class AppConst
   # PRINT_APP_MR_SKU_BARCODE = 'Material Resource SKU Barcode'
 
   PRINTER_APPLICATIONS = [
-  #   PRINT_APP_LOCATION,
-  #   PRINT_APP_MR_SKU_BARCODE
+    # PRINT_APP_LOCATION,
+    # PRINT_APP_MR_SKU_BARCODE
   ].freeze
 
   # These will need to be configured per installation...
