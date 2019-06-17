@@ -155,7 +155,7 @@ class Nspack < Roda
           <link rel="stylesheet" href="/css/asciidoc.css">
         <% end %>
         <div id="asciidoc-content">
-          #{Asciidoctor.convert(content, safe: :safe, attributes: { 'source-highlighter' => 'coderay', 'coderay-css' => 'style' })}
+          #{Asciidoctor.convert(content, safe: :safe, attributes: { 'source-highlighter' => 'coderay', 'coderay-css' => 'style', 'imagesdir' => '/documentation_images' })}
         </div>
       HTML
     end
