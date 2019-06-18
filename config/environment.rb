@@ -29,7 +29,8 @@ DB.extension :pg_inet
 
 Que.connection = DB
 Que.job_middleware.push(
-  ->(job, &block) {
+  # ->(job, &block) {
+  lambda { |job, &block|
     job.lock_single_instance
     block.call
     job.clear_single_instance
