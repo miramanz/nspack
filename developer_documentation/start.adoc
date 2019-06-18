@@ -20,7 +20,7 @@ Handy Rake prep tasks
 
 * Run `bundle exec rake developers:setup` to setup a new developer install and to add missing environment variables to `.env.local`.
 * Run `bundle exec rake developers:listenv` to get a list of environment variables and their descriptions.
-* Run `bundle exec rake developers:listenv` to list which environment variables are missing from `.env.local`.
+* Run `bundle exec rake developers:validateenv` to list which environment variables are missing from `.env.local`.
 
 === General
 
