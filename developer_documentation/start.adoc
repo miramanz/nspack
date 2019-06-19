@@ -58,6 +58,12 @@ Pictoral overview of application.
 * link:/developer_documentation/utility_functions.adoc[Utility functions]
 * link:/developer_documentation/jobs.adoc[Jobs (Que)]
 
+==== Testing
+
+* link:/developer_documentation/test_helpers.adoc[Test helpers]
+* link:/developer_documentation/test_helpers_route.adoc[Test helpers for routes]
+* link:/developer_documentation/test_seeds.adoc[Test seeds]
+
 ////
 === Tutorials
 
