@@ -64,7 +64,6 @@ Pictoral overview of application.
 * link:/developer_documentation/test_helpers_route.adoc[Test helpers for routes]
 * link:/developer_documentation/test_seeds.adoc[Test seeds]
 
-A bug for Miracle!
 ////
 === Tutorials
 
