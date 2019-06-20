@@ -44,7 +44,7 @@ Use link:https://github.com/postmodern/chruby[chruby] to run the correct version
 
 IMPORTANT: Follow the link:/developer_documentation/coding_principles.adoc[Coding principles].
 
-Use link:http://batsov.com/rubocop/[rubocop] to lint code.
+Use link:https://www.rubocop.org/[rubocop] to lint code.
 
 Rubocop follows the style guide found at link:https://rubystyle.guide[Ruby Style Guide] with some overrides specified in `.rubocop.yml`.
 
