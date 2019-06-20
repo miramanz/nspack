@@ -1204,9 +1204,9 @@ module DevelopmentApp
                 res = #{perm_check}.call(:edit, 1)
                 assert res.success, 'Should be able to edit a #{opts.singlename}'
 
-                #{opts.classnames[:module]}::#{opts.classnames[:repo]}.any_instance.stubs(:find_#{opts.singlename}).returns(entity(completed: true))
-                res = #{perm_check}.call(:edit, 1)
-                refute res.success, 'Should not be able to edit a completed #{opts.singlename}'
+                # #{opts.classnames[:module]}::#{opts.classnames[:repo]}.any_instance.stubs(:find_#{opts.singlename}).returns(entity(completed: true))
+                # res = #{perm_check}.call(:edit, 1)
+                # refute res.success, 'Should not be able to edit a completed #{opts.singlename}'
               end
 
               def test_delete
@@ -1214,9 +1214,9 @@ module DevelopmentApp
                 res = #{perm_check}.call(:delete, 1)
                 assert res.success, 'Should be able to delete a #{opts.singlename}'
 
-                #{opts.classnames[:module]}::#{opts.classnames[:repo]}.any_instance.stubs(:find_#{opts.singlename}).returns(entity(completed: true))
-                res = #{perm_check}.call(:delete, 1)
-                refute res.success, 'Should not be able to delete a completed #{opts.singlename}'
+                # #{opts.classnames[:module]}::#{opts.classnames[:repo]}.any_instance.stubs(:find_#{opts.singlename}).returns(entity(completed: true))
+                # res = #{perm_check}.call(:delete, 1)
+                # refute res.success, 'Should not be able to delete a completed #{opts.singlename}'
               end
 
               # def test_complete
