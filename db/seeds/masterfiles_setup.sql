@@ -1,6 +1,6 @@
 
 INSERT INTO functional_areas (functional_area_name)
-VALUES ('Masterfiles');
+VALUES ('Masterfiles_1');
 
 -- PARTIES
 INSERT INTO programs (program_name, program_sequence, functional_area_id)
