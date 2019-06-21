@@ -42,6 +42,5 @@ module UiRules
                                     description: nil,
                                     season_group_year: Time.now.year)
     end
-
   end
 end

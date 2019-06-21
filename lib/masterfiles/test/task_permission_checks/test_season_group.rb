@@ -27,9 +27,9 @@ module MasterfilesApp
       res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:edit, 1)
       assert res.success, 'Should be able to edit a season_group'
 
-      MasterfilesApp::CalendarRepo.any_instance.stubs(:find_season_group).returns(entity(completed: true))
-      res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:edit, 1)
-      refute res.success, 'Should not be able to edit a completed season_group'
+      # MasterfilesApp::CalendarRepo.any_instance.stubs(:find_season_group).returns(entity(completed: true))
+      # res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:edit, 1)
+      # refute res.success, 'Should not be able to edit a completed season_group'
     end
 
     def test_delete
@@ -37,9 +37,9 @@ module MasterfilesApp
       res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:delete, 1)
       assert res.success, 'Should be able to delete a season_group'
 
-      MasterfilesApp::CalendarRepo.any_instance.stubs(:find_season_group).returns(entity(completed: true))
-      res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:delete, 1)
-      refute res.success, 'Should not be able to delete a completed season_group'
+      # MasterfilesApp::CalendarRepo.any_instance.stubs(:find_season_group).returns(entity(completed: true))
+      # res = MasterfilesApp::TaskPermissionCheck::SeasonGroup.call(:delete, 1)
+      # refute res.success, 'Should not be able to delete a completed season_group'
     end
 
     # def test_complete
