@@ -95,7 +95,12 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
 WHERE functional_area_name = 'Masterfiles')),
         'Std Fruit Size Counts', '/list/std_fruit_size_counts', 2);
 
-
+-- RMT Classes
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'RMT Classes', '/list/rmt_classes', 2);
 
 -- TARGET MARKETS
 INSERT INTO programs (program_name, program_sequence, functional_area_id)
@@ -145,7 +150,7 @@ WHERE functional_area_name = 'Masterfiles')),
 
 -- LOCATIONS
 
-INSERT INTO functional_areas (functional_area_name) VALUES ('Masterfiles');
+--INSERT INTO functional_areas (functional_area_name) VALUES ('Masterfiles');
 
 INSERT INTO programs (program_name, program_sequence, functional_area_id)
 VALUES ('Locations', 1, (SELECT id FROM functional_areas
