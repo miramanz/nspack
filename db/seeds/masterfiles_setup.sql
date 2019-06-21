@@ -250,3 +250,21 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Calendar'
                                    WHERE functional_area_name = 'Masterfiles')),
          'Season_groups', '/list/season_groups', 2);
 
+-- PROGRAM raw_materials
+INSERT INTO programs (program_name, program_sequence, functional_area_id)
+VALUES ('Raw Materials', 1, (SELECT id FROM functional_areas
+                                              WHERE functional_area_name = 'Masterfiles'));
+
+INSERT INTO programs_webapps(program_id, webapp) VALUES (
+      (SELECT id FROM programs
+       WHERE program_name = 'Raw Materials'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+       'Nspack');
+
+-- LIST menu item
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Raw Materials'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Rmt_delivery_destinations', '/list/rmt_delivery_destinations', 2);
