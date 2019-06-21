@@ -1,0 +1,24 @@
+---
+:dataminer_definition: rmt_delivery_destinations
+:actions:
+- :url: "/masterfiles/raw_materials/rmt_delivery_destinations/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/raw_materials/rmt_delivery_destinations/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/raw_materials/rmt_delivery_destinations/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/raw_materials/rmt_delivery_destinations/new"
+  :text: New Rmt Delivery Destination
+  :style: :button
+  :behaviour: :popup
