@@ -1,0 +1,38 @@
+---
+:dataminer_definition: farms
+:actions:
+- :url: "/masterfiles/farms/farms/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/farms/farms/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/farms/farms/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+- :separator: true
+- :url: "/development/statuses/list/farms/$:id$"
+  :text: status
+  :icon: information-solid
+  :title: Status
+  :popup: true
+- :url: "/masterfiles/farms/farms/$:id$/pucs/new"
+  :text: add puc
+  :icon: add
+  :title: New puc
+  :popup: true
+- :url: "/list/pucs/with_params?key=standard&farms_pucs.farm_id=$:id$"
+  :text: pucs
+  :icon: list
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/farms/farms/new"
+  :text: New Farm
+  :style: :button
+  :behaviour: :popup
