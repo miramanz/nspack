@@ -90,7 +90,7 @@ class Nspack < Roda
       r.on 'grid' do
         render_data_grid_lookup_rows(id,
                                      ->(function, program, permission) { auth_blocked?(function, program, permission) },
-                                     ->(args) { Crossbeams::Config::UserPermissions.can_user?(current_user, *args) },
+                                     ->(*args) { Crossbeams::Config::UserPermissions.can_user?(current_user, *args) },
                                      key,
                                      params)
       rescue StandardError => e

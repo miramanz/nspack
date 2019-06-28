@@ -1076,7 +1076,7 @@ module DevelopmentApp
         tm = TableMeta.new(fk[:table])
         required = can_be_null ? '' : ', required: true'
         if tm.active_column_present?
-          "#{field}: { renderer: :select, options: #{fk_repo}.new.for_select_#{fk[:table]}, disabled_options: #{fk_repo}.new.for_inactive_select_#{fk[:table]}, caption: '#{field.to_s.chomp('_id')}'#{required} }"
+          "#{field}: { renderer: :select, options: #{fk_repo}.new.for_select_#{fk[:table]}, disabled_options: #{fk_repo}.new.for_select_inactive_#{fk[:table]}, caption: '#{field.to_s.chomp('_id')}'#{required} }"
         else
           "#{field}: { renderer: :select, options: #{fk_repo}.new.for_select_#{fk[:table]}, caption: '#{field.to_s.chomp('_id').split('_').map(&:capitalize).join(' ')}'#{required} }"
         end
@@ -1457,7 +1457,7 @@ module DevelopmentApp
             module #{opts.classnames[:program]}
               module #{opts.classnames[:class]}
                 class New
-                  def self.call(#{needs_id}form_values: nil, form_errors: nil, remote: true) # rubocop:disable Metrics/AbcSize
+                  def self.call(#{needs_id}form_values: nil, form_errors: nil, remote: true)
                     ui_rule = UiRules::Compiler.new(:#{opts.singlename}, :new, form_values: form_values)
                     rules   = ui_rule.compile
 
@@ -1490,7 +1490,7 @@ module DevelopmentApp
             module #{opts.classnames[:program]}
               module #{opts.classnames[:class]}
                 class Edit
-                  def self.call(id, form_values: nil, form_errors: nil) # rubocop:disable Metrics/AbcSize
+                  def self.call(id, form_values: nil, form_errors: nil)
                     ui_rule = UiRules::Compiler.new(:#{opts.singlename}, :edit, id: id, form_values: form_values)
                     rules   = ui_rule.compile
 
