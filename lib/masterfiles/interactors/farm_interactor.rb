@@ -90,25 +90,5 @@ module MasterfilesApp
       validation_failed_response(OpenStruct.new(messages: { puc_code: ['This puc already exists'] }))
     end
 
-    def update_puc(id, params)
-      @puc_id = id
-      res = validate_puc_params(params)
-      return validation_failed_response(res) unless res.messages.empty?
-
-      repo.transaction do
-        repo.update_puc(id, res)
-      end
-      success_response("Updated puc #{puc.puc_code}", puc(false))
-    end
-
-    def delete_puc(id)
-      @puc_id = id
-      name = puc.puc_code
-      repo.transaction do
-        repo.delete_puc(id)
-      end
-      success_response("Deleted puc#{name}")
-    end
-
   end
 end

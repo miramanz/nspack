@@ -64,5 +64,9 @@ module MasterfilesApp
       DB[:farms_pucs].insert(farm_id: id,
                              puc_id: puc_id)
     end
+
+    def delete_farms_pucs(puc_id)
+      DB[:farms_pucs].where(puc_id: puc_id).delete
+    end
   end
 end
