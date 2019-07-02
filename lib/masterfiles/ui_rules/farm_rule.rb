@@ -11,6 +11,8 @@ module UiRules
 
       set_show_fields if %i[show reopen].include? @mode
 
+      # add_behaviours if @options[:id]
+
       form_name 'farm'
     end
 
@@ -55,6 +57,12 @@ module UiRules
                                     farm_group_id: nil,
                                     farm_code: nil,
                                     description: nil)
+    end
+
+    def add_behaviours
+      behaviours do |behaviour|
+        behaviour.dropdown_change :owner_party_role_id, notify: [{ url: "/masterfiles/farms/farms/#{@options[:id]}/owner_party_role_changed" }]
+      end
     end
 
   end

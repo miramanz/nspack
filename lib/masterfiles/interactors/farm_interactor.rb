@@ -90,5 +90,9 @@ module MasterfilesApp
       validation_failed_response(OpenStruct.new(messages: { puc_code: ['This puc already exists'] }))
     end
 
+    def selected_farm_groups(owner_party_role_id)
+      repo.for_select_farm_groups(where: { owner_party_role_id: owner_party_role_id })
+    end
+
   end
 end

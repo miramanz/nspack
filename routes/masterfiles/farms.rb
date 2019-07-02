@@ -179,6 +179,11 @@ class Nspack < Roda
         end
       end
 
+      r.on 'owner_party_role_changed' do
+        farm_groups = interactor.selected_farm_groups(params[:changed_value])
+        json_replace_select_options('farm_farm_group_id', farm_groups)
+      end
+
       r.is do
         r.get do       # SHOW
           check_auth!('farms', 'read')
