@@ -1,0 +1,24 @@
+---
+:dataminer_definition: resources
+:actions:
+- :url: "/production/resources/resources/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/production/resources/resources/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/production/resources/resources/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/production/resources/resources/new"
+  :text: New Resource
+  :style: :button
+  :behaviour: :popup
