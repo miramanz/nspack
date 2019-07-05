@@ -95,6 +95,28 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         show_partial { Production::Resources::Resource::Edit.call(id) }
       end
 
+      r.on 'add_child' do   # NEW CHILD
+        r.get do
+          check_auth!('resources', 'edit')
+          show_partial { Production::Resources::Resource::New.call(id: id) }
+        end
+        r.post do
+          res = interactor.create_resource(id, params[:resource])
+          if res.success
+            flash[:notice] = res.message
+            redirect_to_last_grid(r)
+          else
+            # form_errors = move_validation_errors_to_base(res.errors, :location_long_code, highlights: { location_long_code: %i[location_long_code location_short_code] })
+            # form_errors2 = move_validation_errors_to_base(form_errors, :receiving_bay_type_location, highlights: { receiving_bay_type_location: %i[location_type_id can_store_stock] })
+            re_show_form(r, res, url: "/production/resources/resources/#{id}/add_child") do
+              Production::Resources::Resource::New.call(id: id,
+                                                        form_values: params[:resource],
+                                                        form_errors: res.errors,
+                                                        remote: fetch?(r))
+            end
+          end
+        end
+      end
       r.is do
         r.get do       # SHOW
           check_auth!('resources', 'read')
@@ -135,8 +157,8 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         show_partial_or_page(r) { Production::Resources::Resource::New.call(remote: fetch?(r)) }
       end
       r.post do        # CREATE
-        res = interactor.create_resource(params[:resource])
-        if res.success
+        res = interactor.create_root_resource(params[:resource])
+        if res.success # resource_type_code
           row_keys = %i[
             id
             resource_type_id

@@ -14,13 +14,32 @@ module ProductionApp
       ResourceSchema.call(params)
     end
 
-    def create_resource(params) # rubocop:disable Metrics/AbcSize
+    def create_root_resource(params) # rubocop:disable Metrics/AbcSize
       res = validate_resource_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
       id = nil
       repo.transaction do
-        id = repo.create_resource(res)
+        id = repo.create_root_resource(res)
+        log_status('resources', id, 'CREATED')
+        log_transaction
+      end
+      instance = resource(id)
+      success_response("Created resource #{instance.resource_code}",
+                       instance)
+    rescue Sequel::UniqueConstraintViolation
+      validation_failed_response(OpenStruct.new(messages: { resource_code: ['This resource already exists'] }))
+    rescue Crossbeams::InfoError => e
+      failed_response(e.message)
+    end
+
+    def create_resource(parent_id, params) # rubocop:disable Metrics/AbcSize
+      res = validate_resource_params(params)
+      return validation_failed_response(res) unless res.messages.empty?
+
+      id = nil
+      repo.transaction do
+        id = repo.create_child_resource(parent_id, res)
         log_status('resources', id, 'CREATED')
         log_transaction
       end

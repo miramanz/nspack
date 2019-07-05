@@ -1,5 +1,10 @@
 ---
 :dataminer_definition: resources
+:tree:
+  :tree_column: path_array
+  :tree_caption: Resource Hierarchy
+  :suppress_node_counts: false
+  :groupDefaultExpanded: -1
 :actions:
 - :url: "/production/resources/resources/$:id$"
   :text: view
@@ -15,6 +20,12 @@
   :text: delete
   :icon: delete
   :is_delete: true
+  :popup: true
+- :separator: true
+- :url: "/production/resources/resources/$:id$/add_child"
+  :text: New sub-resource
+  :icon: add-solid
+  :title: New sub-resource
   :popup: true
 :page_controls:
 - :control_type: :link

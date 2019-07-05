@@ -9,6 +9,6 @@ module ProductionApp
     required(:system_resource_id, :integer).maybe(:int?)
     required(:resource_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).filled(:str?)
-    required(:resource_attributes, :hash).maybe(:hash?)
+    optional(:resource_attributes, :hash).maybe(:hash?)
   end
 end
