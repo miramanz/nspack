@@ -855,18 +855,29 @@ const crossbeamsGridFormatters = {
     return '<span class="ac_icon_uncheck">&nbsp;</span>';
   },
 
+  // Format a column to display as an icon.
+  // The column format is: "icon_name[,colour][,indent level]"
+  // - colour defaults to grey
+  // - indent level defaults to 0
   iconFormatter: function iconFormatter(params) {
     if (!params.data) { return null; }
-
     if (params.value === '' || params.value === null) { return ''; }
-    // value == icon,color => expand and apply
-    const icoCol = params.value.split(','); // if 1.nil, push black. if 2.nil, if col level, push level else push 0 : margin based on 2
-    // display as <svg> ? with cbl-icon ++ color? - need to read from disk?
-    return `<img class="cbl-icon" style="color:${icoCol[1]}" src="/app_icons/${icoCol[0]}.svg"></span>`;
+
+    const icoCol = params.value.split(',');
+    if (!icoCol[1]) icoCol.push('gray'); // default colour
+    if (!icoCol[2]) {                    // default indent from "level" column
+      if (params.data.level) {
+        icoCol.push(params.data.level - 1);
+      } else {
+        icoCol.push(0);
+      }
+    }
+    return `<span class="cbl-icon" style="color:${icoCol[1]};margin-left:${icoCol[2] * 0.75}rem">
+        <img src="/app_icons/${icoCol[0]}.svg" onload="SVGInject(this)">
+      </span>`;
   },
 
   hrefInlineFormatter: function hrefInlineFormatter(params) {
-    // var rainPerTenMm = params.value / 10;
     return `<a href="/books/${params.value}/edit">edit</a>`;
   },
 

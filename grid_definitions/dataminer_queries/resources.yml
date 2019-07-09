@@ -55,7 +55,7 @@
     :caption: Icon
     :namespaced_name: resource_types.icon
     :data_type: :string
-    :width: 
+    :width: 100
     :format: 
     :hide: false
     :pinned: 
