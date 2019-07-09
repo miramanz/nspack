@@ -18,7 +18,7 @@ module Production
               form.remote!
               form.method :update
               form.add_field :resource_type_id
-              form.add_field :system_resource_id
+              # form.add_field :system_resource_id
               form.add_field :resource_code
               form.add_field :description
               # form.add_field :resource_attributes

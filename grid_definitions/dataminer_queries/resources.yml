@@ -1,6 +1,6 @@
 ---
 :caption: Resources
-:sql: "SELECT resources.id, resources.resource_type_id,\r\nresources.resource_code,
+:sql: "SELECT resources.id, resources.resource_type_id,\r\nresource_types.icon, resources.resource_code,
   resources.description, resources.active,\r\nresource_types.resource_type_code,\r\nresource_types.description
   AS type_description,\r\n(SELECT array_agg(cc.resource_code) as path\r\n  FROM (SELECT
   c.resource_code\r\n         FROM resources AS c \r\n        JOIN tree_resources
@@ -8,11 +8,11 @@
   = resources.id\r\n       ORDER BY t1.path_length DESC) AS cc) AS path_array,\r\n(SELECT
   MAX(path_length)\r\n   FROM tree_resources\r\n   WHERE descendant_resource_id =
   resources.id) + 1 AS level \r\nFROM resources\r\nJOIN resource_types ON resource_types.id
-  = resources.resource_type_id\r\nORDER BY (SELECT string_agg(\"cc\".\"resource_code\",
-  ';') AS path \r\n    FROM (SELECT \"c\".\"resource_code\" FROM \"resources\" c JOIN
-  \"tree_resources\" t1 ON \"t1\".\"ancestor_resource_id\" = \"c\".\"id\" \r\n    WHERE
-  \"t1\".\"descendant_resource_id\" = \"resources\".\"id\" \r\n    ORDER BY \"t1\".\"path_length\"
-  DESC) cc)\r\n"
+  = resources.resource_type_id\r\nWHERE NOT resource_types.system_resource\r\nORDER
+  BY (SELECT string_agg(\"cc\".\"resource_code\", ';') AS path \r\n    FROM (SELECT
+  \"c\".\"resource_code\" FROM \"resources\" c JOIN \"tree_resources\" t1 ON \"t1\".\"ancestor_resource_id\"
+  = \"c\".\"id\" \r\n    WHERE \"t1\".\"descendant_resource_id\" = \"resources\".\"id\"
+  \r\n    ORDER BY \"t1\".\"path_length\" DESC) cc)\r\n"
 :limit: 
 :offset: 
 :external_settings: {}
@@ -49,9 +49,25 @@
     :group_avg: false
     :group_min: false
     :group_max: false
+  icon:
+    :name: icon
+    :sequence_no: 3
+    :caption: Icon
+    :namespaced_name: resource_types.icon
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
   resource_code:
     :name: resource_code
-    :sequence_no: 3
+    :sequence_no: 4
     :caption: Resource code
     :namespaced_name: resources.resource_code
     :data_type: :string
@@ -67,7 +83,7 @@
     :group_max: false
   description:
     :name: description
-    :sequence_no: 4
+    :sequence_no: 5
     :caption: Description
     :namespaced_name: resources.description
     :data_type: :string
@@ -83,7 +99,7 @@
     :group_max: false
   active:
     :name: active
-    :sequence_no: 5
+    :sequence_no: 6
     :caption: Active
     :namespaced_name: resources.active
     :data_type: :boolean
@@ -99,7 +115,7 @@
     :group_max: false
   resource_type_code:
     :name: resource_type_code
-    :sequence_no: 6
+    :sequence_no: 7
     :caption: Resource type code
     :namespaced_name: resource_types.resource_type_code
     :data_type: :string
@@ -115,7 +131,7 @@
     :group_max: false
   type_description:
     :name: type_description
-    :sequence_no: 7
+    :sequence_no: 8
     :caption: Type description
     :namespaced_name: resource_types.description
     :data_type: :string
@@ -131,7 +147,7 @@
     :group_max: false
   path_array:
     :name: path_array
-    :sequence_no: 8
+    :sequence_no: 9
     :caption: Path array
     :namespaced_name: 
     :data_type: :string
@@ -147,7 +163,7 @@
     :group_max: false
   level:
     :name: level
-    :sequence_no: 9
+    :sequence_no: 10
     :caption: Level
     :namespaced_name: 
     :data_type: :string

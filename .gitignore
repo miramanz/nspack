@@ -15,6 +15,7 @@
 .sass-cache/
 lib/applets/.sass-cache/
 public/assets/*.*
+public/app_icons/*.*
 public/downloads/jasper/*.*
 public/js/ag-enterprise-activation.js
 

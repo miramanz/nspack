@@ -5,8 +5,8 @@ module ProductionApp
     configure { config.type_specs = true }
 
     optional(:id, :integer).filled(:int?)
-    required(:resource_type_id, :integer).filled(:int?)
-    required(:system_resource_id, :integer).maybe(:int?)
+    optional(:resource_type_id, :integer).filled(:int?)
+    optional(:system_resource_id, :integer).maybe(:int?)
     required(:resource_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).filled(:str?)
     optional(:resource_attributes, :hash).maybe(:hash?)

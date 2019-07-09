@@ -10,6 +10,7 @@ Sequel.migration do
       primary_key :id
       String :resource_type_code, null: false
       String :description, null: false
+      TrueClass :system_resource, default: false # ok for indexing? - with id?
       Jsonb :attribute_rules
       Jsonb :behaviour_rules
 
@@ -88,16 +89,6 @@ Sequel.migration do
 
     drop_table(:plant_system_resources)
 
-    # Drop logging for resource_types.
-    drop_trigger(:resource_types, :audit_trigger_row)
-    drop_trigger(:resource_types, :audit_trigger_stm)
-
-    drop_trigger(:resource_types, :set_created_at)
-    drop_function(:resource_types_set_created_at)
-    drop_trigger(:resource_types, :set_updated_at)
-    drop_function(:resource_types_set_updated_at)
-    drop_table(:resource_types)
-
     # Drop logging for resources.
     drop_trigger(:resources, :audit_trigger_row)
     drop_trigger(:resources, :audit_trigger_stm)
@@ -107,5 +98,15 @@ Sequel.migration do
     drop_trigger(:resources, :set_updated_at)
     drop_function(:resources_set_updated_at)
     drop_table(:resources)
+
+    # Drop logging for resource_types.
+    drop_trigger(:resource_types, :audit_trigger_row)
+    drop_trigger(:resource_types, :audit_trigger_stm)
+
+    drop_trigger(:resource_types, :set_created_at)
+    drop_function(:resource_types_set_created_at)
+    drop_trigger(:resource_types, :set_updated_at)
+    drop_function(:resource_types_set_updated_at)
+    drop_table(:resource_types)
   end
 end

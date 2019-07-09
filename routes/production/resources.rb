@@ -38,7 +38,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             re_show_form(r, res) { Production::Resources::ResourceType::Edit.call(id, form_values: params[:resource_type], form_errors: res.errors) }
           end
         end
-        r.delete do    # DELETE
+        r.delete do    # DELETE >>>>>>>>>>>>>>>>>>> THIS SHOULD BE de-activate (only if not in use by active resource) <<<<<<<<<<<<<<<
           check_auth!('resources', 'delete')
           # interactor.assert_permission!(:delete, id)
           res = interactor.delete_resource_type(id)
@@ -56,6 +56,12 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
       r.on 'new' do    # NEW
         check_auth!('resources', 'new')
         show_partial_or_page(r) { Production::Resources::ResourceType::New.call(remote: fetch?(r)) }
+      end
+      r.on 'refresh' do
+        check_auth!('resources', 'new')
+        msg = Crossbeams::Config::ResourceDefinitions.refresh_resource_types
+        flash[:notice] = msg
+        redirect_to_last_grid(r)
       end
       r.post do        # CREATE
         res = interactor.create_resource_type(params[:resource_type])
@@ -98,6 +104,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
       r.on 'add_child' do   # NEW CHILD
         r.get do
           check_auth!('resources', 'edit')
+          interactor.assert_permission!(:add_child, id)
           show_partial { Production::Resources::Resource::New.call(id: id) }
         end
         r.post do
@@ -125,14 +132,8 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         r.patch do     # UPDATE
           res = interactor.update_resource(id, params[:resource])
           if res.success
-            row_keys = %i[
-              resource_type_id
-              system_resource_id
-              resource_code
-              description
-              resource_attributes
-            ]
-            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
+            flash[:notice] = res.message
+            redirect_to_last_grid(r)
           else
             re_show_form(r, res) { Production::Resources::Resource::Edit.call(id, form_values: params[:resource], form_errors: res.errors) }
           end
@@ -158,17 +159,9 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
       end
       r.post do        # CREATE
         res = interactor.create_root_resource(params[:resource])
-        if res.success # resource_type_code
-          row_keys = %i[
-            id
-            resource_type_id
-            system_resource_id
-            resource_code
-            description
-            resource_attributes
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
+        if res.success
+          flash[:notice] = res.message
+          redirect_to_last_grid(r)
         else
           re_show_form(r, res, url: '/production/resources/resources/new') do
             Production::Resources::Resource::New.call(form_values: params[:resource],

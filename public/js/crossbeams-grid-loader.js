@@ -855,6 +855,16 @@ const crossbeamsGridFormatters = {
     return '<span class="ac_icon_uncheck">&nbsp;</span>';
   },
 
+  iconFormatter: function iconFormatter(params) {
+    if (!params.data) { return null; }
+
+    if (params.value === '' || params.value === null) { return ''; }
+    // value == icon,color => expand and apply
+    const icoCol = params.value.split(','); // if 1.nil, push black. if 2.nil, if col level, push level else push 0 : margin based on 2
+    // display as <svg> ? with cbl-icon ++ color? - need to read from disk?
+    return `<img class="cbl-icon" style="color:${icoCol[1]}" src="/app_icons/${icoCol[0]}.svg"></span>`;
+  },
+
   hrefInlineFormatter: function hrefInlineFormatter(params) {
     // var rainPerTenMm = params.value / 10;
     return `<a href="/books/${params.value}/edit">edit</a>`;
@@ -1204,6 +1214,9 @@ const crossbeamsGridStaticLoader = {
           }
           if (col[attr] === 'crossbeamsGridFormatters.booleanFormatter') {
             newCol[attr] = crossbeamsGridFormatters.booleanFormatter;
+          }
+          if (col[attr] === 'crossbeamsGridFormatters.iconFormatter') {
+            newCol[attr] = crossbeamsGridFormatters.iconFormatter;
           }
           if (col[attr] === 'crossbeamsGridFormatters.hrefInlineFormatter') {
             newCol[attr] = crossbeamsGridFormatters.hrefInlineFormatter;

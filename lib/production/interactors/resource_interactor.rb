@@ -79,9 +79,9 @@ module ProductionApp
       failed_response(e.message)
     end
 
-    # def assert_permission!(task, id = nil)
-    #   res = TaskPermissionCheck::Resource.call(task, id)
-    #   raise Crossbeams::TaskNotPermittedError, res.message unless res.success
-    # end
+    def assert_permission!(task, id = nil)
+      res = TaskPermissionCheck::Resource.call(task, id)
+      raise Crossbeams::TaskNotPermittedError, res.message unless res.success
+    end
   end
 end

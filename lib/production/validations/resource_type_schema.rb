@@ -7,6 +7,7 @@ module ProductionApp
     optional(:id, :integer).filled(:int?)
     required(:resource_type_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).filled(:str?)
+    required(:system_resource, :bool).filled(:bool?)
     optional(:attribute_rules, :hash).maybe(:hash?)
     optional(:behaviour_rules, :hash).maybe(:hash?)
   end

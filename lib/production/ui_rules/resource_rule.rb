@@ -26,19 +26,31 @@ module UiRules
     end
 
     def common_fields
+      type_renderer = if @mode == :new
+                        { renderer: :select,
+                          options: @repo.for_select_resource_types(parent_type),
+                          disabled_options: @repo.for_select_inactive_resource_types,
+                          caption: 'resource_type', required: true }
+                      else
+                        resource_type_id_label = @repo.find_resource_type(@form_object.resource_type_id)&.resource_type_code
+                        { renderer: :label, with_value: resource_type_id_label, caption: 'Resource Type' }
+                      end
       {
-        resource_type_id: { renderer: :select,
-                            options: @repo.for_select_resource_types,
-                            disabled_options: @repo.for_select_inactive_resource_types,
-                            caption: 'resource_type', required: true },
-        system_resource_id: { renderer: :select,
-                              options: @repo.for_select_resources,
-                              disabled_options: @repo.for_select_inactive_resources,
-                              caption: 'system_resource' },
+        resource_type_id: type_renderer,
+        # system_resource_id: { renderer: :select,
+        #                       options: @repo.for_select_resources,
+        #                       disabled_options: @repo.for_select_inactive_resources,
+        #                       caption: 'system_resource' },
         resource_code: { required: true },
         description: { required: true },
         resource_attributes: {}
       }
+    end
+
+    def parent_type
+      return nil if @options[:parent_id].nil?
+
+      @repo.resource_type_code_for(@options[:parent_id])
     end
 
     def make_form_object

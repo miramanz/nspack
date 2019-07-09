@@ -17,6 +17,7 @@ module UiRules
     def set_show_fields
       fields[:resource_type_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
+      fields[:system_resource] = { renderer: :label, as_boolean: true }
       fields[:attribute_rules] = { renderer: :label }
       fields[:behaviour_rules] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
