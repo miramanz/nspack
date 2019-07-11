@@ -15,8 +15,7 @@ module UiRules
     end
 
     def set_show_fields
-      # farm_id_label = MasterfilesApp::FarmRepo.new.find_farm(@form_object.farm_id)&.farm_code
-      farm_id_label = @repo.find(:farms, MasterfilesApp::Farms, @form_object.farm_id)&.farm_code
+      farm_id_label = MasterfilesApp::FarmRepo.new.find_farm(@form_object.farm_id)&.farm_code
       fields[:farm_id] = { renderer: :label, with_value: farm_id_label, caption: 'Farm' }
       fields[:orchard_code] = { renderer: :label }
       fields[:description] = { renderer: :label }

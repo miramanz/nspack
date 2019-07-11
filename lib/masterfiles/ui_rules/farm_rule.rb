@@ -17,12 +17,8 @@ module UiRules
     end
 
     def set_show_fields
-      # owner_party_role_id_label
-      # = MasterfilesApp::PartyRepo.new.find_party_role(@form_object.owner_party_role_id)&.id
-      owner_party_role_id_label = @repo.find(:party_roles, MasterfilesApp::PartyRole, @form_object.owner_party_role_id)&.id
-      # pdn_region_id_label = MasterfilesApp::FarmRepo.new.find_production_region(@form_object.pdn_region_id)&.production_region_code
+      owner_party_role_id_label = MasterfilesApp::PartyRepo.new.find_party_role(@form_object.owner_party_role_id)&.party_name
       pdn_region_id_label = @repo.find(:production_regions, MasterfilesApp::ProductionRegion, @form_object.pdn_region_id)&.production_region_code
-      # farm_group_id_label = MasterfilesApp::FarmRepo.new.find_farm_group(@form_object.farm_group_id)&.farm_group_code
       farm_group_id_label = @repo.find(:farm_groups, MasterfilesApp::FarmGroup, @form_object.farm_group_id)&.farm_group_code
       fields[:owner_party_role_id] = { renderer: :label, with_value: owner_party_role_id_label, caption: 'Owner Party Role' }
       fields[:pdn_region_id] = { renderer: :label, with_value: pdn_region_id_label, caption: 'Pdn Region' }
