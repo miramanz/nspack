@@ -89,4 +89,6 @@ class AppConst
   # LOCATION_TYPES_RECEIVING_BAY = 'RECEIVING BAY'
 
   # ERP_PURCHASE_INVOICE_URI = ENV.fetch('ERP_PURCHASE_INVOICE_URI', 'default')
+
+  BIG_ZERO = BigDecimal('0')
 end

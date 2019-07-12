@@ -344,7 +344,7 @@ class Nspack < Roda
                                      :rackmid,
                                      :datagrid,
                                      :ag_grid,
-                                     :selectr,
+                                     :choices,
                                      :sortable,
                                      :lodash,
                                      :multi,
