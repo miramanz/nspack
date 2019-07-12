@@ -1,7 +1,7 @@
 ---
 :caption: Resource Types
 :sql: "SELECT \"resource_types\".\"id\", \"resource_types\".\"resource_type_code\",
-  \"resource_types\".\"description\",\r\n\"resource_types\".system_resource,\r\n\"resource_types\".\"active\",
+  \"resource_types\".\"description\",\r\n\"resource_types\".system_resource, \"resource_types\".\"icon\",\r\n\"resource_types\".\"active\",
   \"resource_types\".\"created_at\", \"resource_types\".\"updated_at\"\r\nFROM \"resource_types\""
 :limit: 
 :offset: 
@@ -61,7 +61,23 @@
     :caption: System resource
     :namespaced_name: resource_types.system_resource
     :data_type: :boolean
-    :width: 
+    :width: 150
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  icon:
+    :name: icon
+    :sequence_no: 5
+    :caption: Icon
+    :namespaced_name: resource_types.icon
+    :data_type: :string
+    :width: 80
     :format: 
     :hide: false
     :pinned: 
@@ -73,7 +89,7 @@
     :group_max: false
   active:
     :name: active
-    :sequence_no: 5
+    :sequence_no: 6
     :caption: Active
     :namespaced_name: resource_types.active
     :data_type: :boolean
@@ -89,7 +105,7 @@
     :group_max: false
   created_at:
     :name: created_at
-    :sequence_no: 6
+    :sequence_no: 7
     :caption: Created at
     :namespaced_name: resource_types.created_at
     :data_type: :datetime
@@ -105,7 +121,7 @@
     :group_max: false
   updated_at:
     :name: updated_at
-    :sequence_no: 7
+    :sequence_no: 8
     :caption: Updated at
     :namespaced_name: resource_types.updated_at
     :data_type: :datetime

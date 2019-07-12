@@ -21,6 +21,7 @@ module UiRules
       fields[:attribute_rules] = { renderer: :label }
       fields[:behaviour_rules] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
+      rules[:icon_render] = render_icon
     end
 
     def common_fields
@@ -46,6 +47,15 @@ module UiRules
                                     description: nil,
                                     attribute_rules: nil,
                                     behaviour_rules: nil)
+    end
+
+    def render_icon
+      return '' if @form_object.icon.nil?
+
+      icon_parts = @form_object.icon.split(',')
+      svg = File.read(File.join(ENV['ROOT'], 'public/app_icons', "#{icon_parts.first}.svg"))
+      color = icon_parts[1] || 'gray'
+      %(<div class="crossbeams-field"><label>Icon</label><div class="cbl-input"><span class="cbl-icon" style="color:#{color}">#{svg}</span></div></div>)
     end
   end
 end

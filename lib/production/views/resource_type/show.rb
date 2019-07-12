@@ -18,6 +18,7 @@ module Production
               # form.add_field :attribute_rules
               # form.add_field :behaviour_rules
               form.add_field :active
+              form.add_text rules[:icon_render]
             end
           end
 

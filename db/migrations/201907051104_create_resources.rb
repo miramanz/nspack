@@ -13,6 +13,7 @@ Sequel.migration do
       TrueClass :system_resource, default: false # ok for indexing? - with id?
       Jsonb :attribute_rules
       Jsonb :behaviour_rules
+      String :icon
 
       TrueClass :active, default: true
       DateTime :created_at, null: false
