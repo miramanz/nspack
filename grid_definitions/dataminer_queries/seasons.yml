@@ -1,7 +1,7 @@
 ---
 :caption: Seasons
 :sql: "SELECT \"seasons\".\"id\", \"seasons\".\"season_group_id\", \"seasons\".\"commodity_id\",
-  \"seasons\".\"season_code\", \"seasons\".\"description\", \"seasons\".\"year\",
+  \"seasons\".\"season_code\", \"seasons\".\"description\", \"seasons\".\"season_year\",
   \"seasons\".\"start_date\", \"seasons\".\"end_date\", \"seasons\".\"active\", \"seasons\".\"created_at\",
   \"seasons\".\"updated_at\", \"commodities\".\"code\" AS commodity_code, \"season_groups\".\"season_group_code\"\r\nFROM
   \"seasons\" JOIN \"commodities\" ON \"commodities\".\"id\" = \"seasons\".\"commodity_id\"
@@ -90,11 +90,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  year:
-    :name: year
+  season_year:
+    :name: season_year
     :sequence_no: 6
-    :caption: Year
-    :namespaced_name: seasons.year
+    :caption: Season Year
+    :namespaced_name: seasons.season_year
     :data_type: :integer
     :width: 
     :format: 

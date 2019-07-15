@@ -17,6 +17,7 @@ module Masterfiles
               form.action '/masterfiles/farms/orchards'
               form.remote! if remote
               form.add_field :farm_id
+              form.add_field :puc_id
               form.add_field :orchard_code
               form.add_field :description
               form.add_field :cultivars

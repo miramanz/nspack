@@ -16,6 +16,7 @@ module Masterfiles
               form.add_field :puc_code
               form.add_field :gap_code
               form.add_field :active
+              form.add_field :farms
             end
           end
 

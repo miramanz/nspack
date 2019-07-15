@@ -158,27 +158,6 @@ class Nspack < Roda
         show_partial { Masterfiles::Farms::Farm::Edit.call(id) }
       end
 
-      r.on 'pucs' do
-        r.on 'new' do    # NEW
-          check_auth!('farms', 'new')
-          show_partial_or_page(r) { Masterfiles::Farms::Puc::New.call(id, remote: fetch?(r)) }
-        end
-        r.post do        # CREATE
-          res = interactor.create_puc(id,params[:puc])
-          if res.success
-            flash[:notice] = res.message
-            redirect_to_last_grid(r)
-          else
-            re_show_form(r, res, url: "/masterfiles/farms/farms/#{id}/pucs/new") do
-              Masterfiles::Farms::Puc::New.call(id,
-                                                form_values: params[:puc],
-                                                form_errors: res.errors,
-                                                remote: fetch?(r))
-            end
-          end
-        end
-      end
-
       r.on 'owner_party_role_changed' do
         farm_groups = interactor.selected_farm_groups(params[:changed_value])
         json_replace_select_options('farm_farm_group_id', farm_groups)
@@ -262,6 +241,11 @@ class Nspack < Roda
         show_partial { Masterfiles::Farms::Orchard::Edit.call(id) }
       end
 
+      r.on 'farm_changed' do
+        farm_pucs = interactor.selected_farm_pucs(params[:changed_value])
+        json_replace_select_options('puc_id', farm_pucs)
+      end
+
       r.is do
         r.get do       # SHOW
           check_auth!('farms', 'read')
@@ -272,6 +256,7 @@ class Nspack < Roda
           if res.success
             row_keys = %i[
               farm_id
+              puc_id
               orchard_code
               description
               cultivars
@@ -306,6 +291,7 @@ class Nspack < Roda
           row_keys = %i[
             id
             farm_id
+            puc_id
             orchard_code
             description
             cultivars
@@ -359,6 +345,32 @@ class Nspack < Roda
             delete_grid_row(id, notice: res.message)
           else
             show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'pucs' do
+      interactor = MasterfilesApp::PucInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('farms', 'new')
+        show_partial_or_page(r) { Masterfiles::Farms::Puc::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_puc(params[:puc])
+        if res.success
+          row_keys = %i[
+            id
+            puc_code
+            gap_code
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/farms/pucs/new') do
+            Masterfiles::Farms::Puc::New.call(form_values: params[:puc],
+                                              form_errors: res.errors,
+                                              remote: fetch?(r))
           end
         end
       end

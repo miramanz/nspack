@@ -22,8 +22,9 @@
   :icon: information-solid
   :title: Status
   :popup: true
-:conditions:
-  :standard:
-    - :col: farms_pucs.farm_id
-      :op: =
-      :val: $:farms_pucs.farm_id$
+:page_controls:
+  - :control_type: :link
+    :url: "/masterfiles/farms/pucs/new"
+    :text: New Puc
+    :style: :button
+    :behaviour: :popup

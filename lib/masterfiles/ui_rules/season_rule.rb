@@ -21,7 +21,7 @@ module UiRules
                                       with_value: MasterfilesApp::CommodityRepo.new.find_commodity(@form_object.commodity_id)&.code }
       fields[:season_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
-      fields[:year] = { renderer: :label }
+      fields[:season_year] = { renderer: :label }
       fields[:start_date] = { renderer: :label }
       fields[:end_date] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
@@ -33,7 +33,7 @@ module UiRules
         commodity_id: { renderer: :select, options: MasterfilesApp::CommodityRepo.new.for_select_commodities, disabled_options: MasterfilesApp::CommodityRepo.new.for_select_inactive_commodities },
         season_code: { required: true },
         description: {},
-        year: {renderer: :integer},
+        season_year: {renderer: :integer},
         start_date: {renderer: :input, subtype: :date},
         end_date: {renderer: :input, subtype: :date},
         active: { renderer: :checkbox }
@@ -54,7 +54,7 @@ module UiRules
                                     commodity_id: nil,
                                     season_code: nil,
                                     description: nil,
-                                    year: nil,
+                                    season_year: nil,
                                     start_date: nil,
                                     end_date: nil,
                                     active: true)

@@ -9,8 +9,8 @@ module MasterfilesApp
     required(:commodity_id, :integer).filled(:int?)
     required(:season_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
-    required(:year, :integer).maybe(:int?)
-    required(:start_date, :date_time).maybe(:date_time?)
-    required(:end_date, :date_time).maybe(:date_time?)
+    required(:season_year, :integer).maybe(:int?)
+    required(:start_date, :date).maybe(:date?)
+    required(:end_date, :date).maybe(:date?)
   end
 end

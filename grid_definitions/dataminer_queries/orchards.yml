@@ -1,9 +1,11 @@
 ---
 :caption: Orchards
-:sql: "SELECT \"orchards\".\"id\", \"orchards\".\"farm_id\", \"orchards\".\"orchard_code\",
-  \"orchards\".\"description\", \"orchards\".\"cultivars\", \"orchards\".\"active\",
-  \"orchards\".\"created_at\", \"orchards\".\"updated_at\", \"farms\".\"farm_code\"\r\nFROM
-  \"orchards\" JOIN \"farms\" ON \"farms\".\"id\" = \"orchards\".\"farm_id\""
+:sql: "SELECT \"orchards\".\"id\", \"orchards\".\"farm_id\", \"orchards\".\"puc_id\",
+  \"orchards\".\"orchard_code\", \"orchards\".\"description\", \"orchards\".\"cultivars\",
+  \"orchards\".\"active\", \"orchards\".\"created_at\", \"orchards\".\"updated_at\",
+  \"farms\".\"farm_code\", \"pucs\".\"puc_code\"\r\nFROM \"orchards\" \r\nJOIN \"farms\"
+  ON \"farms\".\"id\" = \"orchards\".\"farm_id\"\r\nJOIN \"pucs\" ON \"pucs\".\"id\"
+  = \"orchards\".\"puc_id\""
 :limit: 
 :offset: 
 :external_settings: {}
@@ -40,9 +42,25 @@
     :group_avg: false
     :group_min: false
     :group_max: false
+  puc_id:
+    :name: puc_id
+    :sequence_no: 3
+    :caption: Puc
+    :namespaced_name: orchards.puc_id
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
   orchard_code:
     :name: orchard_code
-    :sequence_no: 3
+    :sequence_no: 4
     :caption: Orchard code
     :namespaced_name: orchards.orchard_code
     :data_type: :string
@@ -58,7 +76,7 @@
     :group_max: false
   description:
     :name: description
-    :sequence_no: 4
+    :sequence_no: 5
     :caption: Description
     :namespaced_name: orchards.description
     :data_type: :string
@@ -74,7 +92,7 @@
     :group_max: false
   cultivars:
     :name: cultivars
-    :sequence_no: 5
+    :sequence_no: 6
     :caption: Cultivars
     :namespaced_name: orchards.cultivars
     :data_type: :integer_array
@@ -90,7 +108,7 @@
     :group_max: false
   active:
     :name: active
-    :sequence_no: 6
+    :sequence_no: 7
     :caption: Active
     :namespaced_name: orchards.active
     :data_type: :boolean
@@ -106,7 +124,7 @@
     :group_max: false
   created_at:
     :name: created_at
-    :sequence_no: 7
+    :sequence_no: 8
     :caption: Created at
     :namespaced_name: orchards.created_at
     :data_type: :datetime
@@ -122,7 +140,7 @@
     :group_max: false
   updated_at:
     :name: updated_at
-    :sequence_no: 8
+    :sequence_no: 9
     :caption: Updated at
     :namespaced_name: orchards.updated_at
     :data_type: :datetime
@@ -138,7 +156,7 @@
     :group_max: false
   farm_code:
     :name: farm_code
-    :sequence_no: 9
+    :sequence_no: 10
     :caption: Farm code
     :namespaced_name: farms.farm_code
     :data_type: :string
@@ -147,6 +165,22 @@
     :hide: false
     :pinned: 
     :groupable: true
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  puc_code:
+    :name: puc_code
+    :sequence_no: 11
+    :caption: Puc code
+    :namespaced_name: pucs.puc_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
     :group_by_seq: 
     :group_sum: false
     :group_avg: false

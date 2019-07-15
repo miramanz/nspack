@@ -10,6 +10,7 @@ module MasterfilesApp
       base_attrs = {
         id: 1,
         farm_id: 1,
+        puc_id: 1,
         orchard_code: 'ABC',
         description: 'ABC',
         cultivars: [1, 2, 3],

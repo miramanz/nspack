@@ -14,18 +14,6 @@ module MasterfilesApp
       FarmSchema.call(params)
     end
 
-    def puc(cached = true)
-      if cached
-        @puc ||= repo.find_puc(@puc_id)
-      else
-        @puc = repo.find_puc(@puc_id)
-      end
-    end
-
-    def validate_puc_params(params)
-      PucSchema.call(params)
-    end
-
     def create_farm(params)
       res = validate_farm_params(params)
       return validation_failed_response(res) unless res.messages.empty?
@@ -75,19 +63,6 @@ module MasterfilesApp
     def assert_permission!(task, id = nil)
       res = TaskPermissionCheck::Farm.call(task, id)
       raise Crossbeams::TaskNotPermittedError, res.message unless res.success
-    end
-
-    def create_puc(id, params)
-      res = validate_puc_params(params)
-      return validation_failed_response(res) unless res.messages.empty?
-
-      repo.transaction do
-        @puc_id = repo.create_puc(res)
-        repo.create_farms_pucs(id,@puc_id)
-      end
-      success_response("Created puc #{puc.puc_code}", puc)
-    rescue Sequel::UniqueConstraintViolation
-      validation_failed_response(OpenStruct.new(messages: { puc_code: ['This puc already exists'] }))
     end
 
     def selected_farm_groups(owner_party_role_id)

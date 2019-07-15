@@ -7,9 +7,9 @@ module MasterfilesApp
     attribute :commodity_id, Types::Integer
     attribute :season_code, Types::String
     attribute :description, Types::String
-    attribute :year, Types::Integer
-    attribute :start_date, Types::DateTime
-    attribute :end_date, Types::DateTime
+    attribute :season_year, Types::Integer
+    attribute :start_date, Types::Date
+    attribute :end_date, Types::Date
     attribute? :active, Types::Bool
   end
 end

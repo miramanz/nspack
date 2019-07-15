@@ -102,7 +102,7 @@ class Nspack < Roda
               commodity_id
               season_code
               description
-              year
+              season_year
               start_date
               end_date
             ]
@@ -139,7 +139,7 @@ class Nspack < Roda
             commodity_id
             season_code
             description
-            year
+            season_year
             start_date
             end_date
           ]

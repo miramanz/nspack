@@ -14,7 +14,7 @@ module Masterfiles
             page.form_errors form_errors
             page.form do |form|
               form.caption 'New Puc'
-              form.action "/masterfiles/farms/farms/#{parent_id}/pucs"
+              form.action "/masterfiles/farms/pucs"
               form.remote! if remote
               form.add_field :puc_code
               form.add_field :gap_code

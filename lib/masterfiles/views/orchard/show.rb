@@ -14,6 +14,7 @@ module Masterfiles
               # form.caption 'Orchard'
               form.view_only!
               form.add_field :farm_id
+              form.add_field :puc_id
               form.add_field :orchard_code
               form.add_field :description
               form.add_field :cultivars

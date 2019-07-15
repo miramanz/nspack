@@ -26,6 +26,8 @@ module UiRules
       fields[:farm_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
+      fields[:pucs] = { renderer: :list, items: farm_puc_codes }
+      fields[:orchards] = { renderer: :list, items: farm_orchard_codes }
     end
 
     def common_fields
@@ -59,6 +61,14 @@ module UiRules
       behaviours do |behaviour|
         behaviour.dropdown_change :owner_party_role_id, notify: [{ url: "/masterfiles/farms/farms/#{@options[:id]}/owner_party_role_changed" }]
       end
+    end
+
+    def farm_puc_codes
+      @repo.find_farm_puc_codes(@options[:id])
+    end
+
+    def farm_orchard_codes
+      @repo.find_farm_orchard_codes(@options[:id])
     end
 
   end

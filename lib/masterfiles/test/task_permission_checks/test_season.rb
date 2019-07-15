@@ -13,7 +13,7 @@ module MasterfilesApp
         commodity_id: 1,
         season_code: 'ABC',
         description: 'ABC',
-        year: 1,
+        season_year: 1,
         start_date: '2010-01-01 12:00',
         end_date: '2010-01-01 12:00',
         active: true

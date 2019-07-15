@@ -18,6 +18,7 @@ module UiRules
       fields[:puc_code] = { renderer: :label }
       fields[:gap_code] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
+      fields[:farms] = { renderer: :list, items: puc_farm_codes }
     end
 
     def common_fields
@@ -39,6 +40,10 @@ module UiRules
     def make_new_form_object
       @form_object = OpenStruct.new(puc_code: nil,
                                     gap_code: nil)
+    end
+
+    def puc_farm_codes
+      @repo.find_puc_farm_codes(@options[:id])
     end
 
   end

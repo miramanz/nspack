@@ -68,5 +68,22 @@ module MasterfilesApp
     def delete_farms_pucs(puc_id)
       DB[:farms_pucs].where(puc_id: puc_id).delete
     end
+
+    def find_puc_farm_codes(id)
+      DB[:farms].join(:farms_pucs, farm_id: :id).where(puc_id: id).select_map(:farm_code).sort
+    end
+
+    def find_farm_pucs(id)
+      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: id).map([id, :puc_code]).sort
+    end
+
+    def find_farm_puc_codes(id)
+      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: id).select_map(:puc_code).sort
+    end
+
+    def find_farm_orchard_codes(id)
+      DB[:orchards].join(:farms, id: :farm_id).where(farm_id: id).select_map(:orchard_code).sort
+    end
+
   end
 end

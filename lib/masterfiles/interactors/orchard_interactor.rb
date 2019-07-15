@@ -64,5 +64,10 @@ module MasterfilesApp
       res = TaskPermissionCheck::Orchard.call(task, id)
       raise Crossbeams::TaskNotPermittedError, res.message unless res.success
     end
+
+    def selected_farm_pucs(farm_id)
+      repo.find_farm_pucs(farm_id.to_i)
+    end
+
   end
 end

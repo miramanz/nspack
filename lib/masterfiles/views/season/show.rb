@@ -17,7 +17,7 @@ module Masterfiles
               form.add_field :commodity_id
               form.add_field :season_code
               form.add_field :description
-              form.add_field :year
+              form.add_field :season_year
               form.add_field :start_date
               form.add_field :end_date
               form.add_field :active
