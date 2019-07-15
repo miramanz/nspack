@@ -6,11 +6,11 @@ Sequel.migration do
       primary_key :id
       foreign_key :season_group_id, :season_groups, type: :integer, null: false
       foreign_key :commodity_id, :commodities, type: :integer, null: false
-      String :season_code, size: 255, null: false
+      String :season_code, null: false
       String :description
-      Integer :year
-      DateTime :start_date
-      DateTime :end_date
+      Integer :season_year
+      Date :start_date
+      Date :end_date
       TrueClass :active, default: true
       DateTime :created_at, null: false
       DateTime :updated_at, null: false

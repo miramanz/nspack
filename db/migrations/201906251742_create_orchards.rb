@@ -5,6 +5,7 @@ Sequel.migration do
     create_table(:orchards, ignore_index_errors: true) do
       primary_key :id
       foreign_key :farm_id, :farms, type: :integer, null: false
+      foreign_key :puc_id, :pucs, type: :integer, null: false
       String :orchard_code, size: 255, null: false
       String :description
       column :cultivars, 'int[]'
