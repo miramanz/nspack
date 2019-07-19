@@ -38,9 +38,10 @@ module MasterfilesApp
       return validation_failed_response(res) unless res.messages.empty?
 
       attrs = res.to_h
-      cultivar_ids = "{ #{attrs.delete(:cultivar_ids).join(',')} }"
+      cultivar_ids = attrs.delete(:cultivar_ids)
+      attrs = attrs.merge(cultivar_ids: "{#{cultivar_ids.join(',')}}") unless cultivar_ids.nil?
       repo.transaction do
-        repo.update_orchard(id, attrs.merge(cultivar_ids: cultivar_ids))
+        repo.update_orchard(id, attrs)
         log_transaction
       end
       instance = orchard(id)
