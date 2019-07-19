@@ -8,7 +8,7 @@ Sequel.migration do
       foreign_key :puc_id, :pucs, type: :integer, null: false
       String :orchard_code, size: 255, null: false
       String :description
-      column :cultivars, 'int[]'
+      column :cultivar_ids, 'int[]'
       TrueClass :active, default: true
       DateTime :created_at, null: false
       DateTime :updated_at, null: false

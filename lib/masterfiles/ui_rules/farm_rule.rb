@@ -33,10 +33,12 @@ module UiRules
     def common_fields
       {
         owner_party_role_id: { renderer: :select, options: MasterfilesApp::PartyRepo.new.for_select_party_roles, caption: 'owner_party_role', required: true },
-        pdn_region_id: { renderer: :select, options: MasterfilesApp::FarmRepo.new.for_select_production_regions, disabled_options: MasterfilesApp::FarmRepo.new.for_select_inactive_production_regions, caption: 'pdn_region', required: true },
-        farm_group_id: { renderer: :select, options: MasterfilesApp::FarmRepo.new.for_select_farm_groups, disabled_options: MasterfilesApp::FarmRepo.new.for_select_inactive_farm_groups, caption: 'farm_group', required: true },
+        pdn_region_id: { renderer: :select, options: @repo.for_select_production_regions, disabled_options: @repo.for_select_inactive_production_regions, caption: 'pdn_region', required: true },
+        farm_group_id: { renderer: :select, options: @repo.for_select_farm_groups, disabled_options: @repo.for_select_inactive_farm_groups, caption: 'farm_group', required: true },
         farm_code: { required: true },
-        description: {}
+        description: {},
+        active: { renderer: :checkbox },
+        farms_pucs_ids: { renderer: :multi, options: @repo.for_select_pucs, selected: @form_object.farms_pucs_ids }
       }
     end
 
@@ -54,7 +56,9 @@ module UiRules
                                     pdn_region_id: nil,
                                     farm_group_id: nil,
                                     farm_code: nil,
-                                    description: nil)
+                                    description: nil,
+                                    active: true,
+                                    farms_pucs_ids: [])
     end
 
     def add_behaviours

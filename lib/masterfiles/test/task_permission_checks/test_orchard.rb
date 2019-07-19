@@ -13,7 +13,7 @@ module MasterfilesApp
         puc_id: 1,
         orchard_code: 'ABC',
         description: 'ABC',
-        cultivars: [1, 2, 3],
+        cultivar_ids: [1, 2, 3],
         active: true
       }
       MasterfilesApp::Orchard.new(base_attrs.merge(attrs))

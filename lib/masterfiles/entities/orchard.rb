@@ -7,7 +7,7 @@ module MasterfilesApp
     attribute :puc_id, Types::Integer
     attribute :orchard_code, Types::String
     attribute :description, Types::String
-    attribute :cultivars, Types::Array
+    attribute :cultivar_ids, Types::Array
     attribute? :active, Types::Bool
   end
 end

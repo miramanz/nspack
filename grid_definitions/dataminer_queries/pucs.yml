@@ -2,9 +2,9 @@
 :caption: Pucs
 :sql: "SELECT \"pucs\".\"id\", \"pucs\".\"puc_code\", \"pucs\".\"gap_code\", \"pucs\".\"active\",
   \"pucs\".\"created_at\", \"pucs\".\"updated_at\", array_agg(farms.farm_code) AS
-  farm_codes, fn_current_status('pucs', \"pucs\".\"id\") AS status FROM \"pucs\"\r\nJOIN
-  farms_pucs on farms_pucs.puc_id = pucs.id \r\nJOIN farms on farms_pucs.farm_id =
-  farms.id \r\nGROUP BY \"pucs\".\"id\""
+  farm_codes, fn_current_status('pucs', \"pucs\".\"id\") AS status FROM \"pucs\"\r\nLEFT
+  JOIN farms_pucs on farms_pucs.puc_id = pucs.id \r\nLEFT JOIN farms on farms_pucs.farm_id
+  = farms.id \r\nGROUP BY \"pucs\".\"id\""
 :limit: 
 :offset: 
 :external_settings: {}

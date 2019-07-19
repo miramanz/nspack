@@ -19,6 +19,7 @@ module Masterfiles
               form.method :update
               form.add_field :puc_code
               form.add_field :gap_code
+              form.add_field :active
             end
           end
 

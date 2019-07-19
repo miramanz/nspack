@@ -24,7 +24,8 @@ module UiRules
     def common_fields
       {
         puc_code: { required: true },
-        gap_code: {}
+        gap_code: {},
+        active: { renderer: :checkbox }
       }
     end
 
@@ -39,7 +40,8 @@ module UiRules
 
     def make_new_form_object
       @form_object = OpenStruct.new(puc_code: nil,
-                                    gap_code: nil)
+                                    gap_code: nil,
+                                    active: true)
     end
 
     def puc_farm_codes

@@ -22,6 +22,9 @@
   :icon: information-solid
   :title: Status
   :popup: true
+- :url: "/masterfiles/farms/farms/$:id$/list_farm_orchards"
+  :text: orchards
+  :icon: list
 :page_controls:
 - :control_type: :link
   :url: "/masterfiles/farms/farms/new"

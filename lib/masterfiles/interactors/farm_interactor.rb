@@ -20,7 +20,8 @@ module MasterfilesApp
 
       id = nil
       repo.transaction do
-        id = repo.create_farm(res)
+        response = repo.create_farm(res)
+        id = response[:id]
         log_status('farms', id, 'CREATED')
         log_transaction
       end
@@ -37,13 +38,20 @@ module MasterfilesApp
       res = validate_farm_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
-      repo.transaction do
-        repo.update_farm(id, res)
-        log_transaction
+      attrs = res.to_h
+      farms_pucs_ids = attrs.delete(:farms_pucs_ids)
+      farms_pucs_response = associate_farms_pucs(id, farms_pucs_ids)
+      if farms_pucs_response.success
+        repo.transaction do
+          repo.update_farm(id, attrs)
+          log_transaction
+        end
+        instance = farm(id)
+        success_response("Updated farm #{instance.farm_code}",
+                         instance)
+      else
+        validation_failed_response(OpenStruct.new(messages: { roles: ['You did not choose a puc'] }))
       end
-      instance = farm(id)
-      success_response("Updated farm #{instance.farm_code}",
-                       instance)
     rescue Crossbeams::InfoError => e
       failed_response(e.message)
     end
@@ -67,6 +75,15 @@ module MasterfilesApp
 
     def selected_farm_groups(owner_party_role_id)
       repo.for_select_farm_groups(where: { owner_party_role_id: owner_party_role_id })
+    end
+
+    def associate_farms_pucs(id, farms_pucs_ids)
+      return validation_failed_response(OpenStruct.new(messages: { farms_pucs_ids: ['You did not choose a puc'] })) if farms_pucs_ids.empty?
+
+      repo.transaction do
+        repo.associate_farms_pucs(id, farms_pucs_ids)
+      end
+      success_response('Farm => Puc associated successfully')
     end
 
   end

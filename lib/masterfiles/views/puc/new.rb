@@ -18,6 +18,7 @@ module Masterfiles
               form.remote! if remote
               form.add_field :puc_code
               form.add_field :gap_code
+              form.add_field :active
             end
           end
 

@@ -94,7 +94,7 @@ class TestOrchardRoutes < RouteTester
     ensure_exists!(INTERACTOR)
     row_vals = Hash.new(1)
     INTERACTOR.any_instance.stubs(:create_orchard).returns(ok_response(instance: row_vals))
-    post_as_fetch 'masterfiles/farms/orchards', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
+    post_as_fetch 'masterfiles/farms/farms/1/orchards/new', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
     expect_json_add_to_grid(has_notice: true)
   end
 
@@ -102,8 +102,8 @@ class TestOrchardRoutes < RouteTester
     authorise_pass!
     ensure_exists!(INTERACTOR)
     INTERACTOR.any_instance.stubs(:create_orchard).returns(bad_response)
-    Masterfiles::Farms::Orchard::New.stub(:call, bland_page) do
-      post_as_fetch 'masterfiles/farms/orchards', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
+    Masterfiles::Farms::Orchard::Addochards.stub(:call, bland_page) do
+      post_as_fetch 'masterfiles/farms/farms/1/orchards/new', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
     end
     expect_json_replace_dialog
   end

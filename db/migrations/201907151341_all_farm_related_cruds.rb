@@ -79,13 +79,10 @@ Sequel.migration do
     run "SELECT audit.audit_table('pucs', true, true, '{updated_at}'::text[]);"
 
     create_table(:farms_pucs, ignore_index_errors: true) do
-      primary_key :id
       foreign_key :puc_id, :pucs, type: :integer, null: false
       foreign_key :farm_id, :farms, type: :integer, null: false
       DateTime :created_at, null: false
       DateTime :updated_at, null: false
-      #
-      # index [:code], name: :farms_pucs_unique_code, unique: true
     end
 
     pgt_created_at(:farms_pucs,
@@ -107,7 +104,7 @@ Sequel.migration do
       foreign_key :puc_id, :pucs, type: :integer, null: false
       String :orchard_code, size: 255, null: false
       String :description
-      column :cultivars, 'int[]'
+      column :cultivar_ids, 'int[]'
       TrueClass :active, default: true
       DateTime :created_at, null: false
       DateTime :updated_at, null: false
@@ -132,32 +129,14 @@ Sequel.migration do
 
   down do
     # Drop logging for this table.
-    drop_trigger(:farm_groups, :audit_trigger_row)
-    drop_trigger(:farm_groups, :audit_trigger_stm)
+    drop_trigger(:orchards, :audit_trigger_row)
+    drop_trigger(:orchards, :audit_trigger_stm)
 
-    drop_trigger(:farm_groups, :set_created_at)
-    drop_function(:farm_groups_set_created_at)
-    drop_trigger(:farm_groups, :set_updated_at)
-    drop_function(:farm_groups_set_updated_at)
-    drop_table(:farm_groups)
-
-    drop_trigger(:farms, :audit_trigger_row)
-    drop_trigger(:farms, :audit_trigger_stm)
-
-    drop_trigger(:farms, :set_created_at)
-    drop_function(:farms_set_created_at)
-    drop_trigger(:farms, :set_updated_at)
-    drop_function(:farms_set_updated_at)
-    drop_table(:farms)
-
-    drop_trigger(:pucs, :audit_trigger_row)
-    drop_trigger(:pucs, :audit_trigger_stm)
-
-    drop_trigger(:pucs, :set_created_at)
-    drop_function(:pucs_set_created_at)
-    drop_trigger(:pucs, :set_updated_at)
-    drop_function(:pucs_set_updated_at)
-    drop_table(:pucs)
+    drop_trigger(:orchards, :set_created_at)
+    drop_function(:orchards_set_created_at)
+    drop_trigger(:orchards, :set_updated_at)
+    drop_function(:orchards_set_updated_at)
+    drop_table(:orchards)
 
     drop_trigger(:farms_pucs, :audit_trigger_row)
     drop_trigger(:farms_pucs, :audit_trigger_stm)
@@ -168,13 +147,31 @@ Sequel.migration do
     drop_function(:farms_pucs_set_updated_at)
     drop_table(:farms_pucs)
 
-    drop_trigger(:orchards, :audit_trigger_row)
-    drop_trigger(:orchards, :audit_trigger_stm)
+    drop_trigger(:pucs, :audit_trigger_row)
+    drop_trigger(:pucs, :audit_trigger_stm)
 
-    drop_trigger(:orchards, :set_created_at)
-    drop_function(:orchards_set_created_at)
-    drop_trigger(:orchards, :set_updated_at)
-    drop_function(:orchards_set_updated_at)
-    drop_table(:orchards)
+    drop_trigger(:pucs, :set_created_at)
+    drop_function(:pucs_set_created_at)
+    drop_trigger(:pucs, :set_updated_at)
+    drop_function(:pucs_set_updated_at)
+    drop_table(:pucs)
+
+    drop_trigger(:farms, :audit_trigger_row)
+    drop_trigger(:farms, :audit_trigger_stm)
+
+    drop_trigger(:farms, :set_created_at)
+    drop_function(:farms_set_created_at)
+    drop_trigger(:farms, :set_updated_at)
+    drop_function(:farms_set_updated_at)
+    drop_table(:farms)
+
+    drop_trigger(:farm_groups, :audit_trigger_row)
+    drop_trigger(:farm_groups, :audit_trigger_stm)
+
+    drop_trigger(:farm_groups, :set_created_at)
+    drop_function(:farm_groups_set_created_at)
+    drop_trigger(:farm_groups, :set_updated_at)
+    drop_function(:farm_groups_set_updated_at)
+    drop_table(:farm_groups)
   end
 end

@@ -26,7 +26,8 @@ module UiRules
       {
         owner_party_role_id: { renderer: :select, options: MasterfilesApp::PartyRepo.new.for_select_party_roles, caption: 'owner_party_role', required: true },
         farm_group_code: { required: true },
-        description: {}
+        description: {},
+        active: { renderer: :checkbox }
       }
     end
 
@@ -42,7 +43,8 @@ module UiRules
     def make_new_form_object
       @form_object = OpenStruct.new(owner_party_role_id: nil,
                                     farm_group_code: nil,
-                                    description: nil)
+                                    description: nil,
+                                    active: true)
     end
 
   end

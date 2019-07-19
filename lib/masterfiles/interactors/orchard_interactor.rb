@@ -37,8 +37,10 @@ module MasterfilesApp
       res = validate_orchard_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
+      attrs = res.to_h
+      cultivar_ids = "{ #{attrs.delete(:cultivar_ids).join(',')} }"
       repo.transaction do
-        repo.update_orchard(id, res)
+        repo.update_orchard(id, attrs.merge(cultivar_ids: cultivar_ids))
         log_transaction
       end
       instance = orchard(id)
@@ -66,7 +68,11 @@ module MasterfilesApp
     end
 
     def selected_farm_pucs(farm_id)
-      repo.find_farm_pucs(farm_id.to_i)
+      repo.selected_farm_pucs(farm_id)
+    end
+
+    def farm_orchards(farm_id)
+      @repo.find_farm_orchard_codes(farm_id)
     end
 
   end
