@@ -2,7 +2,7 @@
 :caption: Orchards
 :sql: "SELECT \"orchards\".\"id\", \"orchards\".\"farm_id\", \"orchards\".\"puc_id\",
   \"orchards\".\"orchard_code\", \"orchards\".\"description\", \"orchards\".\"cultivar_ids\",
-  string_agg(cultivars.cultivar_name, ';') AS cultivar_names, \"orchards\".\"active\",
+  string_agg(cultivars.cultivar_name, '; ') AS cultivar_names, \"orchards\".\"active\",
   \"orchards\".\"created_at\", \"orchards\".\"updated_at\", \"farms\".\"farm_code\",
   \"pucs\".\"puc_code\"\r\nFROM \"orchards\" \r\nJOIN \"farms\" ON \"farms\".\"id\"
   = \"orchards\".\"farm_id\"\r\nJOIN \"pucs\" ON \"pucs\".\"id\" = \"orchards\".\"puc_id\"\r\nLEFT
