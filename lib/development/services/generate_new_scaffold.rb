@@ -1292,8 +1292,6 @@ module DevelopmentApp
                 end
               end
 
-              # New scaffold form to ask for shared factory..
-
               private
 
               def #{opts.singlename}_attrs
