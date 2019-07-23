@@ -10,9 +10,11 @@ Sequel.migration do
       primary_key :id
       String :resource_type_code, null: false
       String :description, null: false
-      TrueClass :system_resource, default: false # ok for indexing? - with id?
-      Jsonb :attribute_rules
-      Jsonb :behaviour_rules
+      TrueClass :system_resource, default: false
+      TrueClass :computing_device, default: false
+      TrueClass :peripheral, default: false
+      # Jsonb :attribute_rules
+      # Jsonb :behaviour_rules
       String :icon
 
       TrueClass :active, default: true
@@ -34,6 +36,13 @@ Sequel.migration do
 
     # Log changes to this table. Exclude changes to the updated_at column.
     run "SELECT audit.audit_table('resource_types', true, true, '{updated_at}'::text[]);"
+
+    # system resources: computing device / peripheral
+    # computing_device_id XXX : can belong to > 1
+    # peripheral_type       | = resource_type
+    # computing_device_type | = resource_type
+    # peripheral?
+    # computing_device?
 
     # RESOURCES
     # ---------
