@@ -49,7 +49,7 @@ Pass in the table name as a symbol and the number by which you expect the row co
 Example:
 [source,ruby]
 ----
-def test_delete
+def test_delete_commodity_group
   id = create_commodity_group
   assert_count_changed(:commodity_groups, -1) do
     res = interactor.delete_commodity_group(id)
