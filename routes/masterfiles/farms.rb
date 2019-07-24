@@ -130,6 +130,7 @@ class Nspack < Roda
             owner_party_role_id
             farm_group_code
             description
+            puc_id
             active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
@@ -169,33 +170,57 @@ class Nspack < Roda
         r.redirect "/list/orchards/with_params?key=standard&orchards.farm_id=#{id}"
       end
 
+      r.on 'link_farm_pucs' do
+        r.post do
+          res = interactor.associate_farms_pucs(id, multiselect_grid_choices(params))
+          if fetch?(r)
+            show_json_notice(res.message)
+          else
+            flash[:notice] = res.message
+            r.redirect '/list/pucs'
+          end
+        end
+      end
+
       r.on 'orchards' do
         interactor = MasterfilesApp::OrchardInteractor.new(current_user, {}, { route_url: request.path }, {})
         r.on 'add_orchards' do
           check_auth!('farms', 'new')
-          show_partial_or_page(r) { Masterfiles::Farms::Orchard::Addochards.call(id, remote: fetch?(r)) }
+          show_partial_or_page(r) { Masterfiles::Farms::Orchard::New.call(id, remote: fetch?(r)) }
         end
 
         r.post do        # CREATE
           res = interactor.create_orchard(params[:orchard].merge(farm_id: id))
           if res.success
-            farm_pucs = interactor.selected_farm_pucs(id)
-            farm_orchards = interactor.farm_orchards(id)
-            json_actions([
-                             OpenStruct.new(type: :change_select_value, dom_id: 'orchard_puc_id', value: farm_pucs),
-                             OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_orchard_code', value: ''),
-                             OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_description', value: ''),
-                             OpenStruct.new(type: :replace_list_items, dom_id: 'orchard_farm_orchards', items: farm_orchards),
-                             OpenStruct.new(type: :clear_form_validation, dom_id: 'new_farm_orchards')
-                         ],
-                         'Added new item',
-                         keep_dialog_open: true)
+            row_keys = %i[
+              id
+              farm_id
+              puc_id
+              orchard_code
+              description
+              active
+              cultivar_ids
+            ]
+            add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                         notice: res.message)
+            # farm_pucs = interactor.selected_farm_pucs(id)
+            # farm_orchards = interactor.farm_orchards(id)
+            # json_actions([
+            #                  OpenStruct.new(type: :change_select_value, dom_id: 'orchard_puc_id', value: farm_pucs),
+            #                  OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_orchard_code', value: ''),
+            #                  OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_description', value: ''),
+            #                  OpenStruct.new(type: :replace_multi_options, dom_id: 'orchard_cultivar_ids', options_array: res.instance[:cultivars]),
+            #                  OpenStruct.new(type: :replace_list_items, dom_id: 'orchard_farm_orchards', items: farm_orchards),
+            #                  OpenStruct.new(type: :clear_form_validation, dom_id: 'new_farm_orchards')
+            #              ],
+            #              'Added new item',
+            #              keep_dialog_open: true)
           else
             re_show_form(r, res, url: "/masterfiles/farms/farms/#{id}/orchards/add_orchards") do
-              Masterfiles::Farms::Orchard::Addochards.call(id,
-                                                           form_values: params[:orchard],
-                                                           form_errors: res.errors,
-                                                           remote: fetch?(r))
+              Masterfiles::Farms::Orchard::New.call(id,
+                                                    form_values: params[:orchard],
+                                                    form_errors: res.errors,
+                                                    remote: fetch?(r))
             end
           end
         end
@@ -215,6 +240,7 @@ class Nspack < Roda
               farm_group_id
               farm_code
               description
+              puc_id
               active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)

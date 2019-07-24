@@ -15,6 +15,7 @@ module MasterfilesApp
         farm_code: 'ABC',
         description: 'ABC',
         active: true,
+        puc_id: 1,
         farms_pucs_ids: [1, 2]
       }
       MasterfilesApp::Farm.new(base_attrs.merge(attrs))

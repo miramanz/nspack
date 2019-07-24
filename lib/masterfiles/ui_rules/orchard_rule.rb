@@ -35,7 +35,7 @@ module UiRules
         orchard_code: { required: true },
         description: {},
         active: { renderer: :checkbox },
-        cultivar_ids: { renderer: :multi, options: MasterfilesApp::CultivarRepo.new.for_select_cultivars, selected: @form_object.cultivar_ids }
+        cultivar_ids: { renderer: :multi, options: MasterfilesApp::CultivarRepo.new.for_select_cultivars, selected: @form_object.cultivar_ids, caption: 'Cultivars' }
       }
     end
 
@@ -48,6 +48,8 @@ module UiRules
           puc_id: { renderer: :select, options: @repo.selected_farm_pucs(farm_id), disabled_options: @repo.for_select_inactive_pucs, caption: 'Puc', required: true },
           orchard_code: { required: true },
           description: {},
+          active: { renderer: :checkbox },
+          cultivar_ids: { renderer: :multi, options: MasterfilesApp::CultivarRepo.new.for_select_cultivars, selected: @form_object.cultivar_ids },
           farm_orchards: { renderer: :list, items: farm_orchards, caption: 'Orchards' }
       }
     end

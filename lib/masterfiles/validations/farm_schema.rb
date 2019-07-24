@@ -11,6 +11,6 @@ module MasterfilesApp
     required(:farm_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
     required(:active, :bool).filled(:bool?)
-    required(:farms_pucs_ids, Types::IntArray).filled { each(:int?) }
+    required(:puc_id, :integer).filled(:int?)
   end
 end

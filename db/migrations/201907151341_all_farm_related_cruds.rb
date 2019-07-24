@@ -32,6 +32,7 @@ Sequel.migration do
       foreign_key :owner_party_role_id, :party_roles, type: :integer, null: false
       foreign_key :pdn_region_id, :production_regions, type: :integer, null: false
       foreign_key :farm_group_id, :farm_groups, type: :integer, null: false
+      # foreign_key :puc_id, :pucs, type: :integer, null: false
       String :farm_code, size: 255, null: false
       String :description
       TrueClass :active, default: true

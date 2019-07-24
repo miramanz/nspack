@@ -25,6 +25,11 @@
 - :url: "/masterfiles/farms/farms/$:id$/list_farm_orchards"
   :text: orchards
   :icon: list
+  :popup: true
+- :url: "/list/link_farm_pucs/multi?key=farms_pucs&id=$:id$"
+  :text: pucs
+  :icon: list
+  :popup: true
 :page_controls:
 - :control_type: :link
   :url: "/masterfiles/farms/farms/new"

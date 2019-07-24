@@ -16,6 +16,7 @@ module Masterfiles
               form.caption 'New Orchard'
               form.action "/masterfiles/farms/farms/#{farm_id}/orchards/new"
               form.remote! if remote
+              form.add_field :farm
               form.add_field :farm_id
               form.add_field :puc_id
               form.add_field :orchard_code

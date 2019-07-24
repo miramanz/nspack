@@ -57,7 +57,7 @@ module MasterfilesApp
       hash = find_hash(:farms, id)
       return nil if hash.nil?
 
-      hash[:farms_pucs_ids] = farms_pucs_ids(id)
+      hash[:puc_id] = farm_primary_puc_id(id)
       Farm.new(hash)
     end
 
@@ -70,9 +70,7 @@ module MasterfilesApp
 
     def create_farm(attrs)
       params = attrs.to_h
-      farms_pucs_ids = params.delete(:farms_pucs_ids)
-      return { error: { roles: ['You did not choose a puc'] } } if farms_pucs_ids.empty?
-
+      farms_pucs_ids = Array(params.to_h.delete(:puc_id))
       farm_id = DB[:farms].insert(params)
       farms_pucs_ids.each do |puc_id|
         DB[:farms_pucs].insert(farm_id: farm_id,
@@ -116,16 +114,31 @@ module MasterfilesApp
       DB[:orchards].join(:farms, id: :farm_id).where(farm_id: id).select_map(:orchard_code).sort
     end
 
-    def farms_pucs_ids(farm_id)
-      DB[:farms_pucs].where(farm_id: farm_id).select_map(:puc_id).sort
-    end
-
     def selected_farm_pucs(farm_id)
       DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: farm_id).select_map([:puc_code, :puc_id]).sort
     end
 
+    def farm_primary_puc_id(farm_id)
+      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: farm_id).select_map(:puc_id).first
+    end
+
+    def select_unallocated_pucs
+      query = <<~SQL
+        SELECT puc_code,id
+        FROM pucs
+        WHERE active AND id NOT IN (SELECT distinct puc_id from farms_pucs)
+      SQL
+      DB[query].select_map([:puc_code, :id]).sort
+    end
+
     def find_cultivar_names(id)
-      DB[:cultivars].where(id: id).select_map(:cultivar_name).sort
+      query = <<~SQL
+        SELECT cultivars.cultivar_name
+        FROM orchards
+        JOIN cultivars ON cultivars.id = ANY (orchards.cultivar_ids)
+        WHERE orchards.id = #{id}
+      SQL
+      DB[query].select_map(:cultivar_name).sort
     end
 
   end
