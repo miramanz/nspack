@@ -10,6 +10,5 @@ module MasterfilesApp
     required(:orchard_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
     required(:cultivar_ids, Types::IntArray).filled { each(:int?) }
-    required(:active, :bool).filled(:bool?)
   end
 end

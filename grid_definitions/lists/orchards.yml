@@ -16,12 +16,6 @@
   :icon: delete
   :is_delete: true
   :popup: true
-- :separator: true
-- :url: "/development/statuses/list/orchards/$:id$"
-  :text: status
-  :icon: information-solid
-  :title: Status
-  :popup: true
 :page_controls:
 - :control_type: :link
   :url: "/masterfiles/farms/farms/$:orchards.farm_id$/orchards/add_orchards"

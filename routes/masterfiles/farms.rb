@@ -130,7 +130,6 @@ class Nspack < Roda
             owner_party_role_id
             farm_group_code
             description
-            puc_id
             active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
@@ -200,21 +199,11 @@ class Nspack < Roda
               description
               active
               cultivar_ids
+              puc_code
+              cultivar_names
             ]
             add_grid_row(attrs: select_attributes(res.instance, row_keys),
                          notice: res.message)
-            # farm_pucs = interactor.selected_farm_pucs(id)
-            # farm_orchards = interactor.farm_orchards(id)
-            # json_actions([
-            #                  OpenStruct.new(type: :change_select_value, dom_id: 'orchard_puc_id', value: farm_pucs),
-            #                  OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_orchard_code', value: ''),
-            #                  OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_description', value: ''),
-            #                  OpenStruct.new(type: :replace_multi_options, dom_id: 'orchard_cultivar_ids', options_array: res.instance[:cultivars]),
-            #                  OpenStruct.new(type: :replace_list_items, dom_id: 'orchard_farm_orchards', items: farm_orchards),
-            #                  OpenStruct.new(type: :clear_form_validation, dom_id: 'new_farm_orchards')
-            #              ],
-            #              'Added new item',
-            #              keep_dialog_open: true)
           else
             re_show_form(r, res, url: "/masterfiles/farms/farms/#{id}/orchards/add_orchards") do
               Masterfiles::Farms::Orchard::New.call(id,
@@ -241,6 +230,9 @@ class Nspack < Roda
               farm_code
               description
               puc_id
+              farm_group_code
+              owner_party_role
+              pdn_region_production_region_code
               active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
@@ -278,6 +270,9 @@ class Nspack < Roda
             farm_group_id
             farm_code
             description
+            farm_group_code
+            owner_party_role
+            pdn_region_production_region_code
             active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
@@ -327,6 +322,8 @@ class Nspack < Roda
               description
               active
               cultivar_ids
+              puc_code
+              cultivar_names
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -362,7 +359,8 @@ class Nspack < Roda
             orchard_code
             description
             active
-            cultivar_ids
+            puc_code
+            cultivar_names
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)

@@ -8,6 +8,8 @@ module MasterfilesApp
     attribute :orchard_code, Types::String
     attribute :description, Types::String
     attribute :cultivar_ids, Types::Array
+    attribute :puc_code, Types::String
+    attribute :cultivar_names, Types::String
     attribute? :active, Types::Bool
   end
 end

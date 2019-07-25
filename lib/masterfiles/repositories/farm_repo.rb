@@ -54,7 +54,13 @@ module MasterfilesApp
     crud_calls_for :pucs, name: :puc, wrapper: Puc
 
     def find_farm(id)
-      hash = find_hash(:farms, id)
+      # hash = find_hash(:farms, id)
+      hash = DB['SELECT farms.* , farm_groups.farm_group_code, fn_party_role_name(farms.owner_party_role_id) AS owner_party_role,
+                production_regions.production_region_code AS pdn_region_production_region_code
+                FROM farms
+                LEFT JOIN farm_groups ON farm_groups.id = farms.farm_group_id
+                JOIN production_regions ON production_regions.id = farms.pdn_region_id
+                WHERE farms.id = ?', id].first
       return nil if hash.nil?
 
       hash[:puc_id] = farm_primary_puc_id(id)
@@ -66,6 +72,19 @@ module MasterfilesApp
       return nil if hash.nil?
 
       Puc.new(hash)
+    end
+
+    def find_orchard(id)
+      # hash = find_hash(:orchards, id)
+      hash = DB["SELECT orchards.* , pucs.puc_code, string_agg(cultivars.cultivar_name, ', ') AS cultivar_names
+                FROM orchards
+                JOIN pucs ON pucs.id = orchards.puc_id
+                JOIN cultivars ON cultivars.id = ANY (orchards.cultivar_ids)
+                WHERE orchards.id = ?
+                GROUP BY orchards.id,pucs.id", id].first
+      return nil if hash.nil?
+
+      Orchard.new(hash)
     end
 
     def create_farm(attrs)
@@ -139,6 +158,10 @@ module MasterfilesApp
         WHERE orchards.id = #{id}
       SQL
       DB[query].select_map(:cultivar_name).sort
+    end
+
+    def find_farm_group_farm_codes(id)
+      DB[:farms].join(:farm_groups, id: :farm_group_id).where(farm_group_id: id).select_map(:farm_code).sort
     end
 
   end

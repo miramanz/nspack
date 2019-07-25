@@ -20,6 +20,7 @@ module UiRules
       fields[:farm_group_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
+      fields[:farms] = { renderer: :list, items: farm_group_farms }
     end
 
     def common_fields
@@ -45,6 +46,10 @@ module UiRules
                                     farm_group_code: nil,
                                     description: nil,
                                     active: true)
+    end
+
+    def farm_group_farms
+      @repo.find_farm_group_farm_codes(@options[:id])
     end
 
   end

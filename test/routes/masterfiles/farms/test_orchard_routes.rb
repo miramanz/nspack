@@ -102,7 +102,7 @@ class TestOrchardRoutes < RouteTester
     authorise_pass!
     ensure_exists!(INTERACTOR)
     INTERACTOR.any_instance.stubs(:create_orchard).returns(bad_response)
-    Masterfiles::Farms::Orchard::Addochards.stub(:call, bland_page) do
+    Masterfiles::Farms::Orchard::New.stub(:call, bland_page) do
       post_as_fetch 'masterfiles/farms/farms/1/orchards/new', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
     end
     expect_json_replace_dialog

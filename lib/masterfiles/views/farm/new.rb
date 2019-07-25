@@ -22,7 +22,6 @@ module Masterfiles
               form.add_field :puc_id
               form.add_field :farm_code
               form.add_field :description
-              form.add_field :active
             end
           end
 

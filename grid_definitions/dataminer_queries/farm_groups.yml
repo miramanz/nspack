@@ -27,7 +27,7 @@
   owner_party_role_id:
     :name: owner_party_role_id
     :sequence_no: 2
-    :caption: Owner party role
+    :caption: Farm group owner id
     :namespaced_name: farm_groups.owner_party_role_id
     :data_type: :integer
     :width: 
@@ -123,7 +123,7 @@
   owner_party_role:
     :name: owner_party_role
     :sequence_no: 8
-    :caption: Owner party role
+    :caption: Farm group owner
     :namespaced_name: 
     :data_type: :string
     :width: 
