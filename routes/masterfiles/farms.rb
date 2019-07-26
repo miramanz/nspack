@@ -189,7 +189,7 @@ class Nspack < Roda
         end
 
         r.post do        # CREATE
-          res = interactor.create_orchard(params[:orchard], id)
+          res = interactor.create_orchard(params[:orchard])
           if res.success
             row_keys = %i[
               id
