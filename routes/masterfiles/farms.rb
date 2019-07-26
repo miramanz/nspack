@@ -189,7 +189,7 @@ class Nspack < Roda
         end
 
         r.post do        # CREATE
-          res = interactor.create_orchard(params[:orchard].merge(farm_id: id))
+          res = interactor.create_orchard(params[:orchard], id)
           if res.success
             row_keys = %i[
               id
@@ -338,37 +338,6 @@ class Nspack < Roda
             delete_grid_row(id, notice: res.message)
           else
             show_json_error(res.message, status: 200)
-          end
-        end
-      end
-    end
-
-    r.on 'orchards' do
-      interactor = MasterfilesApp::OrchardInteractor.new(current_user, {}, { route_url: request.path }, {})
-      r.on 'new' do    # NEW
-        check_auth!('farms', 'new')
-        show_partial_or_page(r) { Masterfiles::Farms::Orchard::New.call(remote: fetch?(r)) }
-      end
-      r.post do        # CREATE
-        res = interactor.create_orchard(params[:orchard])
-        if res.success
-          row_keys = %i[
-            id
-            farm_id
-            puc_id
-            orchard_code
-            description
-            active
-            puc_code
-            cultivar_names
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
-        else
-          re_show_form(r, res, url: '/masterfiles/farms/orchards/new') do
-            Masterfiles::Farms::Orchard::New.call(form_values: params[:orchard],
-                                                 form_errors: res.errors,
-                                                 remote: fetch?(r))
           end
         end
       end

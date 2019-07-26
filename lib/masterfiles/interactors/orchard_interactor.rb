@@ -14,8 +14,8 @@ module MasterfilesApp
       OrchardSchema.call(params)
     end
 
-    def create_orchard(params)
-      res = validate_orchard_params(params)
+    def create_orchard(params, farm_id)
+      res = validate_orchard_params(params.merge(farm_id: farm_id))
       return validation_failed_response(res) unless res.messages.empty?
 
       attrs = res.to_h
