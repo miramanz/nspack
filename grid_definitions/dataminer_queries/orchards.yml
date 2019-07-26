@@ -1,13 +1,14 @@
 ---
 :caption: Orchards
-:sql: "SELECT \"orchards\".\"id\", \"orchards\".\"farm_id\", \"orchards\".\"puc_id\",
-  \"orchards\".\"orchard_code\", \"orchards\".\"description\", \"orchards\".\"cultivar_ids\",
-  string_agg(cultivars.cultivar_name, '; ') AS cultivar_names, \"orchards\".\"active\",
-  \"orchards\".\"created_at\", \"orchards\".\"updated_at\", \"farms\".\"farm_code\",
-  \"pucs\".\"puc_code\"\r\nFROM \"orchards\" \r\nJOIN \"farms\" ON \"farms\".\"id\"
-  = \"orchards\".\"farm_id\"\r\nJOIN \"pucs\" ON \"pucs\".\"id\" = \"orchards\".\"puc_id\"\r\nLEFT
-  JOIN \"cultivars\" ON \"cultivars\".id = ANY (\"orchards\".\"cultivar_ids\")\r\nGROUP
-  BY \"orchards\".\"id\",\"farms\".id,\"pucs\".id"
+:sql: "SELECT orchards.id, orchards.farm_id,orchards.puc_id,orchards.orchard_code,orchards.description,orchards.cultivar_ids,
+         	  orchard_cultivars.cultivar_names, orchards.active,orchards.created_at,orchards.updated_at,farms.farm_code,pucs.puc_code
+       FROM orchards
+       JOIN farms ON farms.id = orchards.farm_id
+       JOIN pucs ON pucs.id = orchards.puc_id
+       JOIN (SELECT orchards.id as orchard_id,string_agg(cultivars.cultivar_name, ', ') AS cultivar_names
+             FROM cultivars
+             JOIN orchards ON cultivars.id = ANY (orchards.cultivar_ids)
+             GROUP BY orchards.id) orchard_cultivars ON orchard_cultivars.orchard_id = orchards.id"
 :limit: 
 :offset: 
 :external_settings: {}

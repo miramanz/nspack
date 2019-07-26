@@ -76,13 +76,15 @@ module MasterfilesApp
 
     def find_orchard(id)
       # hash = find_hash(:orchards, id)
-      hash = DB["SELECT orchards.*, farms.farm_code as farm, pucs.puc_code, string_agg(cultivars.cultivar_name, ', ') AS cultivar_names
-                FROM orchards
-                JOIN farms ON farms.id = orchards.farm_id
-                JOIN pucs ON pucs.id = orchards.puc_id
-                JOIN cultivars ON cultivars.id = ANY (orchards.cultivar_ids)
-                WHERE orchards.id = ?
-                GROUP BY orchards.id, farms.id, pucs.id", id].first
+      hash = DB["SELECT orchards.*, farms.farm_code as farm, pucs.puc_code, orchard_cultivars.cultivar_names
+                 FROM orchards
+                 JOIN farms ON farms.id = orchards.farm_id
+                 JOIN pucs ON pucs.id = orchards.puc_id
+                 JOIN (SELECT orchards.id as orchard_id,string_agg(cultivars.cultivar_name, ', ') AS cultivar_names
+                       FROM cultivars
+                       JOIN orchards ON cultivars.id = ANY (orchards.cultivar_ids)
+                       GROUP BY orchards.id) orchard_cultivars ON orchard_cultivars.orchard_id = orchards.id
+                 WHERE orchards.id = ?", id].first
       return nil if hash.nil?
 
       Orchard.new(hash)
