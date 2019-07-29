@@ -39,19 +39,16 @@ module MasterfilesApp
       return validation_failed_response(res) unless res.messages.empty?
 
       attrs = res.to_h
-      farms_pucs_ids = attrs.delete(:farms_pucs_ids)
-      farms_pucs_response = associate_farms_pucs(id, farms_pucs_ids)
-      if farms_pucs_response.success
-        repo.transaction do
-          repo.update_farm(id, attrs)
-          log_transaction
-        end
-        instance = farm(id)
-        success_response("Updated farm #{instance.farm_code}",
-                         instance)
-      else
-        validation_failed_response(OpenStruct.new(messages: { roles: ['You did not choose a puc'] }))
+      attrs.delete(:puc_id)
+
+      repo.transaction do
+        repo.update_farm(id, attrs)
+        log_transaction
       end
+      instance = farm(id)
+      success_response("Updated farm #{instance.farm_code}",
+                       instance)
+
     rescue Crossbeams::InfoError => e
       failed_response(e.message)
     end

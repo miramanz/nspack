@@ -17,6 +17,7 @@ module Masterfiles
               form.add_field :pdn_region_id
               form.add_field :farm_group_id
               form.add_field :farm_code
+              form.add_field :puc_id
               form.add_field :description
               form.add_field :active
               form.add_field :pucs

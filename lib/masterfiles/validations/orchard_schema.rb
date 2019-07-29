@@ -9,7 +9,6 @@ module MasterfilesApp
     required(:puc_id, :integer).maybe(:int?)
     required(:orchard_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
-    optional(:cultivar_ids, Types::IntArray).filled { each(:int?) }
-    optional(:active, :bool).filled(:bool?)
+    required(:cultivar_ids, Types::IntArray).filled { each(:int?) }
   end
 end

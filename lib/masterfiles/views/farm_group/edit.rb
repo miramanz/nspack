@@ -20,7 +20,6 @@ module Masterfiles
               form.add_field :owner_party_role_id
               form.add_field :farm_group_code
               form.add_field :description
-              form.add_field :active
             end
           end
 

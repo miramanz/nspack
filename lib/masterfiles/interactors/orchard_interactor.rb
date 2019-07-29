@@ -18,9 +18,13 @@ module MasterfilesApp
       res = validate_orchard_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
+      attrs = res.to_h
+      cultivar_ids = attrs.delete(:cultivar_ids)
+      attrs = attrs.merge(cultivar_ids: "{#{cultivar_ids.join(',')}}") unless cultivar_ids.nil?
+
       id = nil
       repo.transaction do
-        id = repo.create_orchard(res)
+        id = repo.create_orchard(attrs)
         log_status('orchards', id, 'CREATED')
         log_transaction
       end

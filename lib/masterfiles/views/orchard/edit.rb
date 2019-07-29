@@ -17,11 +17,11 @@ module Masterfiles
               form.action "/masterfiles/farms/orchards/#{id}"
               form.remote!
               form.method :update
+              form.add_field :farm
               form.add_field :farm_id
               form.add_field :puc_id
               form.add_field :orchard_code
               form.add_field :description
-              form.add_field :active
               form.add_field :cultivar_ids
             end
           end

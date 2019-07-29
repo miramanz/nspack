@@ -17,6 +17,7 @@ module Masterfiles
               form.add_field :farm_group_code
               form.add_field :description
               form.add_field :active
+              form.add_field :farms
             end
           end
 

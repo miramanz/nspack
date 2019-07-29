@@ -7,10 +7,9 @@ module MasterfilesApp
     optional(:id, :integer).filled(:int?)
     required(:owner_party_role_id, :integer).filled(:int?)
     required(:pdn_region_id, :integer).filled(:int?)
-    required(:farm_group_id, :integer).filled(:int?)
+    optional(:farm_group_id, :integer).maybe(:int?)
     required(:farm_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
-    required(:active, :bool).filled(:bool?)
-    required(:farms_pucs_ids, Types::IntArray).filled { each(:int?) }
+    required(:puc_id, :integer).filled(:int?)
   end
 end
