@@ -324,9 +324,3 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
          'Orchards', '/list/orchards', 2);
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
-         AND functional_area_id = (SELECT id FROM functional_areas
-                                   WHERE functional_area_name = 'Masterfiles')),
-         'Pucs', '/list/pucs', 2);

@@ -130,7 +130,6 @@ class Nspack < Roda
             owner_party_role_id
             farm_group_code
             description
-            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -159,46 +158,30 @@ class Nspack < Roda
         show_partial { Masterfiles::Farms::Farm::Edit.call(id) }
       end
 
-      r.on 'owner_party_role_changed' do
-        farm_groups = interactor.selected_farm_groups(params[:changed_value])
-        json_replace_select_options('farm_farm_group_id', farm_groups)
-      end
-
-      r.on 'list_farm_orchards' do
-        check_auth!('farms', 'edit')
-        r.redirect "/list/orchards/with_params?key=standard&orchards.farm_id=#{id}"
-      end
-
-      r.on 'orchards' do
-        interactor = MasterfilesApp::OrchardInteractor.new(current_user, {}, { route_url: request.path }, {})
-        r.on 'add_orchards' do
+      r.on 'pucs' do
+        r.on 'new' do    # NEW
           check_auth!('farms', 'new')
-          show_partial_or_page(r) { Masterfiles::Farms::Orchard::Addochards.call(id, remote: fetch?(r)) }
+          show_partial_or_page(r) { Masterfiles::Farms::Puc::New.call(id, remote: fetch?(r)) }
         end
-
         r.post do        # CREATE
-          res = interactor.create_orchard(params[:orchard].merge(farm_id: id))
+          res = interactor.create_puc(id,params[:puc])
           if res.success
-            farm_pucs = interactor.selected_farm_pucs(id)
-            farm_orchards = interactor.farm_orchards(id)
-            json_actions([
-                             OpenStruct.new(type: :change_select_value, dom_id: 'orchard_puc_id', value: farm_pucs),
-                             OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_orchard_code', value: ''),
-                             OpenStruct.new(type: :replace_input_value, dom_id: 'orchard_description', value: ''),
-                             OpenStruct.new(type: :replace_list_items, dom_id: 'orchard_farm_orchards', items: farm_orchards),
-                             OpenStruct.new(type: :clear_form_validation, dom_id: 'new_farm_orchards')
-                         ],
-                         'Added new item',
-                         keep_dialog_open: true)
+            flash[:notice] = res.message
+            redirect_to_last_grid(r)
           else
-            re_show_form(r, res, url: "/masterfiles/farms/farms/#{id}/orchards/add_orchards") do
-              Masterfiles::Farms::Orchard::Addochards.call(id,
-                                                           form_values: params[:orchard],
-                                                           form_errors: res.errors,
-                                                           remote: fetch?(r))
+            re_show_form(r, res, url: "/masterfiles/farms/farms/#{id}/pucs/new") do
+              Masterfiles::Farms::Puc::New.call(id,
+                                                form_values: params[:puc],
+                                                form_errors: res.errors,
+                                                remote: fetch?(r))
             end
           end
         end
+      end
+
+      r.on 'owner_party_role_changed' do
+        farm_groups = interactor.selected_farm_groups(params[:changed_value])
+        json_replace_select_options('farm_farm_group_id', farm_groups)
       end
 
       r.is do
@@ -215,7 +198,6 @@ class Nspack < Roda
               farm_group_id
               farm_code
               description
-              active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -252,7 +234,6 @@ class Nspack < Roda
             farm_group_id
             farm_code
             description
-            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -281,11 +262,6 @@ class Nspack < Roda
         show_partial { Masterfiles::Farms::Orchard::Edit.call(id) }
       end
 
-      r.on 'farm_changed' do
-        farm_pucs = interactor.selected_farm_pucs(params[:changed_value])
-        json_replace_select_options('orchard_puc_id', farm_pucs)
-      end
-
       r.is do
         r.get do       # SHOW
           check_auth!('farms', 'read')
@@ -296,11 +272,9 @@ class Nspack < Roda
           if res.success
             row_keys = %i[
               farm_id
-              puc_id
               orchard_code
               description
-              active
-              cultivar_ids
+              cultivars
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -332,11 +306,9 @@ class Nspack < Roda
           row_keys = %i[
             id
             farm_id
-            puc_id
             orchard_code
             description
-            active
-            cultivar_ids
+            cultivars
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -387,33 +359,6 @@ class Nspack < Roda
             delete_grid_row(id, notice: res.message)
           else
             show_json_error(res.message, status: 200)
-          end
-        end
-      end
-    end
-
-    r.on 'pucs' do
-      interactor = MasterfilesApp::PucInteractor.new(current_user, {}, { route_url: request.path }, {})
-      r.on 'new' do    # NEW
-        check_auth!('farms', 'new')
-        show_partial_or_page(r) { Masterfiles::Farms::Puc::New.call(remote: fetch?(r)) }
-      end
-      r.post do        # CREATE
-        res = interactor.create_puc(params[:puc])
-        if res.success
-          row_keys = %i[
-            id
-            puc_code
-            gap_code
-            active
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
-        else
-          re_show_form(r, res, url: '/masterfiles/farms/pucs/new') do
-            Masterfiles::Farms::Puc::New.call(form_values: params[:puc],
-                                              form_errors: res.errors,
-                                              remote: fetch?(r))
           end
         end
       end
