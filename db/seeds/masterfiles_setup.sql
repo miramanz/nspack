@@ -324,3 +324,17 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
          'Orchards', '/list/orchards', 2);
+
+-- LIST menu item
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Rmt_container_types', '/list/rmt_container_types', 2);
+
+-- LIST menu item
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Rmt_container_material_types', '/list/rmt_container_material_types', 2);
