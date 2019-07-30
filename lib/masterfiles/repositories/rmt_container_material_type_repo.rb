@@ -57,6 +57,7 @@ module MasterfilesApp
 
     def create_rmt_container_material_type(attrs)
       params = attrs.to_h
+      party_role_ids = params.delete(:party_role_ids)
       party_role_ids ||= []
       # return { error: { roles: ['You did not choose a party role'] } } if party_role_ids.empty?
 
@@ -65,7 +66,7 @@ module MasterfilesApp
         DB[:rmt_container_material_owners].insert(rmt_container_material_type_id: rmt_container_material_type_id,
                                                   rmt_material_owner_party_role_id: pr_id)
       end
-      { id: rmt_container_material_type_id }
+      rmt_container_material_type_id
     end
 
   end
