@@ -8,6 +8,6 @@ module MasterfilesApp
     required(:rmt_container_type_id, :integer).filled(:int?)
     required(:container_material_type_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
-    optional(:party_role_ids, Types::IntArray).filled { each(:int?) }
+    optional(:party_role_ids, Types::IntArray)
   end
 end

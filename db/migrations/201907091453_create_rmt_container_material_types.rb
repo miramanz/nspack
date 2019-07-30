@@ -11,7 +11,7 @@ Sequel.migration do
       DateTime :created_at, null: false
       DateTime :updated_at, null: false
 
-      index [:code], name: :rmt_container_material_types_unique_code, unique: true
+      index [:container_material_type_code], name: :rmt_container_material_types_unique_code, unique: true
     end
 
     pgt_created_at(:rmt_container_material_types,

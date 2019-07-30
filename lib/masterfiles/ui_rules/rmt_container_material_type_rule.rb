@@ -25,7 +25,7 @@ module UiRules
       fields[:container_material_type_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
-      fields[:container_material_owners] = { renderer: :list, caption: 'Party Roles', items: @form_object.container_material_owners }
+      fields[:container_material_owners] = { renderer: :list, caption: 'Container Owners', items: @form_object.container_material_owners }
     end
 
     # def set_approve_fields
@@ -45,7 +45,7 @@ module UiRules
         rmt_container_type_id: { renderer: :select, options: MasterfilesApp::RmtContainerTypeRepo.new.for_select_rmt_container_types, disabled_options: MasterfilesApp::RmtContainerTypeRepo.new.for_select_inactive_rmt_container_types, caption: 'rmt_container_type', required: true },
         container_material_type_code: { required: true },
         description: {},
-        party_role_ids: { renderer: :multi, options: @repo.for_select_party_roles, selected: @form_object.party_role_ids, required: false  }
+        party_role_ids: { renderer: :multi, options: @repo.for_select_party_roles, caption: 'Container Owners', selected: @form_object.party_role_ids, required: false  }
       }
     end
 
