@@ -1,0 +1,24 @@
+---
+:dataminer_definition: pucs
+:actions:
+- :url: "/masterfiles/farms/pucs/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/farms/pucs/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/farms/pucs/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+  - :control_type: :link
+    :url: "/masterfiles/farms/pucs/new"
+    :text: New Puc
+    :style: :button
+    :behaviour: :popup

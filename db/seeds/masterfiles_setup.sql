@@ -250,6 +250,12 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Calendar'
                                    WHERE functional_area_name = 'Masterfiles')),
          'Season_groups', '/list/season_groups', 2);
 
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Calendar'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Seasons', '/list/seasons', 2);
+
 -- PROGRAM raw_materials
 INSERT INTO programs (program_name, program_sequence, functional_area_id)
 VALUES ('Raw Materials', 1, (SELECT id FROM functional_areas
@@ -299,3 +305,28 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
         false,
         false);
 
+-- Farms
+-- LIST menu item
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Farm_groups', '/list/farm_groups', 2);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Farms', '/list/farms', 2);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Orchards', '/list/orchard_details', 2);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Pucs', '/list/pucs', 2);
