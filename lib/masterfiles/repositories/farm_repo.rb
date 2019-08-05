@@ -67,12 +67,27 @@ module MasterfilesApp
       Farm.new(hash)
     end
 
-    def find_puc(id)
-      hash = find_hash(:pucs, id)
-      return nil if hash.nil?
-
-      Puc.new(hash)
-    end
+    # def find_orchard(id)
+    #   # hash = find_hash(:orchards, id)
+    #   hash = find_with_association(:orchards,
+    #                                id,
+    #                                parent_tables: [{ parent_table: :farms,
+    #                                                  columns: [:farm_code],
+    #                                                  flatten_columns: { farm_code: :farm }},
+    #                                                { parent_table: :pucs,
+    #                                                  columns: [:puc_code],
+    #                                                  flatten_columns: { puc_code: :puc_code }
+    #                                                }],
+    #                                sub_tables: [{ sub_table: :cultivars,
+    #                                               columns: [:cultivar_name],
+    #                                               uses_join_table: true
+    #                                             }],
+    #                                lookup_functions: [],
+    #                                wrapper: nil)
+    #   return nil if hash.nil?
+    #
+    #   Orchard.new(hash)
+    # end
 
     def find_orchard(id)
       # hash = find_hash(:orchards, id)
@@ -98,7 +113,7 @@ module MasterfilesApp
         DB[:farms_pucs].insert(farm_id: farm_id,
                                puc_id: puc_id)
       end
-      { id: farm_id }
+      farm_id
     end
 
     def associate_farms_pucs(id, farms_pucs_ids)
@@ -125,19 +140,19 @@ module MasterfilesApp
     end
 
     def find_puc_farm_codes(id)
-      DB[:farms].join(:farms_pucs, farm_id: :id).where(puc_id: id).select_map(:farm_code).sort
+      DB[:farms].join(:farms_pucs, farm_id: :id).where(puc_id: id).order(:farm_code).select_map(:farm_code)
     end
 
     def find_farm_puc_codes(id)
-      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: id).select_map(:puc_code).sort
+      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: id).order(:puc_code).select_map(:puc_code)
     end
 
     def find_farm_orchard_codes(id)
-      DB[:orchards].join(:farms, id: :farm_id).where(farm_id: id).select_map(:orchard_code).sort
+      DB[:orchards].join(:farms, id: :farm_id).where(farm_id: id).order(:orchard_code).select_map(:orchard_code)
     end
 
     def selected_farm_pucs(farm_id)
-      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: farm_id).select_map(%i[puc_code puc_id]).sort
+      DB[:pucs].join(:farms_pucs, puc_id: :id).where(farm_id: farm_id).order(:puc_code).select_map(%i[puc_code puc_id])
     end
 
     def farm_primary_puc_id(farm_id)
@@ -150,7 +165,7 @@ module MasterfilesApp
         FROM pucs
         WHERE active AND id NOT IN (SELECT distinct puc_id from farms_pucs)
       SQL
-      DB[query].select_map(%i[puc_code id]).sort
+      DB[query].order(:puc_code).select_map(%i[puc_code id])
     end
 
     def find_cultivar_names(id)
@@ -160,11 +175,11 @@ module MasterfilesApp
         JOIN cultivars ON cultivars.id = ANY (orchards.cultivar_ids)
         WHERE orchards.id = #{id}
       SQL
-      DB[query].select_map(:cultivar_name).sort
+      DB[query].order(:cultivar_name).select_map(:cultivar_name)
     end
 
     def find_farm_group_farm_codes(id)
-      DB[:farms].join(:farm_groups, id: :farm_group_id).where(farm_group_id: id).select_map(:farm_code).sort
+      DB[:farms].join(:farm_groups, id: :farm_group_id).where(farm_group_id: id).order(:farm_code).select_map(:farm_code)
     end
   end
 end

@@ -2,18 +2,6 @@
 
 module MasterfilesApp
   class OrchardInteractor < BaseInteractor
-    def repo
-      @repo ||= FarmRepo.new
-    end
-
-    def orchard(id)
-      repo.find_orchard(id)
-    end
-
-    def validate_orchard_params(params)
-      OrchardSchema.call(params)
-    end
-
     def create_orchard(params) # rubocop:disable Metrics/AbcSize
       res = validate_orchard_params(params)
       return validation_failed_response(res) unless res.messages.empty?
@@ -78,6 +66,20 @@ module MasterfilesApp
 
     def farm_orchards(farm_id)
       @repo.find_farm_orchard_codes(farm_id)
+    end
+
+    private
+
+    def repo
+      @repo ||= FarmRepo.new
+    end
+
+    def orchard(id)
+      repo.find_orchard(id)
+    end
+
+    def validate_orchard_params(params)
+      OrchardSchema.call(params)
     end
   end
 end

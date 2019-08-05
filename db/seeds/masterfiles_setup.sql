@@ -248,7 +248,7 @@ INSERT INTO program_functions (program_id, program_function_name, url, program_f
 VALUES ((SELECT id FROM programs WHERE program_name = 'Calendar'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
-         'Season_groups', '/list/season_groups', 2);
+         'Season_groups', '/list/season_groups', 1);
 
 INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
 VALUES ((SELECT id FROM programs WHERE program_name = 'Calendar'
@@ -300,7 +300,7 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
                                     WHERE functional_area_name = 'Masterfiles')),
         'Production_regions',
         '/list/production_regions',
-        2,
+        1,
         NULL,
         false,
         false);
@@ -311,22 +311,25 @@ INSERT INTO program_functions (program_id, program_function_name, url, program_f
 VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
-         'Farm_groups', '/list/farm_groups', 2);
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
-         AND functional_area_id = (SELECT id FROM functional_areas
-                                   WHERE functional_area_name = 'Masterfiles')),
-         'Farms', '/list/farms', 2);
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
-         AND functional_area_id = (SELECT id FROM functional_areas
-                                   WHERE functional_area_name = 'Masterfiles')),
-         'Orchards', '/list/orchard_details', 2);
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
-         AND functional_area_id = (SELECT id FROM functional_areas
-                                   WHERE functional_area_name = 'Masterfiles')),
          'Pucs', '/list/pucs', 2);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Farm_groups', '/list/farm_groups', 3);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Farms', '/list/farms', 4);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Orchards', '/list/orchard_details', 5);
+
+INSERT INTO roles (name)
+	VALUES ('FARM_OWNER');

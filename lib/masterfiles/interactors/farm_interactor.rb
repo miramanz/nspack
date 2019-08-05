@@ -2,18 +2,6 @@
 
 module MasterfilesApp
   class FarmInteractor < BaseInteractor
-    def repo
-      @repo ||= FarmRepo.new
-    end
-
-    def farm(id)
-      repo.find_farm(id)
-    end
-
-    def validate_farm_params(params)
-      FarmSchema.call(params)
-    end
-
     def create_farm(params) # rubocop:disable Metrics/AbcSize
       res = validate_farm_params(params)
       return validation_failed_response(res) unless res.messages.empty?
@@ -21,7 +9,7 @@ module MasterfilesApp
       id = nil
       repo.transaction do
         response = repo.create_farm(res)
-        id = response[:id]
+        id = response
         log_status('farms', id, 'CREATED')
         log_transaction
       end
@@ -80,6 +68,20 @@ module MasterfilesApp
         repo.associate_farms_pucs(id, farms_pucs_ids)
       end
       success_response('Farm => Puc associated successfully')
+    end
+
+    private
+
+    def repo
+      @repo ||= FarmRepo.new
+    end
+
+    def farm(id)
+      repo.find_farm(id)
+    end
+
+    def validate_farm_params(params)
+      FarmSchema.call(params)
     end
   end
 end
