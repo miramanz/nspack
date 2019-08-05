@@ -25,7 +25,7 @@ Sequel.migration do
                    trigger_name: :set_updated_at)
 
     # Log changes to this table. Exclude changes to the updated_at column.
-    run "SELECT audit.audit_table('seasons', true, true, '{updated_at}'::text[]);"
+    run "SELECT audit.audit_table('grades', true, true, '{updated_at}'::text[]);"
   end
 
   down do
