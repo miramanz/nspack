@@ -78,6 +78,7 @@ const crossbeamsRmdScan = (function crossbeamsRmdScan() { // eslint-disable-line
   const lookupScanField = (element, scanPack) => {
     const url = `/rmd/utilities/lookup/${scanPack.scanType}/${scanPack.scanField}/${element.value}`;
     const label = document.getElementById(`${element.id}_scan_lookup`);
+    const hiddenVal = document.getElementById(`${element.id}_scan_lookup_hidden`);
     console.log('lbl', label);
     if (label === null) return null;
 
@@ -111,6 +112,7 @@ const crossbeamsRmdScan = (function crossbeamsRmdScan() { // eslint-disable-line
         }
       } else {
         label.innerHTML = data.showField;
+        hiddenVal.value = data.showField;
       }
     }).catch((data) => {
       console.info('==ERROR==', data); // eslint-disable-line no-console
@@ -168,7 +170,28 @@ const crossbeamsRmdScan = (function crossbeamsRmdScan() { // eslint-disable-line
       if (event.target.dataset && event.target.dataset.disableWith) {
         preventMultipleSubmits(event.target);
       }
+      // On reset button clicked, clear all lookup results
+      if (event.target.dataset && event.target.dataset.resetRmdForm) {
+        event.target.form.querySelectorAll('[data-lookup-result]').forEach((node) => {
+          node.innerHTML = node.dataset.resetValue;
+        });
+        event.target.form.querySelectorAll('[data-lookup-hidden]').forEach((node) => {
+          node.value = node.dataset.resetValue === '&nbsp;' ? '' : node.dataset.resetValue;
+        });
+      }
+      if (event.target.dataset && event.target.dataset.prompt) {
+        event.stopPropagation();
+        event.preventDefault();
+        swal({
+          title: '',
+          text: event.target.dataset.prompt,
+          type: 'warning',
+          showCancelButton: true }).then(() => {
+            window.location = event.target.href;
+          }, null).catch(swal.noop);
+      }
     });
+
     if (cameraScan) {
       cameraScan.addEventListener('click', () => {
         webSocket.send('Type=key248_all');

@@ -20,9 +20,9 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                                        action: '/rmd/deliveries/putaways',
                                        button_caption: 'Putaway')
         form.add_field(:delivery_number, 'Delivery', scan: 'key248_all', scan_type: :delivery)
-        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku)
-        form.add_field(:location, 'Location', scan: 'key248_all', scan_type: :location, lookup: true)
+        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku, lookup: true)
         form.add_field(:quantity, 'Quantity', data_type: 'number')
+        form.add_field(:location, 'Location', scan: 'key248_all', scan_type: :location, lookup: true)
         form.add_csrf_tag csrf_tag
         view(inline: form.render, layout: :layout_rmd)
       end
@@ -45,6 +45,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                          delivery_number: these_params[:delivery_number],
                          delivery_number_scan_field: these_params[:delivery_number_scan_field],
                          quantity: these_params[:quantity])
+          payload.merge!(lookup_values: params[:lookup_values])
         end
 
         store_locally(:delivery_putaway, payload)
@@ -75,8 +76,8 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                                        action: '/rmd/stock_adjustments/adjust_item',
                                        button_caption: 'Adjust Item')
         form.add_field(:stock_adjustment_number, 'Stock Adjustment', scan: 'key248_all', scan_type: :stock_adjustment)
-        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku)
-        form.add_field(:location, 'Location', scan: 'key248_all', scan_type: :location)
+        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku, lookup: true)
+        form.add_field(:location, 'Location', scan: 'key248_all', scan_type: :location, lookup: true)
         form.add_field(:quantity, 'Actual Quantity', data_type: 'number')
         form.add_csrf_tag csrf_tag
         view(inline: form.render, layout: :layout_rmd)
@@ -101,6 +102,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                          stock_adjustment_number: these_params[:stock_adjustment_number],
                          stock_adjustment_number_scan_field: these_params[:stock_adjustment_number_scan_field],
                          quantity: these_params[:quantity])
+          payload.merge!(lookup_values: params[:lookup_values])
         end
 
         store_locally(:stock_item_adjustment, payload)
@@ -129,7 +131,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                                               action: '/rmd/printing/sku_label',
                                               button_caption: 'Print')
         form.add_select(:printer, 'Printer', items: printers, value: printers.first, required: true, prompt: true)
-        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku)
+        form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku, lookup: true)
         form.add_field(:no_of_prints, 'No of Prints', data_type: 'number')
         form.add_csrf_tag csrf_tag
         view(inline: form.render, layout: :layout_rmd)
@@ -149,6 +151,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
                          sku_number: these_params[:sku_number],
                          sku_number_scan_field: these_params[:sku_number_scan_field],
                          no_of_prints: these_params[:no_of_prints])
+          payload.merge!(lookup_values: params[:lookup_values])
         end
 
         store_locally(:print_rmd_sku_label_options, payload)
