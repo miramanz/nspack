@@ -653,60 +653,6 @@ class Nspack < Roda
         show_partial { Masterfiles::Fruit::RmtClass::Edit.call(id) }
       end
 
-      # r.on 'complete' do
-      #   r.get do
-      #     check_auth!('fruit', 'edit')
-      #     interactor.assert_permission!(:complete, id)
-      #     show_partial { Masterfiles::Fruit::RmtClass::Complete.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.complete_a_rmt_class(id, params[:rmt_class])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Fruit::RmtClass::Complete.call(id, params[:rmt_class], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'approve' do
-      #   r.get do
-      #     check_auth!('fruit', 'approve')
-      #     interactor.assert_permission!(:approve, id)
-      #     show_partial { Masterfiles::Fruit::RmtClass::Approve.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.approve_or_reject_a_rmt_class(id, params[:rmt_class])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Fruit::RmtClass::Approve.call(id, params[:rmt_class], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'reopen' do
-      #   r.get do
-      #     check_auth!('fruit', 'edit')
-      #     interactor.assert_permission!(:reopen, id)
-      #     show_partial { Masterfiles::Fruit::RmtClass::Reopen.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.reopen_a_rmt_class(id, params[:rmt_class])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Fruit::RmtClass::Reopen.call(id, params[:rmt_class], res.errors) }
-      #     end
-      #   end
-      # end
-
       r.is do
         r.get do       # SHOW
           check_auth!('fruit', 'read')
@@ -755,6 +701,74 @@ class Nspack < Roda
             Masterfiles::Fruit::RmtClass::New.call(form_values: params[:rmt_class],
                                                    form_errors: res.errors,
                                                    remote: fetch?(r))
+          end
+        end
+      end
+    end
+
+    # GRADES
+    r.on 'grades', Integer do |id|
+      interactor = MasterfilesApp::GradeInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:grades, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('fruit', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Fruit::Grade::Edit.call(id) }
+      end
+
+      r.is do
+        r.get do       # SHOW
+          check_auth!('fruit', 'read')
+          show_partial { Masterfiles::Fruit::Grade::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_grade(id, params[:grade])
+          if res.success
+            update_grid_row(id, changes: { grade_code: res.instance[:grade_code], description: res.instance[:description] }, notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Fruit::Grade::Edit.call(id, form_values: params[:grade], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('fruit', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_grade(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'grades' do
+      interactor = MasterfilesApp::GradeInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('fruit', 'new')
+        show_partial_or_page(r) { Masterfiles::Fruit::Grade::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_grade(params[:grade])
+        if res.success
+          row_keys = %i[
+            id
+            grade_code
+            description
+            active
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/fruit/grades/new') do
+            Masterfiles::Fruit::Grade::New.call(form_values: params[:grade],
+                                                form_errors: res.errors,
+                                                remote: fetch?(r))
           end
         end
       end

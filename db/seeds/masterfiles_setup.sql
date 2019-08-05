@@ -333,3 +333,10 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
 
 INSERT INTO roles (name)
 	VALUES ('FARM_OWNER');
+
+-- Grades
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Grades', '/list/grades', 3);
