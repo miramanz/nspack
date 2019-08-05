@@ -340,3 +340,16 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
          'Grades', '/list/grades', 3);
+
+-- Grouped in Treatments
+INSERT INTO program_functions (program_id, program_function_name, group_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Groups', 'Treatments', '/list/treatment_types', 4);
+
+INSERT INTO program_functions (program_id, program_function_name, group_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Treatments', 'Treatments', '/list/treatments', 5);

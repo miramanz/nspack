@@ -7,11 +7,15 @@ module MasterfilesApp
     def test_for_selects
       assert_respond_to repo, :for_select_rmt_classes
       assert_respond_to repo, :for_select_grades
+      assert_respond_to repo, :for_select_treatment_types
+      assert_respond_to repo, :for_select_treatments
     end
 
     def test_crud_calls
       test_crud_calls_for :rmt_classes, name: :rmt_class, wrapper: RmtClass
       test_crud_calls_for :grades, name: :grade, wrapper: Grade
+      test_crud_calls_for :treatment_types, name: :treatment_type, wrapper: TreatmentType
+      test_crud_calls_for :treatments, name: :treatment, wrapper: Treatment
     end
 
     private

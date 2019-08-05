@@ -17,5 +17,26 @@ module MasterfilesApp
       }
       DB[:grades].insert(default.merge(opts))
     end
+
+    def create_treatment_type(opts = {})
+      default = {
+        treatment_type_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:treatment_types].insert(default.merge(opts))
+    end
+
+    def create_treatment(opts = {})
+      treatment_type_id = create_treatment_type
+
+      default = {
+        treatment_type_id: treatment_type_id,
+        treatment_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:treatments].insert(default.merge(opts))
+    end
   end
 end

@@ -773,6 +773,148 @@ class Nspack < Roda
         end
       end
     end
+
+    # TREATMENT TYPES
+    # --------------------------------------------------------------------------
+    r.on 'treatment_types', Integer do |id|
+      interactor = MasterfilesApp::TreatmentTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:treatment_types, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('fruit', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Fruit::TreatmentType::Edit.call(id) }
+      end
+
+      r.is do
+        r.get do       # SHOW
+          check_auth!('fruit', 'read')
+          show_partial { Masterfiles::Fruit::TreatmentType::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_treatment_type(id, params[:treatment_type])
+          if res.success
+            update_grid_row(id, changes: { treatment_type_code: res.instance[:treatment_type_code], description: res.instance[:description] }, notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Fruit::TreatmentType::Edit.call(id, form_values: params[:treatment_type], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('fruit', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_treatment_type(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'treatment_types' do
+      interactor = MasterfilesApp::TreatmentTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('fruit', 'new')
+        show_partial_or_page(r) { Masterfiles::Fruit::TreatmentType::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_treatment_type(params[:treatment_type])
+        if res.success
+          row_keys = %i[
+            id
+            treatment_type_code
+            description
+            active
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/fruit/treatment_types/new') do
+            Masterfiles::Fruit::TreatmentType::New.call(form_values: params[:treatment_type],
+                                                        form_errors: res.errors,
+                                                        remote: fetch?(r))
+          end
+        end
+      end
+    end
+
+    # TREATMENTS
+    # --------------------------------------------------------------------------
+    r.on 'treatments', Integer do |id|
+      interactor = MasterfilesApp::TreatmentInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:treatments, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('fruit', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Fruit::Treatment::Edit.call(id) }
+      end
+
+      r.is do
+        r.get do       # SHOW
+          check_auth!('fruit', 'read')
+          show_partial { Masterfiles::Fruit::Treatment::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_treatment(id, params[:treatment])
+          if res.success
+            update_grid_row(id, changes: { treatment_type_id: res.instance[:treatment_type_id],
+                                           treatment_code: res.instance[:treatment_code],
+                                           description: res.instance[:description] },
+                                notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Fruit::Treatment::Edit.call(id, form_values: params[:treatment], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('fruit', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_treatment(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'treatments' do
+      interactor = MasterfilesApp::TreatmentInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('fruit', 'new')
+        show_partial_or_page(r) { Masterfiles::Fruit::Treatment::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_treatment(params[:treatment])
+        if res.success
+          row_keys = %i[
+            id
+            treatment_type_code
+            treatment_code
+            description
+            active
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/fruit/treatments/new') do
+            Masterfiles::Fruit::Treatment::New.call(form_values: params[:treatment],
+                                                    form_errors: res.errors,
+                                                    remote: fetch?(r))
+          end
+        end
+      end
+    end
   end
 end
 

@@ -20,7 +20,42 @@ module MasterfilesApp
                           value: :id,
                           order_by: :grade_code
 
+    build_for_select :treatment_types,
+                     label: :treatment_type_code,
+                     value: :id,
+                     order_by: :treatment_type_code
+    build_inactive_select :treatment_types,
+                          label: :treatment_type_code,
+                          value: :id,
+                          order_by: :treatment_type_code
+
+    build_for_select :treatments,
+                     label: :treatment_code,
+                     value: :id,
+                     order_by: :treatment_code
+    build_inactive_select :treatments,
+                          label: :treatment_code,
+                          value: :id,
+                          order_by: :treatment_code
+
     crud_calls_for :rmt_classes, name: :rmt_class, wrapper: RmtClass
     crud_calls_for :grades, name: :grade, wrapper: Grade
+    crud_calls_for :treatment_types, name: :treatment_type, wrapper: TreatmentType
+    crud_calls_for :treatments, name: :treatment, wrapper: Treatment
+
+    def find_treatment(id)
+      hash = find_with_association(:treatments,
+                                   id,
+                                   parent_tables: [{ parent_table: :treatment_types,
+                                                     columns: [:treatment_type_code],
+                                                     flatten_columns: { treatment_type_code: :treatment_type_code } }])
+      return nil if hash.nil?
+
+      Treatment.new(hash)
+    end
+
+    def find_treatment_type_treatment_codes(id)
+      DB[:treatments].join(:treatment_types, id: :treatment_type_id).where(treatment_type_id: id).order(:treatment_code).select_map(:treatment_code)
+    end
   end
 end
