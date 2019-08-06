@@ -2,23 +2,23 @@
 
 module Production
   module Resources
-    module Resource
+    module PlantResourceType
       class Show
         def self.call(id)
-          ui_rule = UiRules::Compiler.new(:resource, :show, id: id)
+          ui_rule = UiRules::Compiler.new(:plant_resource_type, :show, id: id)
           rules   = ui_rule.compile
 
           layout = Crossbeams::Layout::Page.build(rules) do |page|
             page.form_object ui_rule.form_object
             page.form do |form|
-              # form.caption 'Resource'
+              # form.caption 'Resource Type'
               form.view_only!
-              form.add_field :resource_type_id
-              form.add_field :system_resource_id
-              form.add_field :resource_code
+              form.add_field :plant_resource_type_code
               form.add_field :description
-              # form.add_field :resource_attributes
+              # form.add_field :attribute_rules
+              # form.add_field :behaviour_rules
               form.add_field :active
+              form.add_text rules[:icon_render]
             end
           end
 

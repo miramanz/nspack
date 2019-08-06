@@ -1,17 +1,17 @@
 ---
-:caption: Resources
-:sql: "SELECT resources.id, resources.resource_type_id,\r\nresource_types.icon, resources.resource_code,
-  resources.description, resources.active,\r\nresource_types.resource_type_code,\r\nresource_types.description
-  AS type_description,\r\n(SELECT array_agg(cc.resource_code) as path\r\n  FROM (SELECT
-  c.resource_code\r\n         FROM resources AS c \r\n        JOIN tree_resources
-  AS t1 ON t1.ancestor_resource_id = c.id\r\n       WHERE t1.descendant_resource_id
-  = resources.id\r\n       ORDER BY t1.path_length DESC) AS cc) AS path_array,\r\n(SELECT
-  MAX(path_length)\r\n   FROM tree_resources\r\n   WHERE descendant_resource_id =
-  resources.id) + 1 AS level \r\nFROM resources\r\nJOIN resource_types ON resource_types.id
-  = resources.resource_type_id\r\nWHERE NOT resource_types.system_resource\r\nORDER
-  BY (SELECT string_agg(\"cc\".\"resource_code\", ';') AS path \r\n    FROM (SELECT
-  \"c\".\"resource_code\" FROM \"resources\" c JOIN \"tree_resources\" t1 ON \"t1\".\"ancestor_resource_id\"
-  = \"c\".\"id\" \r\n    WHERE \"t1\".\"descendant_resource_id\" = \"resources\".\"id\"
+:caption: Plant Resources
+:sql: "SELECT plant_resources.id, plant_resources.plant_resource_type_id,\r\nplant_resource_types.icon, plant_resources.plant_resource_code,
+  plant_resources.description, plant_resources.active,\r\nplant_resource_types.plant_resource_type_code,\r\nplant_resource_types.description
+  AS type_description,\r\n(SELECT array_agg(cc.plant_resource_code) as path\r\n  FROM (SELECT
+  c.plant_resource_code\r\n         FROM plant_resources AS c \r\n        JOIN tree_plant_resources
+  AS t1 ON t1.ancestor_plant_resource_id = c.id\r\n       WHERE t1.descendant_plant_resource_id
+  = plant_resources.id\r\n       ORDER BY t1.path_length DESC) AS cc) AS path_array,\r\n(SELECT
+  MAX(path_length)\r\n   FROM tree_plant_resources\r\n   WHERE descendant_plant_resource_id =
+  plant_resources.id) + 1 AS level \r\nFROM plant_resources\r\nJOIN plant_resource_types ON plant_resource_types.id
+  = plant_resources.plant_resource_type_id\r\nORDER
+  BY (SELECT string_agg(\"cc\".\"plant_resource_code\", ';') AS path \r\n    FROM (SELECT
+  \"c\".\"plant_resource_code\" FROM \"plant_resources\" c JOIN \"tree_plant_resources\" t1 ON \"t1\".\"ancestor_plant_resource_id\"
+  = \"c\".\"id\" \r\n    WHERE \"t1\".\"descendant_plant_resource_id\" = \"plant_resources\".\"id\"
   \r\n    ORDER BY \"t1\".\"path_length\" DESC) cc)\r\n"
 :limit: 
 :offset: 
@@ -21,7 +21,7 @@
     :name: id
     :sequence_no: 1
     :caption: Id
-    :namespaced_name: resources.id
+    :namespaced_name: plant_resources.id
     :data_type: :integer
     :width: 
     :format: 
@@ -33,11 +33,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  resource_type_id:
-    :name: resource_type_id
+  plant_resource_type_id:
+    :name: plant_resource_type_id
     :sequence_no: 2
-    :caption: Resource type
-    :namespaced_name: resources.resource_type_id
+    :caption: Plant resource type
+    :namespaced_name: plant_resources.plant_resource_type_id
     :data_type: :integer
     :width: 
     :format: 
@@ -53,7 +53,7 @@
     :name: icon
     :sequence_no: 3
     :caption: Icon
-    :namespaced_name: resource_types.icon
+    :namespaced_name: plant_resource_types.icon
     :data_type: :string
     :width: 100
     :format: 
@@ -65,11 +65,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  resource_code:
-    :name: resource_code
+  plant_resource_code:
+    :name: plant_resource_code
     :sequence_no: 4
-    :caption: Resource code
-    :namespaced_name: resources.resource_code
+    :caption: Plant resource code
+    :namespaced_name: plant_resources.plant_resource_code
     :data_type: :string
     :width: 
     :format: 
@@ -85,7 +85,7 @@
     :name: description
     :sequence_no: 5
     :caption: Description
-    :namespaced_name: resources.description
+    :namespaced_name: plant_resources.description
     :data_type: :string
     :width: 
     :format: 
@@ -101,7 +101,7 @@
     :name: active
     :sequence_no: 6
     :caption: Active
-    :namespaced_name: resources.active
+    :namespaced_name: plant_resources.active
     :data_type: :boolean
     :width: 
     :format: 
@@ -113,11 +113,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  resource_type_code:
-    :name: resource_type_code
+  plant_resource_type_code:
+    :name: plant_resource_type_code
     :sequence_no: 7
-    :caption: Resource type code
-    :namespaced_name: resource_types.resource_type_code
+    :caption: Plant resource type code
+    :namespaced_name: plant_resource_types.plant_resource_type_code
     :data_type: :string
     :width: 
     :format: 
@@ -133,7 +133,7 @@
     :name: type_description
     :sequence_no: 8
     :caption: Type description
-    :namespaced_name: resource_types.description
+    :namespaced_name: plant_resource_types.description
     :data_type: :string
     :width: 
     :format: 
@@ -178,24 +178,16 @@
     :group_min: false
     :group_max: false
 :query_parameter_definitions:
-- :column: resources.resource_type_id
-  :caption: Resource type
+- :column: plant_resources.plant_resource_type_id
+  :caption: Plant resource type
   :data_type: :integer
   :control_type: :list
   :default_value: 
   :ordered_list: true
   :ui_priority: 1
-  :list_def: SELECT resource_type_code, id FROM resource_types ORDER BY resource_type_code
-- :column: resources.system_resource_id
-  :caption: System resource
-  :data_type: :integer
-  :control_type: :list
-  :default_value: 
-  :ordered_list: true
-  :ui_priority: 1
-  :list_def: SELECT resource_code, id FROM resources ORDER BY resource_code
-- :column: resources.resource_code
-  :caption: Resource code
+  :list_def: SELECT plant_resource_type_code, id FROM plant_resource_types ORDER BY plant_resource_type_code
+- :column: plant_resources.plant_resource_code
+  :caption: Plant resource code
   :data_type: :string
   :control_type: :text
   :default_value: 

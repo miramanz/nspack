@@ -11,7 +11,6 @@ module Crossbeams
       DROP = 'DROP'
       DROP_STATION = 'DROP_STATION'
       DROP_TABLE = 'DROP_TABLE'
-      ROBOT = 'ROBOT'
       ROBOT_BUTTON = 'ROBOT_BUTTON'
       CLM_ROBOT = 'CLM_ROBOT'
       QC_ROBOT = 'QC_ROBOT'
@@ -21,9 +20,13 @@ module Crossbeams
       BINTIPPING_ROBOT = 'BINTIPPING_ROBOT'
       FORKLIFT = 'FORKLIFT'
       PALLETIZING_BAY = 'PALLETIZING_BAY'
-      # SCALE = 'SCALE'
       BIN_TIPPING_STATION = 'BIN_TIPPING_STATION'
 
+      # Peripherals
+      SCALE = 'SCALE'
+      PRINTER = 'PRINTER'
+
+      # System resource types
       SERVER = 'SERVER'
       MODULE = 'MODULE'
       MODULE_BUTTON = 'MODULE_BUTTON'
@@ -34,7 +37,7 @@ module Crossbeams
       SYSTEM_RESOURCE_RULES = {
         SERVER => { description: 'Server', attributes: { ip_address: :string } },
         MODULE => { description: 'Module', attributes: { ip_address: :string, sub_types: [CLM_ROBOT, QC_ROBOT, SCALE_ROBOT, FORKLIFT_ROBOT, PALLETIZING_ROBOT, BINTIPPING_ROBOT] } },
-        # MODULE_BUTTON => { description: 'Module button' },
+        MODULE_BUTTON => { description: 'Module button', attributes: { ip_address: :string, sub_types: [ROBOT_BUTTON] } },
         PERIPHERAL => { description: 'Peripheral', attributes: { ip_address: :string } }
       }.freeze
 
@@ -60,10 +63,13 @@ module Crossbeams
         DROP_TABLE => { description: 'Drop table',
                         allowed_children: [CLM_ROBOT, SCALE_ROBOT],
                         icon: { file: 'packing', colour: '#c791bc' } },
-        # ROBOT => { description: 'Robot', allowed_children: [], create_with_system_resource: 'MODULE', code_prefix: 'P:CLM-' }, # ... module
-        # ROBOT_BUTTON => { description: 'Robot button', allowed_children: [], create_with_system_resource: 'MODULE_BUTTON' }, # ... module
+        ROBOT_BUTTON => { description: 'Robot button',
+                          allowed_children: [],
+                          icon: { file: 'circle-o', colour: '#c9665f' },
+                          create_with_system_resource: 'MODULE_BUTTON',
+                          code_prefix: '${MODULE}-B' }, # prefixed by module name followed by....
         CLM_ROBOT => { description: 'CLM Robot',
-                       allowed_children: [],
+                       allowed_children: [ROBOT_BUTTON],
                        icon: { file: 'server3', colour: '#5F98CA' },
                        create_with_system_resource: 'MODULE',
                        code_prefix: 'CLM-' },
@@ -98,7 +104,16 @@ module Crossbeams
         PALLETIZING_BAY => { description: 'Palletizing Bay',
                              allowed_children: [PALLETIZING_ROBOT],
                              icon: { file: 'cube', colour: '#80b8e0' } },
-        # SCALE => { description: 'Scale', allowed_children: [SCALE_ROBOT], create_with_system_resource: 'MODULE', code_prefix: 'P:SCM-' },
+        SCALE => { description: 'Scale',
+                   allowed_children: [],
+                   create_with_system_resource: 'PERIPHERAL',
+                   icon: { file: 'balance-scale', colour: '#9580e0' },
+                   code_prefix: 'SCL-' },
+        PRINTER => { description: 'Printer',
+                     allowed_children: [],
+                     icon: { file: 'printer', colour: '#62c95f' },
+                     create_with_system_resource: 'PERIPHERAL',
+                     code_prefix: 'PRN-' },
         BIN_TIPPING_STATION => { description: 'Bin-tipping station',
                                  allowed_children: [BINTIPPING_ROBOT],
                                  icon: { file: 'cog', colour: '#9580e0' } }
@@ -109,29 +124,29 @@ module Crossbeams
       # What happens if XML config has srv-01:clm-01 and srv-02:clm-04 and clm-01 is renamed to clm-03 and clm-04 becomes clm-01 ?
       # MODULE could be CLM, SCM, QCM.. (get prefix from plant - "P:" or module_type..)
 
-      def self.refresh_resource_types # rubocop:disable Metrics/AbcSize
+      def self.refresh_plant_resource_types # rubocop:disable Metrics/AbcSize
         cnt = 0
         repo = BaseRepo.new
         PLANT_RESOURCE_RULES.each_key do |key|
-          next if repo.exists?(:resource_types, resource_type_code: key)
+          next if repo.exists?(:plant_resource_types, plant_resource_type_code: key)
 
           icon = PLANT_RESOURCE_RULES[key][:icon].nil? ? nil : PLANT_RESOURCE_RULES[key][:icon].values.join(',')
 
-          repo.create(:resource_types,
-                      resource_type_code: key,
+          repo.create(:plant_resource_types,
+                      plant_resource_type_code: key,
                       icon: icon,
                       description: PLANT_RESOURCE_RULES[key][:description])
           cnt += 1
         end
 
         SYSTEM_RESOURCE_RULES.each_key do |key|
-          next if repo.exists?(:resource_types, resource_type_code: key)
+          next if repo.exists?(:system_resource_types, system_resource_type_code: key)
 
-          repo.create(:resource_types,
-                      resource_type_code: key,
+          repo.create(:system_resource_types,
+                      system_resource_type_code: key,
                       icon: 'microchip',
-                      description: SYSTEM_RESOURCE_RULES[key][:description],
-                      system_resource: true)
+                      # system_resource: true)
+                      description: SYSTEM_RESOURCE_RULES[key][:description])
           cnt += 1
         end
 
@@ -143,8 +158,8 @@ module Crossbeams
         end
       end
 
-      def self.can_have_children?(resource_type_code)
-        !PLANT_RESOURCE_RULES[resource_type_code][:allowed_children].empty?
+      def self.can_have_children?(plant_resource_type_code)
+        !PLANT_RESOURCE_RULES[plant_resource_type_code][:allowed_children].empty?
       end
     end
   end

@@ -2,13 +2,13 @@
 
 module ProductionApp
   module TaskPermissionCheck
-    class Resource < BaseService
+    class PlantResource < BaseService
       attr_reader :task, :entity
-      def initialize(task, resource_id = nil)
+      def initialize(task, plant_resource_id = nil)
         @task = task
         @repo = ResourceRepo.new
-        @id = resource_id
-        @entity = @id ? @repo.find_resource(@id) : nil
+        @id = plant_resource_id
+        @entity = @id ? @repo.find_plant_resource(@id) : nil
       end
 
       CHECKS = {
@@ -48,10 +48,10 @@ module ProductionApp
       end
 
       def add_child_check
-        if Crossbeams::Config::ResourceDefinitions.can_have_children?(@repo.resource_type_code_for(@id))
+        if Crossbeams::Config::ResourceDefinitions.can_have_children?(@repo.plant_resource_type_code_for(@id))
           all_ok
         else
-          failed_response 'This resource cannot have sub-resources'
+          failed_response 'This plant resource cannot have sub-resources'
         end
       end
 

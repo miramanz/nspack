@@ -1,35 +1,35 @@
 ---
-:dataminer_definition: resources
+:dataminer_definition: plant_resources
 :tree:
   :tree_column: path_array
   :tree_caption: Resource Hierarchy
   :suppress_node_counts: false
   :groupDefaultExpanded: -1
 :actions:
-- :url: "/production/resources/resources/$:id$"
+- :url: "/production/resources/plant_resources/$:id$"
   :text: view
   :icon: view-show
   :title: View
   :popup: true
-- :url: "/production/resources/resources/$:id$/edit"
+- :url: "/production/resources/plant_resources/$:id$/edit"
   :text: edit
   :icon: edit
   :title: Edit
   :popup: true
-- :url: "/production/resources/resources/$:id$"
+- :url: "/production/resources/plant_resources/$:id$"
   :text: delete
   :icon: delete
   :is_delete: true
   :popup: true
 - :separator: true
-- :url: "/production/resources/resources/$:id$/add_child"
+- :url: "/production/resources/plant_resources/$:id$/add_child"
   :text: New sub-resource
   :icon: add-solid
   :title: New sub-resource
   :popup: true
 :page_controls:
 - :control_type: :link
-  :url: "/production/resources/resources/new"
+  :url: "/production/resources/plant_resources/new"
   :text: New Resource
   :style: :button
   :behaviour: :popup

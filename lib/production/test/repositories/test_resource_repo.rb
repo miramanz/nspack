@@ -5,13 +5,13 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module ProductionApp
   class TestResourceRepo < MiniTestWithHooks
     def test_for_selects
-      assert_respond_to repo, :for_select_resource_types
-      assert_respond_to repo, :for_select_resources
+      assert_respond_to repo, :for_select_plant_resource_types
+      assert_respond_to repo, :for_select_plant_resources
     end
 
     def test_crud_calls
-      test_crud_calls_for :resource_types, name: :resource_type, wrapper: ResourceType
-      test_crud_calls_for :resources, name: :resource, wrapper: Resource
+      test_crud_calls_for :plant_resource_types, name: :plant_resource_type, wrapper: PlantResourceType
+      test_crud_calls_for :plant_resources, name: :plant_resource, wrapper: PlantResource
     end
 
     private

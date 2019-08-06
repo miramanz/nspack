@@ -2,10 +2,10 @@
 
 module Production
   module Resources
-    module ResourceType
-      class Edit
-        def self.call(id, form_values: nil, form_errors: nil)
-          ui_rule = UiRules::Compiler.new(:resource_type, :edit, id: id, form_values: form_values)
+    module PlantResourceType
+      class New
+        def self.call(form_values: nil, form_errors: nil, remote: true)
+          ui_rule = UiRules::Compiler.new(:plant_resource_type, :new, form_values: form_values)
           rules   = ui_rule.compile
 
           layout = Crossbeams::Layout::Page.build(rules) do |page|
@@ -13,11 +13,10 @@ module Production
             page.form_values form_values
             page.form_errors form_errors
             page.form do |form|
-              form.caption 'Edit Resource Type'
-              form.action "/production/resources/resource_types/#{id}"
-              form.remote!
-              form.method :update
-              form.add_field :resource_type_code
+              form.caption 'New Plant Resource Type'
+              form.action '/production/resources/plant_resource_types'
+              form.remote! if remote
+              form.add_field :plant_resource_type_code
               form.add_field :description
               # form.add_field :attribute_rules
               # form.add_field :behaviour_rules

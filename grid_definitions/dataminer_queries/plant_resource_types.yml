@@ -1,8 +1,8 @@
 ---
-:caption: Resource Types
-:sql: "SELECT \"resource_types\".\"id\", \"resource_types\".\"resource_type_code\",
-  \"resource_types\".\"description\",\r\n\"resource_types\".system_resource, \"resource_types\".\"icon\",\r\n\"resource_types\".\"active\",
-  \"resource_types\".\"created_at\", \"resource_types\".\"updated_at\"\r\nFROM \"resource_types\""
+:caption: Plant Resource Types
+:sql: "SELECT \"plant_resource_types\".\"id\", \"plant_resource_types\".\"plant_resource_type_code\",
+  \"plant_resource_types\".\"description\",\r\n\"plant_resource_types\".\"icon\",\r\n\"plant_resource_types\".\"active\",
+  \"plant_resource_types\".\"created_at\", \"plant_resource_types\".\"updated_at\"\r\nFROM \"plant_resource_types\""
 :limit: 
 :offset: 
 :external_settings: {}
@@ -11,7 +11,7 @@
     :name: id
     :sequence_no: 1
     :caption: Id
-    :namespaced_name: resource_types.id
+    :namespaced_name: plant_resource_types.id
     :data_type: :integer
     :width: 
     :format: 
@@ -23,11 +23,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  resource_type_code:
-    :name: resource_type_code
+  plant_resource_type_code:
+    :name: plant_resource_type_code
     :sequence_no: 2
-    :caption: Resource type code
-    :namespaced_name: resource_types.resource_type_code
+    :caption: Plant Resource type code
+    :namespaced_name: plant_resource_types.plant_resource_type_code
     :data_type: :string
     :width: 
     :format: 
@@ -43,7 +43,7 @@
     :name: description
     :sequence_no: 3
     :caption: Description
-    :namespaced_name: resource_types.description
+    :namespaced_name: plant_resource_types.description
     :data_type: :string
     :width: 
     :format: 
@@ -55,27 +55,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  system_resource:
-    :name: system_resource
-    :sequence_no: 4
-    :caption: System resource
-    :namespaced_name: resource_types.system_resource
-    :data_type: :boolean
-    :width: 150
-    :format: 
-    :hide: false
-    :pinned: 
-    :groupable: false
-    :group_by_seq: 
-    :group_sum: false
-    :group_avg: false
-    :group_min: false
-    :group_max: false
   icon:
     :name: icon
     :sequence_no: 5
     :caption: Icon
-    :namespaced_name: resource_types.icon
+    :namespaced_name: plant_resource_types.icon
     :data_type: :string
     :width: 80
     :format: 
@@ -91,7 +75,7 @@
     :name: active
     :sequence_no: 6
     :caption: Active
-    :namespaced_name: resource_types.active
+    :namespaced_name: plant_resource_types.active
     :data_type: :boolean
     :width: 
     :format: 
@@ -107,7 +91,7 @@
     :name: created_at
     :sequence_no: 7
     :caption: Created at
-    :namespaced_name: resource_types.created_at
+    :namespaced_name: plant_resource_types.created_at
     :data_type: :datetime
     :width: 
     :format: 
@@ -123,7 +107,7 @@
     :name: updated_at
     :sequence_no: 8
     :caption: Updated at
-    :namespaced_name: resource_types.updated_at
+    :namespaced_name: plant_resource_types.updated_at
     :data_type: :datetime
     :width: 
     :format: 
@@ -136,8 +120,8 @@
     :group_min: false
     :group_max: false
 :query_parameter_definitions:
-- :column: resource_types.resource_type_code
-  :caption: Resource type code
+- :column: plant_resource_types.plant_resource_type_code
+  :caption: Plant resource type code
   :data_type: :string
   :control_type: :text
   :default_value: 
