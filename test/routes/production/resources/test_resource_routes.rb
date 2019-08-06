@@ -44,7 +44,7 @@ class TestResourceRoutes < RouteTester
     row_vals = Hash.new(1)
     INTERACTOR.any_instance.stubs(:update_resource).returns(ok_response(instance: row_vals))
     patch_as_fetch 'production/resources/resources/1', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
-    expect_json_update_grid
+    expect_ok_json_redirect url: DEFAULT_LAST_GRID_URL
   end
 
   def test_update_fail
@@ -93,15 +93,15 @@ class TestResourceRoutes < RouteTester
     authorise_pass!
     ensure_exists!(INTERACTOR)
     row_vals = Hash.new(1)
-    INTERACTOR.any_instance.stubs(:create_resource).returns(ok_response(instance: row_vals))
+    INTERACTOR.any_instance.stubs(:create_root_resource).returns(ok_response(instance: row_vals))
     post_as_fetch 'production/resources/resources', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
-    expect_json_add_to_grid(has_notice: true)
+    expect_ok_json_redirect url: DEFAULT_LAST_GRID_URL
   end
 
   def test_create_remotely_fail
     authorise_pass!
     ensure_exists!(INTERACTOR)
-    INTERACTOR.any_instance.stubs(:create_resource).returns(bad_response)
+    INTERACTOR.any_instance.stubs(:create_root_resource).returns(bad_response)
     Production::Resources::Resource::New.stub(:call, bland_page) do
       post_as_fetch 'production/resources/resources', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
     end
