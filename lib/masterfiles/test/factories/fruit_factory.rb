@@ -38,5 +38,14 @@ module MasterfilesApp
       }
       DB[:treatments].insert(default.merge(opts))
     end
+
+    def create_inventory_code(opts = {})
+      default = {
+        inventory_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:inventory_codes].insert(default.merge(opts))
+    end
   end
 end

@@ -38,10 +38,20 @@ module MasterfilesApp
                           value: :id,
                           order_by: :treatment_code
 
+    build_for_select :inventory_codes,
+                     label: :inventory_code,
+                     value: :id,
+                     order_by: :inventory_code
+    build_inactive_select :inventory_codes,
+                          label: :inventory_code,
+                          value: :id,
+                          order_by: :inventory_code
+
     crud_calls_for :rmt_classes, name: :rmt_class, wrapper: RmtClass
     crud_calls_for :grades, name: :grade, wrapper: Grade
     crud_calls_for :treatment_types, name: :treatment_type, wrapper: TreatmentType
     crud_calls_for :treatments, name: :treatment, wrapper: Treatment
+    crud_calls_for :inventory_codes, name: :inventory_code, wrapper: InventoryCode
 
     def find_treatment(id)
       hash = find_with_association(:treatments,
