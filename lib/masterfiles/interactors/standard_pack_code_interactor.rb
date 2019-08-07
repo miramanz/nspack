@@ -2,18 +2,6 @@
 
 module MasterfilesApp
   class StandardPackCodeInteractor < BaseInteractor
-    def repo
-      @repo ||= FruitSizeRepo.new
-    end
-
-    def standard_pack_code(id)
-      repo.find_standard_pack_code(id)
-    end
-
-    def validate_standard_pack_code_params(params)
-      StandardPackCodeSchema.call(params)
-    end
-
     def create_standard_pack_code(params)
       res = validate_standard_pack_code_params(params)
       return validation_failed_response(res) unless res.messages.empty?
@@ -45,6 +33,20 @@ module MasterfilesApp
       else
         success_response("Deleted standard pack code #{name}")
       end
+    end
+
+    private
+
+    def repo
+      @repo ||= FruitSizeRepo.new
+    end
+
+    def standard_pack_code(id)
+      repo.find_standard_pack_code(id)
+    end
+
+    def validate_standard_pack_code_params(params)
+      StandardPackCodeSchema.call(params)
     end
   end
 end
