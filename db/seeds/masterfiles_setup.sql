@@ -75,19 +75,6 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
 WHERE functional_area_name = 'Masterfiles')),
         'Marketing varieties', '/list/marketing_varieties', 2, 'Cultivars');
 
--- Grouped in Pack codes
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
-                                       AND functional_area_id = (SELECT id FROM functional_areas
-WHERE functional_area_name = 'Masterfiles')),
-        'Basic', '/list/basic_pack_codes', 2, 'Pack codes');
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
-                                       AND functional_area_id = (SELECT id FROM functional_areas
-WHERE functional_area_name = 'Masterfiles')),
-        'Standard', '/list/standard_pack_codes', 2, 'Pack codes');
-
 -- Not Grouped
 INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
 VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
@@ -333,3 +320,87 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Farms'
 
 INSERT INTO roles (name)
 	VALUES ('FARM_OWNER');
+
+-- Grades
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Grades', '/list/grades', 3);
+
+-- Grouped in Treatments
+INSERT INTO program_functions (program_id, program_function_name, group_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Groups', 'Treatments', '/list/treatment_types', 4);
+
+INSERT INTO program_functions (program_id, program_function_name, group_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Treatments', 'Treatments', '/list/treatments', 5);
+
+-- Inventory Codes
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Inventory Codes', '/list/inventory_codes', 6);
+
+-- Marketing
+INSERT INTO programs (program_name, program_sequence, functional_area_id)
+VALUES ('Marketing', 1, (SELECT id FROM functional_areas
+                                              WHERE functional_area_name = 'Masterfiles'));
+
+INSERT INTO programs_webapps(program_id, webapp) VALUES (
+      (SELECT id FROM programs
+       WHERE program_name = 'Marketing'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+       'Nspack');
+
+-- LIST menu item
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Marketing'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Marks', '/list/marks', 2);
+
+-- Packaging
+INSERT INTO programs (program_name, program_sequence, functional_area_id)
+VALUES ('Packaging', 1, (SELECT id FROM functional_areas
+                                              WHERE functional_area_name = 'Masterfiles'));
+
+INSERT INTO programs_webapps(program_id, webapp) VALUES (
+      (SELECT id FROM programs
+       WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+       'Nspack');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Pallet Bases', '/list/pallet_bases', 1);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Pallet Stack Types', '/list/pallet_stack_types', 2);
+
+
+-- Grouped in Pack codes
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Basic', '/list/basic_pack_codes', 4, 'Pack codes');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Standard', '/list/standard_pack_codes', 4, 'Pack codes');
