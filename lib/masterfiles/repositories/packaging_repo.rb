@@ -24,11 +24,19 @@ module MasterfilesApp
     crud_calls_for :pallet_stack_types, name: :pallet_stack_type, wrapper: PalletStackType
 
     def find_pallet_base_pallet_formats(id)
-      DB[:pallet_formats].join(:pallet_bases, id: :pallet_base_id).where(pallet_base_id: id).order(:pallet_base_code).select_map(:pallet_base_code)
+      DB[:pallet_formats]
+        .join(:pallet_bases, id: :pallet_base_id)
+        .where(pallet_base_id: id)
+        .order(:pallet_base_code)
+        .select_map(:pallet_base_code)
     end
 
     def find_pallet_stack_type_pallet_formats(id)
-      DB[:pallet_formats].join(:pallet_stack_types, id: :pallet_stack_type_id).where(pallet_stack_type_id: id).order(:stack_type_code).select_map(:stack_type_code)
+      DB[:pallet_formats]
+        .join(:pallet_stack_types, id: :pallet_stack_type_id)
+        .where(pallet_stack_type_id: id)
+        .order(:stack_type_code)
+        .select_map(:stack_type_code)
     end
   end
 end

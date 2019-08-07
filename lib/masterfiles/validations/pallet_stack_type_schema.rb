@@ -7,6 +7,6 @@ module MasterfilesApp
     optional(:id, :integer).filled(:int?)
     required(:stack_type_code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).maybe(:str?)
-    required(:stack_height, :integer).maybe(:int?)
+    required(:stack_height, :integer).filled(:int?)
   end
 end

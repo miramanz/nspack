@@ -6,8 +6,8 @@ Sequel.migration do
       primary_key :id
       String :pallet_base_code, size: 255, null: false
       String :description
-      Integer :length
-      Integer :width
+      Integer :length, null: false
+      Integer :width, null: false
       String :edi_in_pallet_base
       String :edi_out_pallet_base
       Integer :cartons_per_layer, null: false
@@ -35,7 +35,7 @@ Sequel.migration do
       primary_key :id
       String :stack_type_code, size: 255, null: false
       String :description
-      Integer :stack_height
+      Integer :stack_height, null: false
       TrueClass :active, default: true
       DateTime :created_at, null: false
       DateTime :updated_at, null: false
@@ -58,7 +58,7 @@ Sequel.migration do
 
     create_table(:pallet_formats, ignore_index_errors: true) do
       primary_key :id
-      String :description
+      String :description, null: false
       foreign_key :pallet_base_id, :pallet_bases, type: :integer, null: false
       foreign_key :pallet_stack_type_id, :pallet_stack_types, type: :integer, null: false
 

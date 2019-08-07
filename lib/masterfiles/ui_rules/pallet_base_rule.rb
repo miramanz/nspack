@@ -30,8 +30,8 @@ module UiRules
       {
         pallet_base_code: { required: true },
         description: {},
-        length: { renderer: :integer },
-        width: { renderer: :integer },
+        length: { renderer: :integer, required: true },
+        width: { renderer: :integer, required: true },
         edi_in_pallet_base: {},
         edi_out_pallet_base: {},
         cartons_per_layer: { renderer: :integer, required: true }
