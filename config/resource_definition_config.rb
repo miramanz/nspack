@@ -111,7 +111,7 @@ module Crossbeams
                    code_prefix: 'SCL-' },
         PRINTER => { description: 'Printer',
                      allowed_children: [],
-                     icon: { file: 'printer', colour: '#62c95f' },
+                     icon: { file: 'printer', colour: '#234722' },
                      create_with_system_resource: 'PERIPHERAL',
                      code_prefix: 'PRN-' },
         BIN_TIPPING_STATION => { description: 'Bin-tipping station',
