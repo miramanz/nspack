@@ -11,12 +11,9 @@ module Production
           layout = Crossbeams::Layout::Page.build(rules) do |page|
             page.form_object ui_rule.form_object
             page.form do |form|
-              # form.caption 'Resource Type'
               form.view_only!
               form.add_field :plant_resource_type_code
               form.add_field :description
-              # form.add_field :attribute_rules
-              # form.add_field :behaviour_rules
               form.add_field :active
               form.add_text rules[:icon_render]
             end

@@ -3,7 +3,6 @@ Sequel.migration do
   up do
     extension :pg_triggers
     extension :pg_json
-    # plant_resource_types ++ system_resource_types???
 
     # SYSTEM RESOURCE TYPES
     # ---------------------
@@ -11,11 +10,8 @@ Sequel.migration do
       primary_key :id
       String :system_resource_type_code, null: false
       String :description, null: false
-      # TrueClass :system_resource, default: false
-      # TrueClass :computing_device, default: false
-      # TrueClass :peripheral, default: false
-      # Jsonb :attribute_rules
-      # Jsonb :behaviour_rules
+      TrueClass :computing_device, default: false
+      TrueClass :peripheral, default: false
       String :icon
 
       TrueClass :active, default: true
@@ -44,11 +40,6 @@ Sequel.migration do
       primary_key :id
       String :plant_resource_type_code, null: false
       String :description, null: false
-      # TrueClass :system_resource, default: false
-      # TrueClass :computing_device, default: false
-      # TrueClass :peripheral, default: false
-      # Jsonb :attribute_rules
-      # Jsonb :behaviour_rules
       String :icon
 
       TrueClass :active, default: true
@@ -71,21 +62,14 @@ Sequel.migration do
     # Log changes to this table. Exclude changes to the updated_at column.
     run "SELECT audit.audit_table('plant_resource_types', true, true, '{updated_at}'::text[]);"
 
-    # system resources: computing device / peripheral
-    # computing_device_id XXX : can belong to > 1
-    # peripheral_type       | = resource_type
-    # computing_device_type | = resource_type
-    # peripheral?
-    # computing_device?
-
     # SYSTEM RESOURCES
     # ---------------
     create_table(:system_resources, ignore_index_errors: true) do
       primary_key :id
+      foreign_key :plant_resource_type_id, :plant_resource_types, type: :integer, null: false
       foreign_key :system_resource_type_id, :system_resource_types, type: :integer, null: false
       String :system_resource_code, null: false
       String :description, null: false
-      # Jsonb :system_resource_attributes
 
       TrueClass :active, default: true
       DateTime :created_at, null: false
@@ -115,7 +99,6 @@ Sequel.migration do
       foreign_key :system_resource_id, :system_resources, type: :integer
       String :plant_resource_code, null: false
       String :description, null: false
-      # Jsonb :plant_resource_attributes
 
       TrueClass :active, default: true
       DateTime :created_at, null: false
@@ -158,30 +141,6 @@ Sequel.migration do
   end
 
   down do
-    # drop_table(:tree_resources)
-    #
-    # drop_table(:plant_system_resources)
-    #
-    # # Drop logging for resources.
-    # drop_trigger(:resources, :audit_trigger_row)
-    # drop_trigger(:resources, :audit_trigger_stm)
-    #
-    # drop_trigger(:resources, :set_created_at)
-    # drop_function(:resources_set_created_at)
-    # drop_trigger(:resources, :set_updated_at)
-    # drop_function(:resources_set_updated_at)
-    # drop_table(:resources)
-    #
-    # # Drop logging for resource_types.
-    # drop_trigger(:resource_types, :audit_trigger_row)
-    # drop_trigger(:resource_types, :audit_trigger_stm)
-    #
-    # drop_trigger(:resource_types, :set_created_at)
-    # drop_function(:resource_types_set_created_at)
-    # drop_trigger(:resource_types, :set_updated_at)
-    # drop_function(:resource_types_set_updated_at)
-    # drop_table(:resource_types)
-
     drop_table(:tree_plant_resources)
 
     drop_table(:plant_resources_system_resources)

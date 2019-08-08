@@ -67,7 +67,7 @@ module Crossbeams
                           allowed_children: [],
                           icon: { file: 'circle-o', colour: '#c9665f' },
                           create_with_system_resource: 'MODULE_BUTTON',
-                          code_prefix: '${MODULE}-B' }, # prefixed by module name followed by....
+                          code_prefix: '${CODE}-B' }, # prefixed by module name followed by....
         CLM_ROBOT => { description: 'CLM Robot',
                        allowed_children: [ROBOT_BUTTON],
                        icon: { file: 'server3', colour: '#5F98CA' },

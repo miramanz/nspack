@@ -108,20 +108,10 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
           show_partial { Production::Resources::PlantResource::New.call(id: id) }
         end
         r.post do
-          # 1. Check if this is a twin resource
-          # 2. if no, continue as below
-          # 3. if yes, stash the params & display attributes of the system resource
-          # 4. post that result to a different path and create plant res from stash and sys res from params
           res = interactor.create_plant_resource(id, params[:plant_resource])
           if res.success
-            if res.instance&.resource_sub_type # then stash && update dialog with MODULE grid
-              store_locally(:plant_resource_part1, res.instance)
-              content = render_partial { Production::Resources::PlantResource::NewSystemResource.call(id: id, plant_resource: res.instance) }
-              update_dialog_content(content: content, notice: res.message)
-            else
-              flash[:notice] = res.message
-              redirect_to_last_grid(r)
-            end
+            flash[:notice] = res.message
+            redirect_to_last_grid(r)
           else
             re_show_form(r, res, url: "/production/resources/plant_resources/#{id}/add_child") do
               Production::Resources::PlantResource::New.call(id: id,
@@ -132,24 +122,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
           end
         end
       end
-      r.on 'add_system_child' do
-        r.post do
-          plant_resource = retrieve_from_local_store(:plant_resource_part1)
-          res = interactor.create_twin_resources(id, plant_resource, params[:plant_resource])
-          if res.success
-            flash[:notice] = res.message
-            redirect_to_last_grid(r)
-          else
-            re_show_form(r, res, url: "/production/resources/plant_resources/#{id}/add_system_child") do
-              Production::Resources::PlantResource::NewSystemResource.call(id: id,
-                                                                           plant_resource: plant_resource,
-                                                                           form_values: params[:plant_resource],
-                                                                           form_errors: res.errors,
-                                                                           remote: fetch?(r))
-            end
-          end
-        end
-      end
+
       r.is do
         r.get do       # SHOW
           check_auth!('resources', 'read')
@@ -164,6 +137,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             re_show_form(r, res) { Production::Resources::PlantResource::Edit.call(id, form_values: params[:plant_resource], form_errors: res.errors) }
           end
         end
+
         r.delete do    # DELETE
           check_auth!('resources', 'delete')
           # interactor.assert_permission!(:delete, id)

@@ -16,12 +16,10 @@ module UiRules
 
     def set_show_fields
       plant_resource_type_id_label = @repo.find_plant_resource_type(@form_object.plant_resource_type_id)&.plant_resource_type_code
-      # system_resource_id_label = @repo.find_plant_resource(@form_object.system_plant_resource_id)&.plant_resource_code
       fields[:plant_resource_type_id] = { renderer: :label, with_value: plant_resource_type_id_label, caption: 'Plant Resource Type' }
-      # fields[:system_resource_id] = { renderer: :label, with_value: system_resource_id_label, caption: 'System Resource' }
       fields[:plant_resource_code] = { renderer: :label }
+      fields[:system_resource_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
-      # fields[:plant_resource_attributes] = { renderer: :label }
       fields[:active] = { renderer: :label, as_boolean: true }
     end
 
@@ -37,13 +35,8 @@ module UiRules
                       end
       {
         plant_resource_type_id: type_renderer,
-        # system_resource_id: { renderer: :select,
-        #                       options: @repo.for_select_resources,
-        #                       disabled_options: @repo.for_select_inactive_resources,
-        #                       caption: 'system_resource' },
         plant_resource_code: { required: true },
         description: { required: true }
-        # plant_resource_attributes: {}
       }
     end
 
@@ -59,7 +52,12 @@ module UiRules
         return
       end
 
-      @form_object = @repo.find_plant_resource(@options[:id])
+      @form_object = @repo.find_with_association(:plant_resources,
+                                                 @options[:id],
+                                                 parent_tables: [{ parent_table: :system_resources,
+                                                                   columns: [:system_resource_code],
+                                                                   flatten_columns: { system_resource_code: :system_resource_code } }],
+                                                 wrapper: ProductionApp::PlantResourceWithSystem)
     end
 
     def make_new_form_object
