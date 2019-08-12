@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# ========================================================= #
-# NB. Scaffolds for test factories should be combined       #
-#     - Otherwise you'll have methods for the same table in #
-#       several factories.                                  #
-#     - Rather create a factory for several related tables  #
-# ========================================================= #
-
 module MasterfilesApp
   module CultivarFactory
     def create_cultivar_group(opts = {})

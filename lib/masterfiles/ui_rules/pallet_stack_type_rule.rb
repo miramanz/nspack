@@ -26,7 +26,7 @@ module UiRules
       {
         stack_type_code: { required: true },
         description: {},
-        stack_height: { renderer: :integer }
+        stack_height: { renderer: :integer, required: true }
       }
     end
 
