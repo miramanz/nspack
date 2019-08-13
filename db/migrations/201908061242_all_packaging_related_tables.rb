@@ -61,6 +61,8 @@ Sequel.migration do
       String :description, null: false
       foreign_key :pallet_base_id, :pallet_bases, type: :integer, null: false
       foreign_key :pallet_stack_type_id, :pallet_stack_types, type: :integer, null: false
+      DateTime :created_at, null: false
+      DateTime :updated_at, null: false
 
       index [:pallet_base_id, :pallet_stack_type_id], name: :pallet_formats_idx, unique: true
     end

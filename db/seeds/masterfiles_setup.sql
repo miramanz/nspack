@@ -404,3 +404,23 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
                                        AND functional_area_id = (SELECT id FROM functional_areas
 WHERE functional_area_name = 'Masterfiles')),
         'Standard', '/list/standard_pack_codes', 4, 'Pack codes');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Pallet Formats', '/list/pallet_formats', 3);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Cartons Per Pallet', '/list/cartons_per_pallet', 5);
+
+-- SEARCH menu item
+-- PROGRAM FUNCTION Search Cartons_per_pallet
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Search Cartons Per Pallet', '/search/cartons_per_pallet', 6);

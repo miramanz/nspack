@@ -7,11 +7,15 @@ module MasterfilesApp
     def test_for_selects
       assert_respond_to repo, :for_select_pallet_bases
       assert_respond_to repo, :for_select_pallet_stack_types
+      assert_respond_to repo, :for_select_pallet_formats
+      assert_respond_to repo, :for_select_cartons_per_pallet
     end
 
     def test_crud_calls
       test_crud_calls_for :pallet_bases, name: :pallet_base, wrapper: PalletBase
       test_crud_calls_for :pallet_stack_types, name: :pallet_stack_type, wrapper: PalletStackType
+      test_crud_calls_for :pallet_formats, name: :pallet_format, wrapper: PalletFormat
+      test_crud_calls_for :cartons_per_pallet, name: :cartons_per_pallet, wrapper: CartonsPerPallet
     end
 
     private

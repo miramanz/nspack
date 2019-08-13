@@ -156,5 +156,163 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         end
       end
     end
+
+    # PALLET FORMATS
+    # --------------------------------------------------------------------------
+    r.on 'pallet_formats', Integer do |id| # rubocop:disable Metrics/BlockLength
+      interactor = MasterfilesApp::PalletFormatInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:pallet_formats, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('packaging', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Packaging::PalletFormat::Edit.call(id) }
+      end
+
+      r.is do # rubocop:disable Metrics/BlockLength
+        r.get do       # SHOW
+          check_auth!('packaging', 'read')
+          show_partial { Masterfiles::Packaging::PalletFormat::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_pallet_format(id, params[:pallet_format])
+          if res.success
+            row_keys = %i[
+              description
+              pallet_base_code
+              stack_type_code
+            ]
+            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Packaging::PalletFormat::Edit.call(id, form_values: params[:pallet_format], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('packaging', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_pallet_format(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'pallet_formats' do
+      interactor = MasterfilesApp::PalletFormatInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('packaging', 'new')
+        show_partial_or_page(r) { Masterfiles::Packaging::PalletFormat::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_pallet_format(params[:pallet_format])
+        if res.success
+          row_keys = %i[
+            id
+            description
+            pallet_base_code
+            stack_type_code
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/packaging/pallet_formats/new') do
+            Masterfiles::Packaging::PalletFormat::New.call(form_values: params[:pallet_format],
+                                                           form_errors: res.errors,
+                                                           remote: fetch?(r))
+          end
+        end
+      end
+    end
+
+    # CARTONS PER PALLET
+    # --------------------------------------------------------------------------
+    r.on 'cartons_per_pallet', Integer do |id| # rubocop:disable Metrics/BlockLength
+      interactor = MasterfilesApp::CartonsPerPalletInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:cartons_per_pallet, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('packaging', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Packaging::CartonsPerPallet::Edit.call(id) }
+      end
+
+      r.is do # rubocop:disable Metrics/BlockLength
+        r.get do       # SHOW
+          check_auth!('packaging', 'read')
+          show_partial { Masterfiles::Packaging::CartonsPerPallet::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_cartons_per_pallet(id, params[:cartons_per_pallet])
+          if res.success
+            row_keys = %i[
+              description
+              pallet_format_id
+              basic_pack_id
+              cartons_per_pallet
+              layers_per_pallet
+              active
+              basic_pack_code
+              pallet_formats_description
+            ]
+            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Packaging::CartonsPerPallet::Edit.call(id, form_values: params[:cartons_per_pallet], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('packaging', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_cartons_per_pallet(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'cartons_per_pallet' do # rubocop:disable Metrics/BlockLength
+      interactor = MasterfilesApp::CartonsPerPalletInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('packaging', 'new')
+        show_partial_or_page(r) { Masterfiles::Packaging::CartonsPerPallet::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_cartons_per_pallet(params[:cartons_per_pallet])
+        if res.success
+          row_keys = %i[
+            id
+            description
+            pallet_format_id
+            basic_pack_id
+            cartons_per_pallet
+            layers_per_pallet
+            active
+            basic_pack_code
+            pallet_formats_description
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/packaging/cartons_per_pallet/new') do
+            Masterfiles::Packaging::CartonsPerPallet::New.call(form_values: params[:cartons_per_pallet],
+                                                               form_errors: res.errors,
+                                                               remote: fetch?(r))
+          end
+        end
+      end
+    end
   end
 end
