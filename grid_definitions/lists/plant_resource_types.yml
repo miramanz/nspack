@@ -1,0 +1,19 @@
+---
+:dataminer_definition: plant_resource_types
+:actions:
+- :url: "/production/resources/plant_resource_types/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/production/resources/plant_resource_types/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/production/resources/plant_resource_types/refresh"
+  :text: Refresh Plant and System Resource Type list
+  :style: :button
+  :prompt: Add missing plant resource types to the list?
