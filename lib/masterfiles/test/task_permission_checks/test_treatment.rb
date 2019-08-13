@@ -5,14 +5,11 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestTreatmentPermission < Minitest::Test
     include Crossbeams::Responses
-    include FruitFactory
 
     def entity(attrs = {})
-      treatment_type_id = create_treatment_type
-
       base_attrs = {
         id: 1,
-        treatment_type_id: treatment_type_id,
+        treatment_type_id: 12,
         treatment_code: Faker::Lorem.unique.word,
         description: 'ABC',
         active: true,

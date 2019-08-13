@@ -25,54 +25,12 @@ module MasterfilesApp
       MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:edit, 1)
       assert res.success, 'Should be able to edit a rmt_class'
-
-      # MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true))
-      # res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:edit, 1)
-      # refute res.success, 'Should not be able to edit a completed rmt_class'
     end
 
     def test_delete
       MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:delete, 1)
       assert res.success, 'Should be able to delete a rmt_class'
-
-      # MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true))
-      # res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:delete, 1)
-      # refute res.success, 'Should not be able to delete a completed rmt_class'
     end
-
-    # def test_complete
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity)
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:complete, 1)
-    #   assert res.success, 'Should be able to complete a rmt_class'
-
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true))
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:complete, 1)
-    #   refute res.success, 'Should not be able to complete an already completed rmt_class'
-    # end
-
-    # def test_approve
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true, approved: false))
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:approve, 1)
-    #   assert res.success, 'Should be able to approve a completed rmt_class'
-
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity)
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:approve, 1)
-    #   refute res.success, 'Should not be able to approve a non-completed rmt_class'
-
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true, approved: true))
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:approve, 1)
-    #   refute res.success, 'Should not be able to approve an already approved rmt_class'
-    # end
-
-    # def test_reopen
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity)
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:reopen, 1)
-    #   refute res.success, 'Should not be able to reopen a rmt_class that has not been approved'
-
-    #   MasterfilesApp::FruitRepo.any_instance.stubs(:find_rmt_class).returns(entity(completed: true, approved: true))
-    #   res = MasterfilesApp::TaskPermissionCheck::RmtClass.call(:reopen, 1)
-    #   assert res.success, 'Should be able to reopen an approved rmt_class'
-    # end
   end
 end

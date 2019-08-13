@@ -5,18 +5,13 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestCartonsPerPalletPermission < Minitest::Test
     include Crossbeams::Responses
-    include PackagingFactory
-    include FruitFactory
 
     def entity(attrs = {})
-      pallet_format_id = create_pallet_format
-      basic_pack_code_id = create_basic_pack_code
-
       base_attrs = {
         id: 1,
         description: Faker::Lorem.unique.word,
-        pallet_format_id: pallet_format_id,
-        basic_pack_id: basic_pack_code_id,
+        pallet_format_id: 1,
+        basic_pack_id: 1,
         cartons_per_pallet: 1,
         layers_per_pallet: 1,
         active: true,
