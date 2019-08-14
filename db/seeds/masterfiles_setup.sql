@@ -424,3 +424,47 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
          AND functional_area_id = (SELECT id FROM functional_areas
                                    WHERE functional_area_name = 'Masterfiles')),
          'Search Cartons Per Pallet', '/search/cartons_per_pallet', 6);
+
+
+-- Grouped in Bill of Materials
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'PM Types', '/list/pm_types', 7, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'PM Subtypes', '/list/pm_subtypes', 8, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'PM Products', '/list/pm_products', 9, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'Units of Measure', '/list/units_of_measure', 10, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'PM BOMs', '/list/pm_boms', 11, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+        'PM BOMs Products', '/list/pm_boms_products', 12, 'Bill of Materials');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
+         AND functional_area_id = (SELECT id FROM functional_areas
+         WHERE functional_area_name = 'Masterfiles')),
+         'Search PM BOMs Products', '/search/pm_boms_products', 13, 'Bill of Materials');

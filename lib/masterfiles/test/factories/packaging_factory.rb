@@ -52,5 +52,48 @@ module MasterfilesApp
       }
       DB[:cartons_per_pallet].insert(default.merge(opts))
     end
+
+    def create_pm_type(opts = {})
+      default = {
+        pm_type_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:pm_types].insert(default.merge(opts))
+    end
+
+    def create_pm_subtype(opts = {})
+      pm_type_id = create_pm_type
+
+      default = {
+        pm_type_id: pm_type_id,
+        subtype_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:pm_subtypes].insert(default.merge(opts))
+    end
+
+    def create_pm_product(opts = {})
+      pm_subtype_id = create_pm_subtype
+
+      default = {
+        pm_subtype_id: pm_subtype_id,
+        erp_code: Faker::Lorem.unique.word,
+        product_code: Faker::Lorem.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:pm_products].insert(default.merge(opts))
+    end
+
+    def create_units_of_measure(opts = {})
+      default = {
+        unit_of_measure: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:units_of_measure].insert(default.merge(opts))
+    end
   end
 end
