@@ -56,7 +56,7 @@ module MasterfilesApp
     private
 
     def repo
-      @repo ||= BOMsRepo.new
+      @repo ||= BomsRepo.new
     end
 
     def pm_subtype(id)

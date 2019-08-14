@@ -6,7 +6,7 @@ module MasterfilesApp
       attr_reader :task, :entity
       def initialize(task, units_of_measure_id = nil)
         @task = task
-        @repo = BOMsRepo.new
+        @repo = BomsRepo.new
         @id = units_of_measure_id
         @entity = @id ? @repo.find_units_of_measure(@id) : nil
       end

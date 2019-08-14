@@ -3,7 +3,7 @@
 module UiRules
   class UnitsOfMeasureRule < Base
     def generate_rules
-      @repo = MasterfilesApp::BOMsRepo.new
+      @repo = MasterfilesApp::BomsRepo.new
       make_form_object
       apply_form_values
 

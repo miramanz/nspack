@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MasterfilesApp
-  class BOMsRepo < BaseRepo
+  class BomsRepo < BaseRepo
     build_for_select :pm_types,
                      label: :pm_type_code,
                      value: :id,

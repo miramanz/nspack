@@ -56,7 +56,7 @@ module MasterfilesApp
     private
 
     def repo
-      @repo ||= BOMsRepo.new
+      @repo ||= BomsRepo.new
     end
 
     def units_of_measure(id)

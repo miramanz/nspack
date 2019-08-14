@@ -22,13 +22,13 @@ module MasterfilesApp
     end
 
     def test_edit
-      MasterfilesApp::BOMsRepo.any_instance.stubs(:find_units_of_measure).returns(entity)
+      MasterfilesApp::BomsRepo.any_instance.stubs(:find_units_of_measure).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::UnitsOfMeasure.call(:edit, 1)
       assert res.success, 'Should be able to edit a units_of_measure'
     end
 
     def test_delete
-      MasterfilesApp::BOMsRepo.any_instance.stubs(:find_units_of_measure).returns(entity)
+      MasterfilesApp::BomsRepo.any_instance.stubs(:find_units_of_measure).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::UnitsOfMeasure.call(:delete, 1)
       assert res.success, 'Should be able to delete a units_of_measure'
     end

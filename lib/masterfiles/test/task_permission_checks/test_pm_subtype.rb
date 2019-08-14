@@ -24,13 +24,13 @@ module MasterfilesApp
     end
 
     def test_edit
-      MasterfilesApp::BOMsRepo.any_instance.stubs(:find_pm_subtype).returns(entity)
+      MasterfilesApp::BomsRepo.any_instance.stubs(:find_pm_subtype).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::PmSubtype.call(:edit, 1)
       assert res.success, 'Should be able to edit a pm_subtype'
     end
 
     def test_delete
-      MasterfilesApp::BOMsRepo.any_instance.stubs(:find_pm_subtype).returns(entity)
+      MasterfilesApp::BomsRepo.any_instance.stubs(:find_pm_subtype).returns(entity)
       res = MasterfilesApp::TaskPermissionCheck::PmSubtype.call(:delete, 1)
       assert res.success, 'Should be able to delete a pm_subtype'
     end

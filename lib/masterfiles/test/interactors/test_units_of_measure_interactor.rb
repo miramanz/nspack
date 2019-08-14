@@ -8,11 +8,11 @@ module MasterfilesApp
 
     def test_repo
       repo = interactor.send(:repo)
-      assert repo.is_a?(MasterfilesApp::BOMsRepo)
+      assert repo.is_a?(MasterfilesApp::BomsRepo)
     end
 
     def test_units_of_measure
-      MasterfilesApp::BOMsRepo.any_instance.stubs(:find_units_of_measure).returns(fake_units_of_measure)
+      MasterfilesApp::BomsRepo.any_instance.stubs(:find_units_of_measure).returns(fake_units_of_measure)
       entity = interactor.send(:units_of_measure, 1)
       assert entity.is_a?(UnitsOfMeasure)
     end
