@@ -38,10 +38,20 @@ module MasterfilesApp
                           value: :id,
                           order_by: :unit_of_measure
 
+    build_for_select :pm_boms,
+                     label: :bom_code,
+                     value: :id,
+                     order_by: :bom_code
+    build_inactive_select :pm_boms,
+                          label: :bom_code,
+                          value: :id,
+                          order_by: :bom_code
+
     crud_calls_for :pm_types, name: :pm_type, wrapper: PmType
     crud_calls_for :pm_subtypes, name: :pm_subtype, wrapper: PmSubtype
     crud_calls_for :pm_products, name: :pm_product, wrapper: PmProduct
     crud_calls_for :units_of_measure, name: :units_of_measure, wrapper: UnitsOfMeasure
+    crud_calls_for :pm_boms, name: :pm_bom, wrapper: PmBom
 
     def find_pm_type_subtypes(id)
       DB[:pm_subtypes]

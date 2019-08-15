@@ -95,5 +95,15 @@ module MasterfilesApp
       }
       DB[:units_of_measure].insert(default.merge(opts))
     end
+
+    def create_pm_bom(opts = {})
+      default = {
+        bom_code: Faker::Lorem.unique.word,
+        erp_bom_code: Faker::Lorem.word,
+        description: Faker::Lorem.word,
+        active: true
+      }
+      DB[:pm_boms].insert(default.merge(opts))
+    end
   end
 end

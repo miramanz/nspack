@@ -1,0 +1,24 @@
+---
+:dataminer_definition: pm_boms
+:actions:
+- :url: "/masterfiles/packaging/pm_boms/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/packaging/pm_boms/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/packaging/pm_boms/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/packaging/pm_boms/new"
+  :text: New Pm Bom
+  :style: :button
+  :behaviour: :popup

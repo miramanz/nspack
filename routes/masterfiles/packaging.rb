@@ -603,5 +603,76 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         end
       end
     end
+
+    # PM BOMS
+    # --------------------------------------------------------------------------
+    r.on 'pm_boms', Integer do |id| # rubocop:disable Metrics/BlockLength
+      interactor = MasterfilesApp::PmBomInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:pm_boms, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('packaging', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Packaging::PmBom::Edit.call(id) }
+      end
+
+      r.is do
+        r.get do       # SHOW
+          check_auth!('packaging', 'read')
+          show_partial { Masterfiles::Packaging::PmBom::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_pm_bom(id, params[:pm_bom])
+          if res.success
+            update_grid_row(id, changes: { bom_code: res.instance[:bom_code], erp_bom_code: res.instance[:erp_bom_code], description: res.instance[:description] },
+                                notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Packaging::PmBom::Edit.call(id, form_values: params[:pm_bom], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('packaging', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_pm_bom(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'pm_boms' do
+      interactor = MasterfilesApp::PmBomInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('packaging', 'new')
+        show_partial_or_page(r) { Masterfiles::Packaging::PmBom::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_pm_bom(params[:pm_bom])
+        if res.success
+          row_keys = %i[
+            id
+            bom_code
+            erp_bom_code
+            description
+            active
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/packaging/pm_boms/new') do
+            Masterfiles::Packaging::PmBom::New.call(form_values: params[:pm_bom],
+                                                    form_errors: res.errors,
+                                                    remote: fetch?(r))
+          end
+        end
+      end
+    end
   end
 end
