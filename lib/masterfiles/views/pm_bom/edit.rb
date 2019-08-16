@@ -21,6 +21,16 @@ module Masterfiles
               form.add_field :erp_bom_code
               form.add_field :description
             end
+            page.section do |section|
+              section.add_control(control_type: :link,
+                                  text: 'New Pm Boms Products',
+                                  url: "/masterfiles/packaging/pm_boms/#{id}/pm_boms_products/new",
+                                  behaviour: :popup,
+                                  style: :button)
+              section.add_grid('pm_boms_products',
+                               "/list/pm_boms_products/grid?key=standard&pm_boms_products.pm_bom_id=#{id}",
+                               caption: 'PM BOM Products')
+            end
           end
 
           layout

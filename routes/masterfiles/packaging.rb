@@ -620,6 +620,35 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
         show_partial { Masterfiles::Packaging::PmBom::Edit.call(id) }
       end
 
+      r.on 'pm_boms_products' do # rubocop:disable Metrics/BlockLength
+        interactor = MasterfilesApp::PmBomsProductInteractor.new(current_user, {}, { route_url: request.path }, {})
+        r.on 'new' do    # NEW
+          check_auth!('packaging', 'new')
+          show_partial_or_page(r) { Masterfiles::Packaging::PmBomsProduct::New.call(id, remote: fetch?(r)) }
+        end
+        r.post do        # CREATE
+          res = interactor.create_pm_boms_product(params[:pm_boms_product])
+          if res.success
+            row_keys = %i[
+              id
+              product_code
+              bom_code
+              unit_of_measure
+              quantity
+            ]
+            json_actions([OpenStruct.new(type: :add_grid_row, attrs: select_attributes(res.instance, row_keys))],
+                         res.message)
+          else
+            re_show_form(r, res, url: "/masterfiles/packaging/pm_boms/#{id}/pm_boms_products/new") do
+              Masterfiles::Packaging::PmBomsProduct::New.call(id,
+                                                              form_values: params[:pm_boms_product],
+                                                              form_errors: res.errors,
+                                                              remote: fetch?(r))
+            end
+          end
+        end
+      end
+
       r.is do
         r.get do       # SHOW
           check_auth!('packaging', 'read')
@@ -670,6 +699,54 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             Masterfiles::Packaging::PmBom::New.call(form_values: params[:pm_bom],
                                                     form_errors: res.errors,
                                                     remote: fetch?(r))
+          end
+        end
+      end
+    end
+
+    # PM BOMS PRODUCTS
+    # --------------------------------------------------------------------------
+    r.on 'pm_boms_products', Integer do |id| # rubocop:disable Metrics/BlockLength
+      interactor = MasterfilesApp::PmBomsProductInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:pm_boms_products, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('packaging', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Packaging::PmBomsProduct::Edit.call(id) }
+      end
+
+      r.is do # rubocop:disable Metrics/BlockLength
+        r.get do       # SHOW
+          check_auth!('packaging', 'read')
+          show_partial { Masterfiles::Packaging::PmBomsProduct::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_pm_boms_product(id, params[:pm_boms_product])
+          if res.success
+            row_keys = %i[
+              product_code
+              bom_code
+              unit_of_measure
+              quantity
+            ]
+            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Packaging::PmBomsProduct::Edit.call(id, form_values: params[:pm_boms_product], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('packaging', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_pm_boms_product(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
           end
         end
       end

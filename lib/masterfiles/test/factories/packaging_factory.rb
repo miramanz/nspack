@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MasterfilesApp
-  module PackagingFactory
+  module PackagingFactory # rubocop:disable Metrics/ModuleLength
     def create_pallet_base(opts = {})
       default = {
         pallet_base_code: Faker::Lorem.unique.word,
@@ -104,6 +104,20 @@ module MasterfilesApp
         active: true
       }
       DB[:pm_boms].insert(default.merge(opts))
+    end
+
+    def create_pm_boms_product(opts = {})
+      pm_product_id = create_pm_product
+      pm_bom_id = create_pm_bom
+      units_of_measure_id = create_units_of_measure
+
+      default = {
+        pm_product_id: pm_product_id,
+        pm_bom_id: pm_bom_id,
+        unit_of_measure_id: units_of_measure_id,
+        quantity: Faker::Number.decimal
+      }
+      DB[:pm_boms_products].insert(default.merge(opts))
     end
   end
 end

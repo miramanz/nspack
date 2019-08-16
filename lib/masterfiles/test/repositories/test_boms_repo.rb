@@ -10,6 +10,7 @@ module MasterfilesApp
       assert_respond_to repo, :for_select_pm_products
       assert_respond_to repo, :for_select_units_of_measure
       assert_respond_to repo, :for_select_pm_boms
+      assert_respond_to repo, :for_select_pm_boms_products
     end
 
     def test_crud_calls
@@ -18,6 +19,7 @@ module MasterfilesApp
       test_crud_calls_for :pm_products, name: :pm_product, wrapper: PmProduct
       test_crud_calls_for :units_of_measure, name: :units_of_measure, wrapper: UnitsOfMeasure
       test_crud_calls_for :pm_boms, name: :pm_bom, wrapper: PmBom
+      test_crud_calls_for :pm_boms_products, name: :pm_boms_product, wrapper: PmBomsProduct
     end
 
     private

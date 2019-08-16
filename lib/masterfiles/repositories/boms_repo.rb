@@ -47,11 +47,18 @@ module MasterfilesApp
                           value: :id,
                           order_by: :bom_code
 
+    build_for_select :pm_boms_products,
+                     label: :id,
+                     value: :id,
+                     no_active_check: true,
+                     order_by: :id
+
     crud_calls_for :pm_types, name: :pm_type, wrapper: PmType
     crud_calls_for :pm_subtypes, name: :pm_subtype, wrapper: PmSubtype
     crud_calls_for :pm_products, name: :pm_product, wrapper: PmProduct
     crud_calls_for :units_of_measure, name: :units_of_measure, wrapper: UnitsOfMeasure
     crud_calls_for :pm_boms, name: :pm_bom, wrapper: PmBom
+    crud_calls_for :pm_boms_products, name: :pm_boms_product, wrapper: PmBomsProduct
 
     def find_pm_type_subtypes(id)
       DB[:pm_subtypes]
@@ -91,21 +98,22 @@ module MasterfilesApp
       PmProduct.new(hash)
     end
 
-    # def find_pm_boms_product(id)
-    #   hash = find_with_association(:pm_boms_products,
-    #                                id,
-    #                                parent_tables: [{ parent_table: :pm_products,
-    #                                                  columns: [:product_code],
-    #                                                  flatten_columns: { product_code: :product_code } },
-    #                                                { parent_table: :pm_boms,
-    #                                                  columns: [:bom_code],
-    #                                                  flatten_columns: { bom_code: :bom_code } },
-    #                                                { parent_table: :units_of_measure,
-    #                                                  columns: [:unit_of_measure],
-    #                                                  flatten_columns: { unit_of_measure: :unit_of_measure } }])
-    #   return nil if hash.nil?
-    #
-    #   PmBomProduct.new(hash)
-    # end
+    def find_pm_boms_product(id)
+      hash = find_with_association(:pm_boms_products,
+                                   id,
+                                   parent_tables: [{ parent_table: :pm_products,
+                                                     columns: [:product_code],
+                                                     flatten_columns: { product_code: :product_code } },
+                                                   { parent_table: :pm_boms,
+                                                     columns: [:bom_code],
+                                                     flatten_columns: { bom_code: :bom_code } },
+                                                   { parent_table: :units_of_measure,
+                                                     columns: [:unit_of_measure],
+                                                     foreign_key: :unit_of_measure_id,
+                                                     flatten_columns: { unit_of_measure: :unit_of_measure } }])
+      return nil if hash.nil?
+
+      PmBomsProduct.new(hash)
+    end
   end
 end
