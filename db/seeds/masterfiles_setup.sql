@@ -468,3 +468,16 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
          AND functional_area_id = (SELECT id FROM functional_areas
          WHERE functional_area_name = 'Masterfiles')),
          'Search PM BOMs Products', '/search/pm_boms_products', 12, 'Bill of Materials');
+
+-- Marketing Varieties
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Marketing'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Customer Varieties', '/list/customer_varieties', 3);
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Marketing'
+         AND functional_area_id = (SELECT id FROM functional_areas
+                                   WHERE functional_area_name = 'Masterfiles')),
+         'Search Customer Variety Marketing Varieties', '/search/customer_variety_varieties', 4);
