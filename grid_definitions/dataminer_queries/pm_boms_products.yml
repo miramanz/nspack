@@ -1,11 +1,11 @@
 ---
 :caption: Pm Boms Products
 :sql: SELECT "pm_boms_products"."id", "pm_boms_products"."pm_product_id", "pm_boms_products"."pm_bom_id",
-  "pm_boms_products"."unit_of_measure_id", "pm_boms_products"."quantity", "pm_boms_products"."created_at",
+  "pm_boms_products"."uom_id", "pm_boms_products"."quantity", "pm_boms_products"."created_at",
   "pm_boms_products"."updated_at", "pm_boms"."bom_code", "pm_products"."product_code",
-  "units_of_measure"."unit_of_measure" FROM "pm_boms_products" JOIN "pm_boms" ON "pm_boms"."id"
+  "uoms"."uom_code" FROM "pm_boms_products" JOIN "pm_boms" ON "pm_boms"."id"
   = "pm_boms_products"."pm_bom_id" JOIN "pm_products" ON "pm_products"."id" = "pm_boms_products"."pm_product_id"
-  JOIN "units_of_measure" ON "units_of_measure"."id" = "pm_boms_products"."unit_of_measure_id"
+  JOIN "uoms" ON "uoms"."id" = "pm_boms_products"."uom_id"
 :limit: 
 :offset: 
 :external_settings: {}
@@ -58,11 +58,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  unit_of_measure_id:
-    :name: unit_of_measure_id
+  uom_id:
+    :name: uom_id
     :sequence_no: 8
     :caption: Unit of measure
-    :namespaced_name: pm_boms_products.unit_of_measure_id
+    :namespaced_name: pm_boms_products.uom_id
     :data_type: :integer
     :width: 
     :format: 
@@ -154,11 +154,11 @@
     :group_avg: false
     :group_min: false
     :group_max: false
-  unit_of_measure:
-    :name: unit_of_measure
+  uom_code:
+    :name: uom_code
     :sequence_no: 3
     :caption: Unit of measure
-    :namespaced_name: units_of_measure.unit_of_measure
+    :namespaced_name: uoms.uom_code
     :data_type: :string
     :width: 
     :format: 
@@ -187,11 +187,11 @@
   :ordered_list: true
   :ui_priority: 1
   :list_def: SELECT bom_code, id FROM pm_boms ORDER BY bom_code
-- :column: pm_boms_products.unit_of_measure_id
+- :column: pm_boms_products.uom_id
   :caption: Unit of measure
   :data_type: :integer
   :control_type: :list
   :default_value: 
   :ordered_list: true
   :ui_priority: 1
-  :list_def: SELECT unit_of_measure, id FROM units_of_measure ORDER BY unit_of_measure
+  :list_def: SELECT uom_code, id FROM uoms ORDER BY uom_code

@@ -16,4 +16,5 @@ INSERT INTO roles (name) VALUES ('OTHER');
 
 
 -- UNITS OF MEASURE
+INSERT INTO uom_types (code) VALUES ('PACK MATERIAL');
 -- INSERT INTO uom_types (code) VALUES ('INVENTORY'); Already in use in Pack Material

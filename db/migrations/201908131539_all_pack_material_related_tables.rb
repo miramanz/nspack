@@ -77,30 +77,6 @@ Sequel.migration do
     # Log changes to this table. Exclude changes to the updated_at column.
     run "SELECT audit.audit_table('pm_products', true, true, '{updated_at}'::text[]);"
 
-    create_table(:units_of_measure, ignore_index_errors: true) do
-      primary_key :id
-      String :unit_of_measure, size: 255, null: false
-      String :description
-      TrueClass :active, default: true
-      DateTime :created_at, null: false
-      DateTime :updated_at, null: false
-
-      index [:unit_of_measure], name: :units_of_measure_unique_code, unique: true
-    end
-
-    pgt_created_at(:units_of_measure,
-                   :created_at,
-                   function_name: :units_of_measure_set_created_at,
-                   trigger_name: :set_created_at)
-
-    pgt_updated_at(:units_of_measure,
-                   :updated_at,
-                   function_name: :units_of_measure_set_updated_at,
-                   trigger_name: :set_updated_at)
-
-    # Log changes to this table. Exclude changes to the updated_at column.
-    run "SELECT audit.audit_table('units_of_measure', true, true, '{updated_at}'::text[]);"
-
     create_table(:pm_boms, ignore_index_errors: true) do
       primary_key :id
       String :bom_code, size: 255, null: false
@@ -130,12 +106,12 @@ Sequel.migration do
       primary_key :id
       foreign_key :pm_product_id, :pm_products, type: :integer, null: false
       foreign_key :pm_bom_id, :pm_boms, type: :integer, null: false
-      foreign_key :unit_of_measure_id, :units_of_measure, type: :integer, null: false
+      foreign_key :uom_id, :uoms, type: :integer, null: false
       Decimal :quantity, null: false
       DateTime :created_at, null: false
       DateTime :updated_at, null: false
 
-      index [:pm_product_id, :pm_bom_id, :unit_of_measure_id], name: :pm_boms_products_idx, unique: true
+      index [:pm_product_id, :pm_bom_id, :uom_id], name: :pm_boms_products_idx, unique: true
     end
 
     pgt_created_at(:pm_boms_products,
@@ -156,14 +132,14 @@ Sequel.migration do
 
   down do
     # Drop logging for this table.
-    drop_trigger(:pm_boms_poducts, :audit_trigger_row)
-    drop_trigger(:pm_boms_poducts, :audit_trigger_stm)
+    drop_trigger(:pm_boms_products, :audit_trigger_row)
+    drop_trigger(:pm_boms_products, :audit_trigger_stm)
 
-    drop_trigger(:pm_boms_poducts, :set_created_at)
-    drop_function(:pm_boms_poducts_set_created_at)
-    drop_trigger(:pm_boms_poducts, :set_updated_at)
-    drop_function(:pm_boms_poducts_set_updated_at)
-    drop_table(:pm_boms_poducts)
+    drop_trigger(:pm_boms_products, :set_created_at)
+    drop_function(:pm_boms_products_set_created_at)
+    drop_trigger(:pm_boms_products, :set_updated_at)
+    drop_function(:pm_boms_products_set_updated_at)
+    drop_table(:pm_boms_products)
 
     drop_trigger(:pm_boms, :audit_trigger_row)
     drop_trigger(:pm_boms, :audit_trigger_stm)
@@ -173,15 +149,6 @@ Sequel.migration do
     drop_trigger(:pm_boms, :set_updated_at)
     drop_function(:pm_boms_set_updated_at)
     drop_table(:pm_boms)
-
-    drop_trigger(:units_of_measure, :audit_trigger_row)
-    drop_trigger(:units_of_measure, :audit_trigger_stm)
-
-    drop_trigger(:units_of_measure, :set_created_at)
-    drop_function(:units_of_measure_set_created_at)
-    drop_trigger(:units_of_measure, :set_updated_at)
-    drop_function(:units_of_measure_set_updated_at)
-    drop_table(:units_of_measure)
 
     drop_trigger(:pm_products, :audit_trigger_row)
     drop_trigger(:pm_products, :audit_trigger_stm)

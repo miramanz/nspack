@@ -8,7 +8,7 @@ INSERT INTO programs (program_name, program_sequence, functional_area_id)
 VALUES ('General', 1, (SELECT id FROM functional_areas WHERE functional_area_name = 'Masterfiles'));
 
 INSERT INTO programs_webapps(program_id, webapp)
-VALUES ((SELECT id FROM programs WHERE program_name = 'General' AND functional_area_id = (SELECT id FROM functional_areas WHERE functional_area_name = 'Masterfiles')), 'Framework');
+VALUES ((SELECT id FROM programs WHERE program_name = 'General' AND functional_area_id = (SELECT id FROM functional_areas WHERE functional_area_name = 'Masterfiles')), 'Nspack');
 
 INSERT INTO program_functions (program_id, program_function_name, group_name, url, program_function_sequence)
 VALUES ((SELECT id FROM programs WHERE program_name = 'General'
@@ -469,25 +469,13 @@ INSERT INTO program_functions (program_id, program_function_name, url, program_f
 VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
          AND functional_area_id = (SELECT id FROM functional_areas
          WHERE functional_area_name = 'Masterfiles')),
-        'Units of Measure', '/list/units_of_measure', 10, 'Bill of Materials');
+        'PM BOMs', '/list/pm_boms', 10, 'Bill of Materials');
 
 INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
 VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
          AND functional_area_id = (SELECT id FROM functional_areas
          WHERE functional_area_name = 'Masterfiles')),
-        'PM BOMs', '/list/pm_boms', 11, 'Bill of Materials');
---
---INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
---VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
---         AND functional_area_id = (SELECT id FROM functional_areas
---         WHERE functional_area_name = 'Masterfiles')),
---        'PM BOMs Products', '/list/pm_boms_products', 12, 'Bill of Materials');
-
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
-VALUES ((SELECT id FROM programs WHERE program_name = 'Packaging'
-         AND functional_area_id = (SELECT id FROM functional_areas
-         WHERE functional_area_name = 'Masterfiles')),
-         'Search PM BOMs Products', '/search/pm_boms_products', 12, 'Bill of Materials');
+         'Search PM BOMs Products', '/search/pm_boms_products', 11, 'Bill of Materials');
 
 -- Marketing Varieties
 INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)

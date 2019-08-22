@@ -2,13 +2,13 @@
 
 module MasterfilesApp
   module TaskPermissionCheck
-    class UnitsOfMeasure < BaseService
+    class UomType < BaseService
       attr_reader :task, :entity
-      def initialize(task, units_of_measure_id = nil)
+      def initialize(task, uom_type_id = nil)
         @task = task
-        @repo = BomsRepo.new
-        @id = units_of_measure_id
-        @entity = @id ? @repo.find_units_of_measure(@id) : nil
+        @repo = GeneralRepo.new
+        @id = uom_type_id
+        @entity = @id ? @repo.find_uom_type(@id) : nil
       end
 
       CHECKS = {
@@ -33,13 +33,13 @@ module MasterfilesApp
       end
 
       def edit_check
-        # return failed_response 'UnitsOfMeasure has been completed' if completed?
+        # return failed_response 'UomType has been completed' if completed?
 
         all_ok
       end
 
       def delete_check
-        # return failed_response 'UnitsOfMeasure has been completed' if completed?
+        # return failed_response 'UomType has been completed' if completed?
 
         all_ok
       end

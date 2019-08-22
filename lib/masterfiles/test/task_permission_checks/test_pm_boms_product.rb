@@ -11,11 +11,11 @@ module MasterfilesApp
         id: 1,
         pm_product_id: 1,
         pm_bom_id: 1,
-        unit_of_measure_id: 1,
+        uom_id: 1,
         quantity: 1.0,
         product_code: 'ABC',
         bom_code: 'ABC',
-        unit_of_measure: 'ABC'
+        uom_code: 'ABC'
       }
       MasterfilesApp::PmBomsProduct.new(base_attrs.merge(attrs))
     end

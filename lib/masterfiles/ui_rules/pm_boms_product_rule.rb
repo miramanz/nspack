@@ -17,10 +17,10 @@ module UiRules
     def set_show_fields
       pm_product_id_label = @repo.find_hash(:pm_products,  @form_object.pm_product_id)[:erp_code]
       pm_bom_id_label = @repo.find_hash(:pm_boms, @form_object.pm_bom_id)[:bom_code]
-      unit_of_measure_id_label = @repo.find_hash(:units_of_measure, @form_object.unit_of_measure_id)[:unit_of_measure]
+      uom_id_label = @repo.find_hash(:uoms, @form_object.uom_id)[:uom_code]
       fields[:pm_product_id] = { renderer: :label, with_value: pm_product_id_label, caption: 'Pm Product' }
       fields[:pm_bom_id] = { renderer: :label, with_value: pm_bom_id_label, caption: 'Pm Bom' }
-      fields[:unit_of_measure_id] = { renderer: :label, with_value: unit_of_measure_id_label, caption: 'Unit Of Measure' }
+      fields[:uom_id] = { renderer: :label, with_value: uom_id_label, caption: 'Unit Of Measure' }
       fields[:quantity] = { renderer: :label }
     end
 
@@ -35,11 +35,10 @@ module UiRules
                          disabled_options: @repo.for_select_inactive_pm_products,
                          caption: 'pm_product',
                          required: true },
-        unit_of_measure_id: { renderer: :select,
-                              options: @repo.for_select_units_of_measure,
-                              disabled_options: @repo.for_select_inactive_units_of_measure,
-                              caption: 'unit_of_measure',
-                              required: true },
+        uom_id: { renderer: :select,
+                  options: @repo.for_select_pm_uoms('PACK MATERIAL'),
+                  caption: 'Unit of Measure',
+                  required: true },
         quantity: { renderer: :number, required: true }
       }
     end
@@ -56,7 +55,7 @@ module UiRules
     def make_new_form_object
       @form_object = OpenStruct.new(pm_bom_id: @options[:pm_bom_id],
                                     pm_product_id: nil,
-                                    unit_of_measure_id: nil,
+                                    uom_id: nil,
                                     quantity: nil)
     end
   end

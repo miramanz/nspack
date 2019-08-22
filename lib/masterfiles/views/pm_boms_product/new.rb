@@ -19,7 +19,7 @@ module Masterfiles
               form.add_field :pm_product_id
               form.add_field :pm_bom_id
               form.add_field :pm_bom
-              form.add_field :unit_of_measure_id
+              form.add_field :uom_id
               form.add_field :quantity
             end
           end

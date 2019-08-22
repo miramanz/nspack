@@ -534,76 +534,6 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
       end
     end
 
-    # UNITS OF MEASURE
-    # --------------------------------------------------------------------------
-    r.on 'units_of_measure', Integer do |id| # rubocop:disable Metrics/BlockLength
-      interactor = MasterfilesApp::UnitsOfMeasureInteractor.new(current_user, {}, { route_url: request.path }, {})
-
-      # Check for notfound:
-      r.on !interactor.exists?(:units_of_measure, id) do
-        handle_not_found(r)
-      end
-
-      r.on 'edit' do   # EDIT
-        check_auth!('packaging', 'edit')
-        interactor.assert_permission!(:edit, id)
-        show_partial { Masterfiles::Packaging::UnitsOfMeasure::Edit.call(id) }
-      end
-
-      r.is do
-        r.get do       # SHOW
-          check_auth!('packaging', 'read')
-          show_partial { Masterfiles::Packaging::UnitsOfMeasure::Show.call(id) }
-        end
-        r.patch do     # UPDATE
-          res = interactor.update_units_of_measure(id, params[:units_of_measure])
-          if res.success
-            update_grid_row(id, changes: { unit_of_measure: res.instance[:unit_of_measure], description: res.instance[:description] },
-                                notice: res.message)
-          else
-            re_show_form(r, res) { Masterfiles::Packaging::UnitsOfMeasure::Edit.call(id, form_values: params[:units_of_measure], form_errors: res.errors) }
-          end
-        end
-        r.delete do    # DELETE
-          check_auth!('packaging', 'delete')
-          interactor.assert_permission!(:delete, id)
-          res = interactor.delete_units_of_measure(id)
-          if res.success
-            delete_grid_row(id, notice: res.message)
-          else
-            show_json_error(res.message, status: 200)
-          end
-        end
-      end
-    end
-
-    r.on 'units_of_measure' do
-      interactor = MasterfilesApp::UnitsOfMeasureInteractor.new(current_user, {}, { route_url: request.path }, {})
-      r.on 'new' do    # NEW
-        check_auth!('packaging', 'new')
-        show_partial_or_page(r) { Masterfiles::Packaging::UnitsOfMeasure::New.call(remote: fetch?(r)) }
-      end
-      r.post do        # CREATE
-        res = interactor.create_units_of_measure(params[:units_of_measure])
-        if res.success
-          row_keys = %i[
-            id
-            unit_of_measure
-            description
-            active
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
-        else
-          re_show_form(r, res, url: '/masterfiles/packaging/units_of_measure/new') do
-            Masterfiles::Packaging::UnitsOfMeasure::New.call(form_values: params[:units_of_measure],
-                                                             form_errors: res.errors,
-                                                             remote: fetch?(r))
-          end
-        end
-      end
-    end
-
     # PM BOMS
     # --------------------------------------------------------------------------
     r.on 'pm_boms', Integer do |id| # rubocop:disable Metrics/BlockLength
@@ -633,7 +563,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
               id
               product_code
               bom_code
-              unit_of_measure
+              uom_code
               quantity
             ]
             json_actions([OpenStruct.new(type: :add_grid_row, attrs: select_attributes(res.instance, row_keys))],
@@ -731,7 +661,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             row_keys = %i[
               product_code
               bom_code
-              unit_of_measure
+              uom_code
               quantity
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)

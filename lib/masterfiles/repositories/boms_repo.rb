@@ -29,15 +29,6 @@ module MasterfilesApp
                           value: :id,
                           order_by: :product_code
 
-    build_for_select :units_of_measure,
-                     label: :unit_of_measure,
-                     value: :id,
-                     order_by: :unit_of_measure
-    build_inactive_select :units_of_measure,
-                          label: :unit_of_measure,
-                          value: :id,
-                          order_by: :unit_of_measure
-
     build_for_select :pm_boms,
                      label: :bom_code,
                      value: :id,
@@ -56,7 +47,6 @@ module MasterfilesApp
     crud_calls_for :pm_types, name: :pm_type, wrapper: PmType
     crud_calls_for :pm_subtypes, name: :pm_subtype, wrapper: PmSubtype
     crud_calls_for :pm_products, name: :pm_product, wrapper: PmProduct
-    crud_calls_for :units_of_measure, name: :units_of_measure, wrapper: UnitsOfMeasure
     crud_calls_for :pm_boms, name: :pm_bom, wrapper: PmBom
     crud_calls_for :pm_boms_products, name: :pm_boms_product, wrapper: PmBomsProduct
 
@@ -74,6 +64,15 @@ module MasterfilesApp
         .where(pm_subtype_id: id)
         .order(:product_code)
         .select_map(:product_code)
+    end
+
+    def for_select_pm_uoms(uom_type = 'PACK MATERIAL')
+      DB[:uoms].where(
+        uom_type_id: DB[:uom_types].where(code: uom_type).select(:id)
+      ).select(
+        :id,
+        :uom_code
+      ).map { |r| [r[:uom_code], r[:id]] }
     end
 
     def find_pm_subtype(id)
@@ -107,10 +106,10 @@ module MasterfilesApp
                                                    { parent_table: :pm_boms,
                                                      columns: [:bom_code],
                                                      flatten_columns: { bom_code: :bom_code } },
-                                                   { parent_table: :units_of_measure,
-                                                     columns: [:unit_of_measure],
-                                                     foreign_key: :unit_of_measure_id,
-                                                     flatten_columns: { unit_of_measure: :unit_of_measure } }])
+                                                   { parent_table: :uoms,
+                                                     columns: [:uom_code],
+                                                     foreign_key: :uom_id,
+                                                     flatten_columns: { uom_code: :uom_code } }])
       return nil if hash.nil?
 
       PmBomsProduct.new(hash)
