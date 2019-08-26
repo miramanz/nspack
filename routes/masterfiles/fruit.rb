@@ -88,12 +88,16 @@ class Nspack < Roda
         r.patch do     # UPDATE
           res = interactor.update_commodity(id, params[:commodity])
           if res.success
-            update_grid_row(id,
-                            changes: { commodity_group_id: res.instance[:commodity_group_id],
-                                       code: res.instance[:code],
-                                       description: res.instance[:description],
-                                       hs_code: res.instance[:hs_code] },
-                            notice: res.message)
+            row_keys = %i[
+              id
+              commodity_group_code
+              code
+              description
+              hs_code
+              requires_standard_counts
+              active
+            ]
+            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
             re_show_form(r, res) { Masterfiles::Fruit::Commodity::Edit.call(id, params[:commodity], res.errors) }
           end
@@ -118,8 +122,17 @@ class Nspack < Roda
       r.post do        # CREATE
         res = interactor.create_commodity(params[:commodity])
         if res.success
-          flash[:notice] = res.message
-          redirect_to_last_grid(r)
+          row_keys = %i[
+            id
+            commodity_group_code
+            code
+            description
+            hs_code
+            requires_standard_counts
+            active
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
         else
           re_show_form(r, res, url: '/masterfiles/fruit/commodities/new') do
             Masterfiles::Fruit::Commodity::New.call(form_values: params[:commodity],

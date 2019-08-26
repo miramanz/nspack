@@ -83,20 +83,12 @@ class TestCommodityRoutes < RouteTester
     assert_match(/permission/i, last_response.body)
   end
 
-  def test_create
-    authorise_pass!
-    ensure_exists!(INTERACTOR)
-    INTERACTOR.any_instance.stubs(:create_commodity).returns(ok_response)
-    post 'masterfiles/fruit/commodities', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
-    expect_ok_redirect
-  end
-
   def test_create_remotely
     authorise_pass!
     ensure_exists!(INTERACTOR)
     INTERACTOR.any_instance.stubs(:create_commodity).returns(ok_response)
     post_as_fetch 'masterfiles/fruit/commodities', {}, 'rack.session' => { user_id: 1, last_grid_url: DEFAULT_LAST_GRID_URL }
-    expect_ok_json_redirect
+    expect_json_add_to_grid(has_notice: true)
   end
 
   def test_create_fail
