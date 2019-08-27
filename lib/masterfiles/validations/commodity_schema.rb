@@ -9,6 +9,7 @@ module MasterfilesApp
     required(:code, Types::StrippedString).filled(:str?)
     required(:description, Types::StrippedString).filled(:str?)
     required(:hs_code, Types::StrippedString).filled(:str?)
+    required(:requires_standard_counts, :bool).maybe(:bool?)
     # required(:active, :bool).filled(:bool?)
   end
 end

@@ -1,0 +1,24 @@
+---
+:dataminer_definition: pm_products
+:actions:
+- :url: "/masterfiles/packaging/pm_products/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/packaging/pm_products/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/packaging/pm_products/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/packaging/pm_products/new"
+  :text: New Pm Product
+  :style: :button
+  :behaviour: :popup

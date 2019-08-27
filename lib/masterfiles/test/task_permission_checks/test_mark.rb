@@ -5,7 +5,6 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestMarkPermission < Minitest::Test
     include Crossbeams::Responses
-    include MarketingFactory
 
     def entity(attrs = {})
       base_attrs = {

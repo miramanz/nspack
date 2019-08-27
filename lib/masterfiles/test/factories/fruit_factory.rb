@@ -40,5 +40,23 @@ module MasterfilesApp
       }
       DB[:inventory_codes].insert(default.merge(opts))
     end
+
+    def create_basic_pack_code(opts = {})
+      default = {
+        basic_pack_code: Faker::Lorem.unique.word,
+        description: Faker::Lorem.word,
+        length_mm: Faker::Number.number(4),
+        width_mm: Faker::Number.number(4),
+        height_mm: Faker::Number.number(4)
+      }
+      DB[:basic_pack_codes].insert(default.merge(opts))
+    end
+
+    def create_standard_pack_code(opts = {})
+      default = {
+        standard_pack_code: Faker::Lorem.unique.word
+      }
+      DB[:standard_pack_codes].insert(default.merge(opts))
+    end
   end
 end
