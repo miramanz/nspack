@@ -1,5 +1,5 @@
 ---
-:dataminer_definition: fruit_actual_counts_for_packs
+:dataminer_definition: fruit_actual_counts_for_pack_details
 :actions:
 - :url: "/masterfiles/fruit/fruit_actual_counts_for_packs/$:id$"
   :text: view
@@ -18,11 +18,7 @@
   :popup: true
 :page_controls:
 - :control_type: :link
-  :url: "/list/std_fruit_size_counts"
-  :text: Back
-  :style: :back_button
-:conditions:
-  :standard:
-    - :col: fruit_actual_counts_for_packs.std_fruit_size_count_id
-      :op: =
-      :val: $:fruit_actual_counts_for_packs.std_fruit_size_count_id$
+  :url: "/masterfiles/fruit/fruit_actual_counts_for_packs/new"
+  :text: New Fruit Actual Counts For Pack
+  :style: :button
+  :behaviour: :popup

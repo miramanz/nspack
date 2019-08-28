@@ -33,53 +33,37 @@ module MasterfilesApp
       res = validate_fruit_actual_counts_for_pack_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
-      id = repo.create_fruit_actual_counts_for_pack(res)
+      id = repo.create_fruit_actual_counts_for_pack(process_array_params(res.to_h))
       instance = fruit_actual_counts_for_pack(id)
-      success_response("Created fruit actual counts for pack #{instance.size_count_variation}", instance)
+      success_response("Created fruit actual counts for pack #{instance.id}", instance)
     rescue Sequel::UniqueConstraintViolation
-      validation_failed_response(OpenStruct.new(messages: { size_count_variation: ['This fruit actual counts for pack already exists'] }))
+      validation_failed_response(OpenStruct.new(messages: { id: ['This fruit actual counts for pack already exists'] }))
+    end
+
+    def process_array_params(attrs)
+      standard_pack_code_ids = attrs.delete(:standard_pack_code_ids)
+      size_reference_ids = attrs.delete(:size_reference_ids)
+
+      default = {
+        standard_pack_code_ids: "{#{standard_pack_code_ids.join(',')}}",
+        size_reference_ids: "{#{size_reference_ids.join(',')}}"
+      }
+      attrs.merge(default)
     end
 
     def update_fruit_actual_counts_for_pack(id, params)
       res = validate_fruit_actual_counts_for_pack_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
+      repo.update_fruit_actual_counts_for_pack(id, process_array_params(res.to_h))
       instance = fruit_actual_counts_for_pack(id)
-      repo.update_fruit_actual_counts_for_pack(id, res)
-      success_response("Updated fruit actual counts for pack #{instance.size_count_variation}", instance)
+      success_response("Updated fruit actual counts for pack #{instance.id}", instance)
     end
 
     def delete_fruit_actual_counts_for_pack(id)
-      name = fruit_actual_counts_for_pack(id).size_count_variation
+      name = fruit_actual_counts_for_pack(id).id
       repo.delete_fruit_actual_counts_for_pack(id)
       success_response("Deleted fruit actual counts for pack #{name}")
-    end
-
-    def create_fruit_size_reference(parent_id, params)
-      params[:fruit_actual_counts_for_pack_id] = parent_id
-      res = validate_fruit_size_reference_params(params)
-      return validation_failed_response(res) unless res.messages.empty?
-
-      id = repo.create_fruit_size_reference(res)
-      instance = fruit_size_reference(id)
-      success_response("Created fruit size reference #{instance.size_reference}", instance)
-    rescue Sequel::UniqueConstraintViolation
-      validation_failed_response(OpenStruct.new(messages: { size_reference: ['This fruit size reference already exists'] }))
-    end
-
-    def update_fruit_size_reference(id, params)
-      res = validate_fruit_size_reference_params(params)
-      return validation_failed_response(res) unless res.messages.empty?
-
-      repo.update_fruit_size_reference(id, res)
-      instance = fruit_size_reference(id)
-      success_response("Updated fruit size reference #{instance.size_reference}", instance)
-    end
-
-    def delete_fruit_size_reference(id)
-      name = fruit_size_reference(id).size_reference
-      repo.delete_fruit_size_reference(id)
-      success_response("Deleted fruit size reference #{name}")
     end
 
     private
@@ -102,14 +86,6 @@ module MasterfilesApp
 
     def validate_fruit_actual_counts_for_pack_params(params)
       FruitActualCountsForPackSchema.call(params)
-    end
-
-    def fruit_size_reference(id)
-      repo.find_fruit_size_reference(id)
-    end
-
-    def validate_fruit_size_reference_params(params)
-      FruitSizeReferenceSchema.call(params)
     end
   end
 end

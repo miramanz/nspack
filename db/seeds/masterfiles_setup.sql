@@ -95,13 +95,26 @@ VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
 WHERE functional_area_name = 'Masterfiles')),
         'Marketing varieties', '/list/marketing_varieties', 2, 'Cultivars');
 
--- Not Grouped
-INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
+-- Sizes
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
 VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
                                        AND functional_area_id = (SELECT id FROM functional_areas
 WHERE functional_area_name = 'Masterfiles')),
-        'Std Fruit Size Counts', '/list/std_fruit_size_counts', 2);
+        'Std Fruit Size Counts', '/list/std_fruit_size_counts', 3, 'Sizes');
 
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Size References', '/list/fruit_size_references', 4, 'Sizes');
+
+INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence, group_name)
+VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'
+                                       AND functional_area_id = (SELECT id FROM functional_areas
+WHERE functional_area_name = 'Masterfiles')),
+        'Size Conversions', '/search/fruit_actual_counts_for_packs', 5, 'Sizes');
+
+-- Not Grouped
 -- RMT Classes
 INSERT INTO program_functions (program_id, program_function_name, url, program_function_sequence)
 VALUES ((SELECT id FROM programs WHERE program_name = 'Fruit'

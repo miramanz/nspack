@@ -4,7 +4,7 @@ module Masterfiles
   module Fruit
     module FruitSizeReference
       class New
-        def self.call(parent_id, form_values: nil, form_errors: nil, remote: true)
+        def self.call(form_values: nil, form_errors: nil, remote: true)
           ui_rule = UiRules::Compiler.new(:fruit_size_reference, :new, form_values: form_values)
           rules   = ui_rule.compile
 
@@ -13,9 +13,8 @@ module Masterfiles
             page.form_values form_values
             page.form_errors form_errors
             page.form do |form|
-              form.action "/masterfiles/fruit/fruit_actual_counts_for_packs/#{parent_id}/fruit_size_references"
+              form.action '/masterfiles/fruit/fruit_size_references'
               form.remote! if remote
-              form.add_field :fruit_actual_counts_for_pack_id
               form.add_field :size_reference
             end
           end

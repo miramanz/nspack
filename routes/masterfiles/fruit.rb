@@ -552,27 +552,7 @@ class Nspack < Roda
         check_auth!('fruit', 'edit')
         show_partial { Masterfiles::Fruit::FruitActualCountsForPack::Edit.call(id) }
       end
-      r.on 'fruit_size_references' do
-        interactor = MasterfilesApp::FruitSizeInteractor.new(current_user, {}, { route_url: request.path }, {})
-        r.on 'new' do    # NEW
-          check_auth!('fruit', 'new')
-          show_partial_or_page(r) { Masterfiles::Fruit::FruitSizeReference::New.call(id, remote: fetch?(r)) }
-        end
-        r.post do        # CREATE
-          res = interactor.create_fruit_size_reference(id, params[:fruit_size_reference])
-          if res.success
-            flash[:notice] = res.message
-            redirect_to_last_grid(r)
-          else
-            re_show_form(r, res, url: "/masterfiles/fruit/fruit_actual_counts_for_packs/#{id}/fruit_size_references/new") do
-              Masterfiles::Fruit::FruitSizeReference::New.call(id,
-                                                               form_values: params[:fruit_size_reference],
-                                                               form_errors: res.errors,
-                                                               remote: fetch?(r))
-            end
-          end
-        end
-      end
+
       r.is do
         r.get do       # SHOW
           check_auth!('fruit', 'read')
@@ -581,13 +561,14 @@ class Nspack < Roda
         r.patch do     # UPDATE
           res = interactor.update_fruit_actual_counts_for_pack(id, params[:fruit_actual_counts_for_pack])
           if res.success
-            update_grid_row(id,
-                            changes: { std_fruit_size_count_id: res.instance[:std_fruit_size_count_id],
-                                       basic_pack_code_id: res.instance[:basic_pack_code_id],
-                                       standard_pack_code_id: res.instance[:standard_pack_code_id],
-                                       actual_count_for_pack: res.instance[:actual_count_for_pack],
-                                       size_count_variation: res.instance[:size_count_variation] },
-                            notice: res.message)
+            row_keys = %i[
+              std_fruit_size_count
+              basic_pack_code
+              actual_count_for_pack
+              standard_pack_codes
+              size_references
+            ]
+            update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
             re_show_form(r, res) { Masterfiles::Fruit::FruitActualCountsForPack::Edit.call(id, params[:fruit_actual_counts_for_pack], res.errors) }
           end
@@ -595,43 +576,6 @@ class Nspack < Roda
         r.delete do    # DELETE
           check_auth!('fruit', 'delete')
           res = interactor.delete_fruit_actual_counts_for_pack(id)
-          delete_grid_row(id, notice: res.message)
-        end
-      end
-    end
-    # FRUIT SIZE REFERENCES
-    # --------------------------------------------------------------------------
-    r.on 'fruit_size_references', Integer do |id|
-      interactor = MasterfilesApp::FruitSizeInteractor.new(current_user, {}, { route_url: request.path }, {})
-
-      # Check for notfound:
-      r.on !interactor.exists?(:fruit_size_references, id) do
-        handle_not_found(r)
-      end
-
-      r.on 'edit' do   # EDIT
-        check_auth!('fruit', 'edit')
-        show_partial { Masterfiles::Fruit::FruitSizeReference::Edit.call(id) }
-      end
-      r.is do
-        r.get do       # SHOW
-          check_auth!('fruit', 'read')
-          show_partial { Masterfiles::Fruit::FruitSizeReference::Show.call(id) }
-        end
-        r.patch do     # UPDATE
-          res = interactor.update_fruit_size_reference(id, params[:fruit_size_reference])
-          if res.success
-            update_grid_row(id,
-                            changes: { fruit_actual_counts_for_pack_id: res.instance[:fruit_actual_counts_for_pack_id],
-                                       size_reference: res.instance[:size_reference] },
-                            notice: res.message)
-          else
-            re_show_form(r, res) { Masterfiles::Fruit::FruitSizeReference::Edit.call(id, params[:fruit_size_reference], res.errors) }
-          end
-        end
-        r.delete do    # DELETE
-          check_auth!('fruit', 'delete')
-          res = interactor.delete_fruit_size_reference(id)
           delete_grid_row(id, notice: res.message)
         end
       end
@@ -647,6 +591,74 @@ class Nspack < Roda
         check_auth!('fruit', 'read')
         parent_id = actual_count.std_fruit_size_count_id
         r.redirect "/list/fruit_actual_counts_for_packs/with_params?key=standard&fruit_actual_counts_for_packs.std_fruit_size_count_id=#{parent_id}"
+      end
+    end
+
+    # FRUIT SIZE REFERENCES
+    # --------------------------------------------------------------------------
+    r.on 'fruit_size_references', Integer do |id|
+      interactor = MasterfilesApp::FruitSizeReferenceInteractor.new(current_user, {}, { route_url: request.path }, {})
+
+      # Check for notfound:
+      r.on !interactor.exists?(:fruit_size_references, id) do
+        handle_not_found(r)
+      end
+
+      r.on 'edit' do   # EDIT
+        check_auth!('fruit', 'edit')
+        interactor.assert_permission!(:edit, id)
+        show_partial { Masterfiles::Fruit::FruitSizeReference::Edit.call(id) }
+      end
+
+      r.is do
+        r.get do       # SHOW
+          check_auth!('fruit', 'read')
+          show_partial { Masterfiles::Fruit::FruitSizeReference::Show.call(id) }
+        end
+        r.patch do     # UPDATE
+          res = interactor.update_fruit_size_reference(id, params[:fruit_size_reference])
+          if res.success
+            update_grid_row(id, changes: { size_reference: res.instance[:size_reference] },
+                                notice: res.message)
+          else
+            re_show_form(r, res) { Masterfiles::Fruit::FruitSizeReference::Edit.call(id, form_values: params[:fruit_size_reference], form_errors: res.errors) }
+          end
+        end
+        r.delete do    # DELETE
+          check_auth!('fruit', 'delete')
+          interactor.assert_permission!(:delete, id)
+          res = interactor.delete_fruit_size_reference(id)
+          if res.success
+            delete_grid_row(id, notice: res.message)
+          else
+            show_json_error(res.message, status: 200)
+          end
+        end
+      end
+    end
+
+    r.on 'fruit_size_references' do
+      interactor = MasterfilesApp::FruitSizeReferenceInteractor.new(current_user, {}, { route_url: request.path }, {})
+      r.on 'new' do    # NEW
+        check_auth!('fruit', 'new')
+        show_partial_or_page(r) { Masterfiles::Fruit::FruitSizeReference::New.call(remote: fetch?(r)) }
+      end
+      r.post do        # CREATE
+        res = interactor.create_fruit_size_reference(params[:fruit_size_reference])
+        if res.success
+          row_keys = %i[
+            id
+            size_reference
+          ]
+          add_grid_row(attrs: select_attributes(res.instance, row_keys),
+                       notice: res.message)
+        else
+          re_show_form(r, res, url: '/masterfiles/fruit/fruit_size_references/new') do
+            Masterfiles::Fruit::FruitSizeReference::New.call(form_values: params[:fruit_size_reference],
+                                                             form_errors: res.errors,
+                                                             remote: fetch?(r))
+          end
+        end
       end
     end
 
