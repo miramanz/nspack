@@ -16,6 +16,7 @@ module Masterfiles
               form.add_field :cultivar_group_id
               form.add_field :cultivar_name
               form.add_field :description
+              form.add_field :active
             end
           end
 

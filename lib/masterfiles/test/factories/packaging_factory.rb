@@ -33,7 +33,8 @@ module MasterfilesApp
       default = {
         description: Faker::Lorem.unique.word,
         pallet_base_id: pallet_base_id,
-        pallet_stack_type_id: pallet_stack_type_id
+        pallet_stack_type_id: pallet_stack_type_id,
+        active: true
       }
       DB[:pallet_formats].insert(default.merge(opts))
     end
@@ -106,7 +107,8 @@ module MasterfilesApp
         pm_product_id: pm_product_id,
         pm_bom_id: pm_bom_id,
         uom_id: uom_id,
-        quantity: Faker::Number.decimal
+        quantity: Faker::Number.decimal,
+        active: true
       }
       DB[:pm_boms_products].insert(default.merge(opts))
     end

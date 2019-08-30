@@ -1,6 +1,6 @@
 ---
 :caption: UOM Types
-:sql: SELECT "uom_types"."id", "uom_types"."code" FROM "uom_types"
+:sql: SELECT "uom_types"."id", "uom_types"."code", "uom_types"."active" FROM "uom_types"
 :limit: 
 :offset: 
 :external_settings: {}
@@ -33,6 +33,22 @@
     :pinned: 
     :groupable: true
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 3
+    :caption: Active
+    :namespaced_name: uom_types.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

@@ -10,5 +10,6 @@ module MasterfilesApp
     attribute :product_code, Types::String
     attribute :bom_code, Types::String
     attribute :uom_code, Types::String
+    attribute? :active, Types::Bool
   end
 end

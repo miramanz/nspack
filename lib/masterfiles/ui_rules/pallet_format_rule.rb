@@ -20,6 +20,7 @@ module UiRules
       fields[:description] = { renderer: :label }
       fields[:pallet_base_id] = { renderer: :label, with_value: pallet_base_id_label, caption: 'Pallet Base' }
       fields[:pallet_stack_type_id] = { renderer: :label, with_value: pallet_stack_type_id_label, caption: 'Pallet Stack Type' }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields

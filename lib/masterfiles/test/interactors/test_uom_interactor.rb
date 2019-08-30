@@ -74,7 +74,8 @@ module MasterfilesApp
       {
         id: 1,
         uom_type_id: uom_type_id,
-        uom_code: Faker::Lorem.unique.word
+        uom_code: Faker::Lorem.unique.word,
+        active: true
       }
     end
 

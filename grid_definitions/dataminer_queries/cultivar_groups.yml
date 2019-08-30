@@ -1,7 +1,7 @@
 ---
 :caption: Cultivar Groups
 :sql: SELECT "cultivar_groups"."id", "cultivar_groups"."cultivar_group_code", "cultivar_groups"."description",
-  "cultivar_groups"."created_at", "cultivar_groups"."updated_at" FROM "cultivar_groups"
+  "cultivar_groups"."created_at", "cultivar_groups"."updated_at", "cultivar_groups"."active" FROM "cultivar_groups"
 :limit: 
 :offset: 
 :columns:
@@ -76,6 +76,22 @@
     :hide: true
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 7
+    :caption: Active
+    :namespaced_name: cultivar_groups.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

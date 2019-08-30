@@ -1,8 +1,7 @@
 ---
 :caption: Fruit Size References
-:sql: "SELECT \"fruit_size_references\".\"id\", \"fruit_size_references\".\"size_reference\",
-  \"fruit_size_references\".\"created_at\", \"fruit_size_references\".\"updated_at\"\r\nFROM
-  \"fruit_size_references\""
+:sql: SELECT fruit_size_references.id, fruit_size_references.size_reference, fruit_size_references.active,
+      fruit_size_references.created_at, fruit_size_references.updated_at FROM fruit_size_references
 :limit: 
 :offset: 
 :external_settings: {}
@@ -67,6 +66,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 5
+    :caption: Active
+    :namespaced_name: fruit_size_references.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

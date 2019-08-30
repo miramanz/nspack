@@ -15,6 +15,7 @@ module Masterfiles
               form.view_only!
               form.add_field :uom_type_id
               form.add_field :uom_code
+              form.add_field :active
             end
           end
 

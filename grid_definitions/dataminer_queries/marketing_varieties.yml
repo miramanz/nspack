@@ -2,7 +2,7 @@
 :caption: Marketing Varieties
 :sql: SELECT "marketing_varieties"."id", "marketing_varieties"."marketing_variety_code",
   "marketing_varieties"."description", "marketing_varieties"."created_at", "marketing_varieties"."updated_at",
-  "cultivars"."cultivar_group_id" FROM "marketing_varieties" JOIN "marketing_varieties_for_cultivars"
+  "cultivars"."cultivar_group_id", "marketing_varieties"."active" FROM "marketing_varieties" JOIN "marketing_varieties_for_cultivars"
   ON "marketing_varieties"."id" = "marketing_varieties_for_cultivars"."marketing_variety_id"
   JOIN "cultivars" ON "cultivars"."id" = "marketing_varieties_for_cultivars"."cultivar_id"
   ORDER BY "marketing_varieties"."marketing_variety_code"
@@ -103,6 +103,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 7
+    :caption: Active
+    :namespaced_name: marketing_varieties.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

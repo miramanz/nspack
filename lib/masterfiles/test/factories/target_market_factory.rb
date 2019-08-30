@@ -5,7 +5,8 @@ module MasterfilesApp
     def create_marketing_variety(opts = {})
       default = {
         marketing_variety_code: Faker::Lorem.word,
-        description: Faker::Lorem.word
+        description: Faker::Lorem.word,
+        active: true
       }
       DB[:marketing_varieties].insert(default.merge(opts))
     end

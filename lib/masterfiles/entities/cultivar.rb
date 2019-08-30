@@ -8,5 +8,6 @@ module MasterfilesApp
     attribute :cultivar_group_code, Types::String
     attribute :cultivar_name, Types::String
     attribute :description, Types::String
+    attribute? :active, Types::Bool
   end
 end

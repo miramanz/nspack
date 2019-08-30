@@ -17,11 +17,16 @@ module UiRules
       uom_type_id_label = @repo.find_uom_type(@form_object.uom_type_id)&.code
       fields[:uom_type_id] = { renderer: :label, with_value: uom_type_id_label, caption: 'UOM Type' }
       fields[:uom_code] = { renderer: :label, caption: 'UOM Code' }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields
       {
-        uom_type_id: { renderer: :select, options: @repo.for_select_uom_types, caption: 'UOM Type', required: true },
+        uom_type_id: { renderer: :select,
+                       options: @repo.for_select_uom_types,
+                       disabled_options: @repo.for_select_inactive_uom_types,
+                       caption: 'UOM Type',
+                       required: true },
         uom_code: { required: true, caption: 'UOM Code' }
       }
     end

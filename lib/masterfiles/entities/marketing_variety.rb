@@ -5,5 +5,6 @@ module MasterfilesApp
     attribute :id, Types::Integer
     attribute :marketing_variety_code, Types::String
     attribute :description, Types::String
+    attribute? :active, Types::Bool
   end
 end

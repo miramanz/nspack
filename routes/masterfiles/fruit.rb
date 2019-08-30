@@ -567,6 +567,7 @@ class Nspack < Roda
               actual_count_for_pack
               standard_pack_codes
               size_references
+              active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -649,6 +650,7 @@ class Nspack < Roda
           row_keys = %i[
             id
             size_reference
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -718,6 +720,7 @@ class Nspack < Roda
             id
             rmt_class_code
             description
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)

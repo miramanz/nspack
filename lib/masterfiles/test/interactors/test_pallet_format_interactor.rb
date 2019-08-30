@@ -50,15 +50,15 @@ module MasterfilesApp
       attrs = interactor.send(:repo).find_pallet_format(id)
       attrs = attrs.to_h
       attrs.delete(:description)
-      # value = attrs[:description]
-      # attrs[:description] = 'a_change'
+      value = attrs[:id]
+      attrs[:id] = 22
       res = interactor.update_pallet_format(id, attrs)
       refute res.success, "#{res.message} : #{res.errors.inspect}"
       assert_equal ['is missing'], res.errors[:description]
       after = interactor.send(:repo).find_pallet_format(id)
       after = after.to_h
-      refute_equal 'a_change', after[:description]
-      # assert_equal value, after[:description]
+      refute_equal 22, after[:id]
+      assert_equal value, after[:id]
     end
 
     def test_delete_pallet_format
@@ -81,7 +81,8 @@ module MasterfilesApp
         pallet_base_id: pallet_base_id,
         pallet_stack_type_id: pallet_stack_type_id,
         pallet_base_code: 'ABC',
-        stack_type_code: 'ABC'
+        stack_type_code: 'ABC',
+        active: true
       }
     end
 

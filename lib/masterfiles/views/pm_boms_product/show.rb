@@ -17,6 +17,7 @@ module Masterfiles
               form.add_field :pm_bom_id
               form.add_field :uom_id
               form.add_field :quantity
+              form.add_field :active
             end
           end
 

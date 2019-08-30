@@ -71,7 +71,8 @@ module MasterfilesApp
     def fruit_size_reference_attrs
       {
         id: 1,
-        size_reference: Faker::Lorem.unique.word
+        size_reference: Faker::Lorem.unique.word,
+        active: true
       }
     end
 

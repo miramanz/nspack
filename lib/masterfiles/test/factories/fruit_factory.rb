@@ -47,14 +47,16 @@ module MasterfilesApp
         description: Faker::Lorem.word,
         length_mm: Faker::Number.number(4),
         width_mm: Faker::Number.number(4),
-        height_mm: Faker::Number.number(4)
+        height_mm: Faker::Number.number(4),
+        active: true
       }
       DB[:basic_pack_codes].insert(default.merge(opts))
     end
 
     def create_standard_pack_code(opts = {})
       default = {
-        standard_pack_code: Faker::Lorem.unique.word
+        standard_pack_code: Faker::Lorem.unique.word,
+        active: true
       }
       DB[:standard_pack_codes].insert(default.merge(opts))
     end
@@ -74,7 +76,8 @@ module MasterfilesApp
         average_size_mm: Faker::Number.number(4),
         minimum_weight_gm: 1.0,
         maximum_weight_gm: 1.0,
-        average_weight_gm: 1.0
+        average_weight_gm: 1.0,
+        active: true
       }
       DB[:std_fruit_size_counts].insert(default.merge(opts))
     end
@@ -90,7 +93,8 @@ module MasterfilesApp
         basic_pack_code_id: basic_pack_code_id,
         actual_count_for_pack: Faker::Number.number(4),
         standard_pack_code_ids: "{#{standard_pack_code_ids}}",
-        size_reference_ids: "{#{size_reference_ids}}"
+        size_reference_ids: "{#{size_reference_ids}}",
+        active: true
       }
       DB[:fruit_actual_counts_for_packs].insert(default.merge(opts))
     end

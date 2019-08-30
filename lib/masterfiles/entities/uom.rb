@@ -6,5 +6,6 @@ module MasterfilesApp
     attribute :uom_type_id, Types::Integer
     attribute :uom_code, Types::String
     attribute? :uom_type_code, Types::String.optional
+    attribute? :active, Types::Bool
   end
 end

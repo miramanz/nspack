@@ -90,7 +90,8 @@ module MasterfilesApp
         std_fruit_size_count: 'ABC',
         basic_pack_code: 'ABC',
         standard_pack_codes: 'ABC',
-        size_references: 'ABC'
+        size_references: 'ABC',
+        active: true
       }
     end
 

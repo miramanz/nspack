@@ -14,6 +14,7 @@ module Masterfiles
               # form.caption 'Uom Type'
               form.view_only!
               form.add_field :code
+              form.add_field :active
             end
           end
 

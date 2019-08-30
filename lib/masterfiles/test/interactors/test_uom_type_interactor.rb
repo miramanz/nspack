@@ -71,7 +71,8 @@ module MasterfilesApp
     def uom_type_attrs
       {
         id: 1,
-        code: Faker::Lorem.unique.word
+        code: Faker::Lorem.unique.word,
+        active: true
       }
     end
 

@@ -5,7 +5,8 @@ module MasterfilesApp
     def create_cultivar_group(opts = {})
       default = {
         cultivar_group_code: Faker::Lorem.unique.word,
-        description: Faker::Lorem.word
+        description: Faker::Lorem.word,
+        active: true
       }
       DB[:cultivar_groups].insert(default.merge(opts))
     end
@@ -18,7 +19,8 @@ module MasterfilesApp
         commodity_id: commodity_id,
         cultivar_group_id: cultivar_group_id,
         cultivar_name: Faker::Lorem.unique.word,
-        description: Faker::Lorem.word
+        description: Faker::Lorem.word,
+        active: true
       }
       DB[:cultivars].insert(default.merge(opts))
     end

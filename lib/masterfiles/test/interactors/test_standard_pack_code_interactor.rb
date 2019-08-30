@@ -46,16 +46,16 @@ module MasterfilesApp
 
     def test_update_standard_pack_code_fail
       id = create_standard_pack_code
-      attrs = interactor.send(:repo).find_hash(:standard_pack_codes, id).reject { |k, _| %i[id standard_pack_code].include?(k) }
+      attrs = interactor.send(:repo).find_hash(:standard_pack_codes, id)
       attrs.delete(:standard_pack_code)
-      # value = attrs[:standard_pack_code]
-      # attrs[:standard_pack_code] = 'a_change'
+      value = attrs[:id]
+      attrs[:id] = 22
       res = interactor.update_standard_pack_code(id, attrs)
       refute res.success, "#{res.message} : #{res.errors.inspect}"
       assert_equal ['is missing'], res.errors[:standard_pack_code]
       after = interactor.send(:repo).find_hash(:standard_pack_codes, id)
-      refute_equal 'a_change', after[:standard_pack_code]
-      # assert_equal value, after[:standard_pack_code]
+      refute_equal 22, after[:id]
+      assert_equal value, after[:id]
     end
 
     def test_delete_standard_pack_code
@@ -71,7 +71,8 @@ module MasterfilesApp
     def standard_pack_code_attrs
       {
         id: 1,
-        standard_pack_code: Faker::Lorem.unique.word
+        standard_pack_code: Faker::Lorem.unique.word,
+        active: true
       }
     end
 

@@ -185,6 +185,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
               description
               pallet_base_code
               stack_type_code
+              active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -218,6 +219,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             description
             pallet_base_code
             stack_type_code
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -264,6 +266,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
               active
               basic_pack_code
               pallet_formats_description
+              active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else
@@ -302,6 +305,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
             active
             basic_pack_code
             pallet_formats_description
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -565,6 +569,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
               bom_code
               uom_code
               quantity
+              active
             ]
             json_actions([OpenStruct.new(type: :add_grid_row, attrs: select_attributes(res.instance, row_keys))],
                          res.message)
@@ -663,6 +668,7 @@ class Nspack < Roda # rubocop:disable Metrics/ClassLength
               bom_code
               uom_code
               quantity
+              active
             ]
             update_grid_row(id, changes: select_attributes(res.instance, row_keys), notice: res.message)
           else

@@ -72,7 +72,8 @@ module MasterfilesApp
         id: 1,
         cultivar_group_code: Faker::Lorem.unique.word,
         description: 'ABC',
-        cultivar_ids: [1]
+        cultivar_ids: [1],
+        active: true
       }
     end
 

@@ -1,32 +1,51 @@
 # frozen_string_literal: true
 
 module MasterfilesApp
-  class FruitSizeRepo < BaseRepo
+  class FruitSizeRepo < BaseRepo # rubocop:disable Metrics/ClassLength
     build_for_select :basic_pack_codes,
                      label: :basic_pack_code,
                      value: :id,
-                     no_active_check: true,
                      order_by: :basic_pack_code
+    build_inactive_select :basic_pack_codes,
+                          label: :basic_pack_code,
+                          value: :id,
+                          order_by: :basic_pack_code
+
     build_for_select :standard_pack_codes,
                      label: :standard_pack_code,
                      value: :id,
-                     no_active_check: true,
                      order_by: :standard_pack_code
+    build_inactive_select :standard_pack_codes,
+                          label: :standard_pack_code,
+                          value: :id,
+                          order_by: :standard_pack_code
+
     build_for_select :std_fruit_size_counts,
                      label: :size_count_description,
                      value: :id,
-                     no_active_check: true,
                      order_by: :size_count_description
+    build_inactive_select :std_fruit_size_counts,
+                          label: :size_count_description,
+                          value: :id,
+                          order_by: :size_count_description
+
     build_for_select :fruit_actual_counts_for_packs,
-                     label: :id,
+                     label: :actual_count_for_pack,
                      value: :id,
-                     no_active_check: true,
-                     order_by: :id
+                     order_by: :actual_count_for_pack
+    build_inactive_select :fruit_actual_counts_for_packs,
+                          label: :actual_count_for_pack,
+                          value: :id,
+                          order_by: :actual_count_for_pack
+
     build_for_select :fruit_size_references,
                      label: :size_reference,
                      value: :id,
-                     no_active_check: true,
                      order_by: :size_reference
+    build_inactive_select :fruit_size_references,
+                          label: :size_reference,
+                          value: :id,
+                          order_by: :size_reference
 
     crud_calls_for :basic_pack_codes, name: :basic_pack_code, wrapper: BasicPackCode
     crud_calls_for :standard_pack_codes, name: :standard_pack_code, wrapper: StandardPackCode

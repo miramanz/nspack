@@ -1,7 +1,7 @@
 ---
 :caption: UOMs
 :sql: SELECT "uoms"."id", "uoms"."uom_type_id", "uoms"."uom_code", "uoms"."created_at",
-  "uoms"."updated_at", "uom_types"."code" AS uom_type_code
+  "uoms"."updated_at", "uom_types"."code" AS uom_type_code, "uoms"."active"
   FROM "uoms" JOIN "uom_types" ON "uom_types"."id" = "uoms"."uom_type_id"
 :limit: 
 :offset: 
@@ -99,6 +99,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 7
+    :caption: Active
+    :namespaced_name: uoms.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

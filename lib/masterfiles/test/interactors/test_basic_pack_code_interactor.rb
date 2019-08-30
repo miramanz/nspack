@@ -74,7 +74,8 @@ module MasterfilesApp
         description: 'ABC',
         length_mm: 1,
         width_mm: 1,
-        height_mm: 1
+        height_mm: 1,
+        active: true
       }
     end
 

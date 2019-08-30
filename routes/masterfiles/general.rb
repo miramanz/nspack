@@ -57,6 +57,7 @@ class Nspack < Roda
           row_keys = %i[
             id
             code
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)
@@ -125,6 +126,7 @@ class Nspack < Roda
             uom_type_id
             uom_type_code
             uom_code
+            active
           ]
           add_grid_row(attrs: select_attributes(res.instance, row_keys),
                        notice: res.message)

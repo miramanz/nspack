@@ -2,7 +2,7 @@
 :caption: Pm Boms Products
 :sql: SELECT "pm_boms_products"."id", "pm_boms_products"."pm_product_id", "pm_boms_products"."pm_bom_id",
   "pm_boms_products"."uom_id", "pm_boms_products"."quantity", "pm_boms_products"."created_at",
-  "pm_boms_products"."updated_at", "pm_boms"."bom_code", "pm_products"."product_code",
+  "pm_boms_products"."updated_at", "pm_boms"."bom_code", "pm_products"."product_code", "pm_boms_products"."active",
   "uoms"."uom_code" FROM "pm_boms_products" JOIN "pm_boms" ON "pm_boms"."id"
   = "pm_boms_products"."pm_bom_id" JOIN "pm_products" ON "pm_products"."id" = "pm_boms_products"."pm_product_id"
   JOIN "uoms" ON "uoms"."id" = "pm_boms_products"."uom_id"
@@ -166,6 +166,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 11
+    :caption: Active
+    :namespaced_name: pm_boms_products.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

@@ -85,7 +85,8 @@ module MasterfilesApp
         quantity: 1.0,
         product_code: 'ABC',
         bom_code: 'ABC',
-        uom_code: 'ABC'
+        uom_code: 'ABC',
+        active: true
       }
     end
 

@@ -30,6 +30,7 @@ module UiRules
       {
         variety_as_customer_variety_id: { renderer: :select,
                                           options: MasterfilesApp::CultivarRepo.new.for_select_marketing_varieties,
+                                          disabled_options: MasterfilesApp::CultivarRepo.new.for_select_inactive_marketing_varieties,
                                           caption: 'Variety as Customer Variety',
                                           required: true },
         packed_tm_group_id: { renderer: :select,
@@ -49,6 +50,7 @@ module UiRules
       {
         variety_as_customer_variety_id: { renderer: :select,
                                           options: MasterfilesApp::CultivarRepo.new.for_select_marketing_varieties,
+                                          disabled_options: MasterfilesApp::CultivarRepo.new.for_select_inactive_marketing_varieties,
                                           caption: 'Variety as Customer Variety',
                                           required: true },
         packed_tm_group_id: { renderer: :select,

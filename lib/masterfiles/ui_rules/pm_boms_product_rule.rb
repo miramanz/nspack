@@ -14,7 +14,7 @@ module UiRules
       form_name 'pm_boms_product'
     end
 
-    def set_show_fields
+    def set_show_fields # rubocop:disable Metrics/AbcSize
       pm_product_id_label = @repo.find_hash(:pm_products,  @form_object.pm_product_id)[:erp_code]
       pm_bom_id_label = @repo.find_hash(:pm_boms, @form_object.pm_bom_id)[:bom_code]
       uom_id_label = @repo.find_hash(:uoms, @form_object.uom_id)[:uom_code]
@@ -22,6 +22,7 @@ module UiRules
       fields[:pm_bom_id] = { renderer: :label, with_value: pm_bom_id_label, caption: 'Pm Bom' }
       fields[:uom_id] = { renderer: :label, with_value: uom_id_label, caption: 'Unit Of Measure' }
       fields[:quantity] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields
@@ -37,6 +38,7 @@ module UiRules
                          required: true },
         uom_id: { renderer: :select,
                   options: @repo.for_select_pm_uoms('PACK MATERIAL'),
+                  disabled_options: MasterfilesApp::GeneralRepo.new.for_select_inactive_uoms,
                   caption: 'Unit of Measure',
                   required: true },
         quantity: { renderer: :number, required: true }

@@ -1,7 +1,7 @@
 ---
 :caption: Pm Boms Products Details
 :sql: SELECT pm_boms_products.id, pm_boms_products.pm_product_id, pm_boms_products.pm_bom_id,
-  pm_boms_products.uom_id, pm_boms_products.quantity, pm_boms_products.created_at,
+  pm_boms_products.uom_id, pm_boms_products.quantity, pm_boms_products.created_at, "pm_boms_products"."active",
   pm_boms_products.updated_at, pm_products.product_code, pm_products.erp_code, pm_products.description
   AS product_description, pm_subtypes.subtype_code,pm_subtypes.description AS subtype_description,
   pm_types.pm_type_code,pm_types.description AS pm_type_description, pm_boms.bom_code,
@@ -299,6 +299,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 19
+    :caption: Active
+    :namespaced_name: pm_boms_products.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

@@ -28,8 +28,16 @@ module UiRules
     def common_fields
       {
         description: {},
-        pallet_format_id: { renderer: :select, options: @repo.for_select_pallet_formats, caption: 'Pallet Format', required: true },
-        basic_pack_id: { renderer: :select, options: MasterfilesApp::FruitSizeRepo.new.for_select_basic_pack_codes, caption: 'Basic Pack', required: true },
+        pallet_format_id: { renderer: :select,
+                            options: @repo.for_select_pallet_formats,
+                            disabled_options: @repo.for_select_inactive_pallet_formats,
+                            caption: 'Pallet Format',
+                            required: true },
+        basic_pack_id: { renderer: :select,
+                         options: MasterfilesApp::FruitSizeRepo.new.for_select_basic_pack_codes,
+                         disabled_options: MasterfilesApp::FruitSizeRepo.new.for_select_inactive_basic_pack_codes,
+                         caption: 'Basic Pack',
+                         required: true },
         cartons_per_pallet: { renderer: :integer, required: true },
         layers_per_pallet: { renderer: :integer, required: true }
       }

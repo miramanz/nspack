@@ -7,7 +7,7 @@
   "std_fruit_size_counts"."maximum_size_mm", "std_fruit_size_counts"."average_size_mm",
   "std_fruit_size_counts"."minimum_weight_gm", "std_fruit_size_counts"."maximum_weight_gm",
   "std_fruit_size_counts"."average_weight_gm", "std_fruit_size_counts"."created_at",
-  "std_fruit_size_counts"."updated_at", "commodities"."code" FROM "std_fruit_size_counts"
+  "std_fruit_size_counts"."updated_at", "std_fruit_size_counts"."active", "commodities"."code" FROM "std_fruit_size_counts"
   JOIN "commodities" ON "commodities"."id" = "std_fruit_size_counts"."commodity_id"
 :limit: 
 :offset: 
@@ -265,6 +265,22 @@
     :pinned: 
     :groupable: true
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 17
+    :caption: Active
+    :namespaced_name: std_fruit_size_counts.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

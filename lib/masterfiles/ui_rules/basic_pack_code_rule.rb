@@ -20,6 +20,7 @@ module UiRules
       fields[:length_mm] = { renderer: :label }
       fields[:width_mm] = { renderer: :label }
       fields[:height_mm] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields

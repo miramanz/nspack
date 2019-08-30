@@ -2,7 +2,7 @@
 :caption: Fruit Actual Counts For Packs
 :sql: SELECT fruit_actual_counts_for_packs.id, fruit_actual_counts_for_packs.std_fruit_size_count_id,
   fruit_actual_counts_for_packs.basic_pack_code_id, fruit_actual_counts_for_packs.actual_count_for_pack,
-  fruit_actual_counts_for_packs.created_at, fruit_actual_counts_for_packs.updated_at,
+  fruit_actual_counts_for_packs.created_at, fruit_actual_counts_for_packs.updated_at, fruit_actual_counts_for_packs.active,
   fruit_actual_counts_for_packs.standard_pack_code_ids, fruit_actual_counts_for_packs.size_reference_ids,
   std_fruit_size_counts.size_count_description AS std_fruit_size_count, basic_pack_codes.basic_pack_code,
   spc.standard_pack_codes, fsr.size_references FROM fruit_actual_counts_for_packs
@@ -210,6 +210,22 @@
     :pinned: 
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 7
+    :caption: Active
+    :namespaced_name: fruit_actual_counts_for_packs.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

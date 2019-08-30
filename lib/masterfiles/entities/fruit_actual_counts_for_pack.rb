@@ -12,5 +12,6 @@ module MasterfilesApp
     attribute :basic_pack_code, Types::String
     attribute :standard_pack_codes, Types::String
     attribute :size_references, Types::String
+    attribute? :active, Types::Bool
   end
 end

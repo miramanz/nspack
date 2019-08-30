@@ -23,8 +23,11 @@ module MasterfilesApp
     build_for_select :pallet_formats,
                      label: :description,
                      value: :id,
-                     no_active_check: true,
                      order_by: :description
+    build_inactive_select :pallet_formats,
+                          label: :description,
+                          value: :id,
+                          order_by: :description
 
     build_for_select :cartons_per_pallet,
                      label: :description,

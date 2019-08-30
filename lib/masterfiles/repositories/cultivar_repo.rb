@@ -5,20 +5,29 @@ module MasterfilesApp
     build_for_select :cultivar_groups,
                      label: :cultivar_group_code,
                      value: :id,
-                     no_active_check: true,
                      order_by: :cultivar_group_code
+    build_inactive_select :cultivar_groups,
+                          label: :cultivar_group_code,
+                          value: :id,
+                          order_by: :cultivar_group_code
 
     build_for_select :cultivars,
                      label: :cultivar_name,
                      value: :id,
-                     no_active_check: true,
                      order_by: :cultivar_name
+    build_inactive_select :cultivars,
+                          label: :cultivar_name,
+                          value: :id,
+                          order_by: :cultivar_name
 
     build_for_select :marketing_varieties,
                      label: :marketing_variety_code,
                      value: :id,
-                     no_active_check: true,
                      order_by: :marketing_variety_code
+    build_inactive_select :marketing_varieties,
+                          label: :marketing_variety_code,
+                          value: :id,
+                          order_by: :marketing_variety_code
 
     crud_calls_for :cultivar_groups, name: :cultivar_group, wrapper: CultivarGroup
     crud_calls_for :cultivars, name: :cultivar, wrapper: Cultivar
