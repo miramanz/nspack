@@ -1,7 +1,7 @@
 ---
 :caption: Standard Pack Codes
 :sql: SELECT "standard_pack_codes"."id", "standard_pack_codes"."standard_pack_code",
-  "standard_pack_codes"."created_at", "standard_pack_codes"."updated_at" FROM "standard_pack_codes"
+  "standard_pack_codes"."created_at", "standard_pack_codes"."updated_at", "standard_pack_codes"."active" FROM "standard_pack_codes"
 :limit: 
 :offset: 
 :columns:
@@ -61,6 +61,22 @@
     :hide: true
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 5
+    :caption: Active
+    :namespaced_name: standard_pack_codes.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

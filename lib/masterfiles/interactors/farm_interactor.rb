@@ -2,26 +2,14 @@
 
 module MasterfilesApp
   class FarmInteractor < BaseInteractor
-    def repo
-      @repo ||= FarmRepo.new
-    end
-
-    def farm(id)
-      repo.find_farm(id)
-    end
-
-    def validate_farm_params(params)
-      FarmSchema.call(params)
-    end
-
-    def create_farm(params)
+    def create_farm(params) # rubocop:disable Metrics/AbcSize
       res = validate_farm_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
       id = nil
       repo.transaction do
         response = repo.create_farm(res)
-        id = response[:id]
+        id = response
         log_status('farms', id, 'CREATED')
         log_transaction
       end
@@ -34,7 +22,7 @@ module MasterfilesApp
       failed_response(e.message)
     end
 
-    def update_farm(id, params)
+    def update_farm(id, params) # rubocop:disable Metrics/AbcSize
       res = validate_farm_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
@@ -48,7 +36,6 @@ module MasterfilesApp
       instance = farm(id)
       success_response("Updated farm #{instance.farm_code}",
                        instance)
-
     rescue Crossbeams::InfoError => e
       failed_response(e.message)
     end
@@ -83,5 +70,18 @@ module MasterfilesApp
       success_response('Farm => Puc associated successfully')
     end
 
+    private
+
+    def repo
+      @repo ||= FarmRepo.new
+    end
+
+    def farm(id)
+      repo.find_farm(id)
+    end
+
+    def validate_farm_params(params)
+      FarmSchema.call(params)
+    end
   end
 end

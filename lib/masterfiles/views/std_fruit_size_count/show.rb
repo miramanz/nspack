@@ -24,6 +24,7 @@ module Masterfiles
               form.add_field :minimum_weight_gm
               form.add_field :maximum_weight_gm
               form.add_field :average_weight_gm
+              form.add_field :active
             end
           end
 

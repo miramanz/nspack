@@ -2,7 +2,7 @@
 :caption: Cultivars
 :sql: SELECT "cultivars"."id", "cultivars"."commodity_id", "cultivars"."cultivar_group_id",
   "cultivars"."cultivar_name", "cultivars"."description", "cultivars"."created_at",
-  "cultivars"."updated_at", "commodities"."code", "cultivar_groups"."cultivar_group_code"
+  "cultivars"."updated_at", "commodities"."code", "cultivar_groups"."cultivar_group_code", "cultivars"."active"
   FROM "cultivars" JOIN "commodities" ON "commodities"."id" = "cultivars"."commodity_id"
   LEFT JOIN "cultivar_groups" ON "cultivar_groups"."id" = "cultivars"."cultivar_group_id"
 :limit: 
@@ -139,6 +139,22 @@
     :hide: false
     :groupable: true
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 10
+    :caption: Active
+    :namespaced_name: cultivars.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

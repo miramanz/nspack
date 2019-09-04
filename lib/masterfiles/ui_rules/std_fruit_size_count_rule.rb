@@ -30,6 +30,7 @@ module UiRules
       fields[:minimum_weight_gm] = { renderer: :label }
       fields[:maximum_weight_gm] = { renderer: :label }
       fields[:average_weight_gm] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields

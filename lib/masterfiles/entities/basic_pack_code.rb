@@ -8,5 +8,6 @@ module MasterfilesApp
     attribute :length_mm, Types::Integer
     attribute :width_mm, Types::Integer
     attribute :height_mm, Types::Integer
+    attribute? :active, Types::Bool
   end
 end

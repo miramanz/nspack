@@ -16,6 +16,7 @@ module UiRules
 
     def set_show_fields
       fields[:standard_pack_code] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields

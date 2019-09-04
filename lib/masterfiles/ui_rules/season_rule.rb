@@ -14,11 +14,11 @@ module UiRules
       form_name 'season'
     end
 
-    def set_show_fields
+    def set_show_fields # rubocop:disable Metrics/AbcSize
       fields[:season_group_id] = { renderer: :label,
-                                      with_value: @repo.find_season_group(@form_object.season_group_id)&.season_group_code }
+                                   with_value: @repo.find_season_group(@form_object.season_group_id)&.season_group_code }
       fields[:commodity_id] = { renderer: :label,
-                                      with_value: MasterfilesApp::CommodityRepo.new.find_commodity(@form_object.commodity_id)&.code }
+                                with_value: MasterfilesApp::CommodityRepo.new.find_commodity(@form_object.commodity_id)&.code }
       fields[:season_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
       fields[:season_year] = { renderer: :label }
@@ -33,9 +33,9 @@ module UiRules
         commodity_id: { renderer: :select, options: MasterfilesApp::CommodityRepo.new.for_select_commodities, disabled_options: MasterfilesApp::CommodityRepo.new.for_select_inactive_commodities },
         season_code: { required: true },
         description: {},
-        season_year: {renderer: :integer},
-        start_date: {renderer: :input, subtype: :date},
-        end_date: {renderer: :input, subtype: :date},
+        season_year: { renderer: :integer },
+        start_date: { renderer: :input, subtype: :date },
+        end_date: { renderer: :input, subtype: :date },
         active: { renderer: :checkbox }
       }
     end
@@ -59,6 +59,5 @@ module UiRules
                                     end_date: nil,
                                     active: true)
     end
-
   end
 end

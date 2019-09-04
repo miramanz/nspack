@@ -16,10 +16,10 @@ module UiRules
       form_name 'farm'
     end
 
-    def set_show_fields
+    def set_show_fields # rubocop:disable Metrics/AbcSize
       owner_party_role_id_label = MasterfilesApp::PartyRepo.new.find_party_role(@form_object.owner_party_role_id)&.party_name
-      pdn_region_id_label = @repo.find(:production_regions, MasterfilesApp::ProductionRegion, @form_object.pdn_region_id)&.production_region_code
-      farm_group_id_label = @repo.find(:farm_groups, MasterfilesApp::FarmGroup, @form_object.farm_group_id)&.farm_group_code
+      pdn_region_id_label = @repo.find_hash(:production_regions, @form_object.pdn_region_id)[:production_region_code]
+      farm_group_id_label = @repo.find_hash(:farm_groups, @form_object.farm_group_id)[:farm_group_code]
       puc_id_label = @repo.find_puc(@form_object.puc_id)&.puc_code
       fields[:owner_party_role_id] = { renderer: :label,
                                        with_value: owner_party_role_id_label,
@@ -44,7 +44,7 @@ module UiRules
       farm_pucs = @options[:id] ? @repo.selected_farm_pucs(@options[:id]) : @repo.select_unallocated_pucs
       {
         owner_party_role_id: { renderer: :select,
-                               options: MasterfilesApp::PartyRepo.new.for_select_party_roles,
+                               options: MasterfilesApp::PartyRepo.new.for_select_party_roles('FARM_OWNER'),
                                required: true,
                                caption: 'Farm Owner' },
         pdn_region_id: { renderer: :select,
@@ -54,7 +54,7 @@ module UiRules
         farm_group_id: { renderer: :select,
                          options: @repo.for_select_farm_groups,
                          disabled_options: @repo.for_select_inactive_farm_groups,
-                         prompt: "Select Farm Group" },
+                         prompt: 'Select Farm Group' },
         farm_code: { required: true },
         description: {},
         active: { renderer: :checkbox },
@@ -98,6 +98,5 @@ module UiRules
     def farm_orchard_codes
       @repo.find_farm_orchard_codes(@options[:id])
     end
-
   end
 end

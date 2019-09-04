@@ -43,7 +43,6 @@ module MasterfilesApp
 
         all_ok
       end
-
     end
   end
 end

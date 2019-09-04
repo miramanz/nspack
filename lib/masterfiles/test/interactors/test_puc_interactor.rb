@@ -69,10 +69,10 @@ module MasterfilesApp
 
     def puc_attrs
       {
-          id: 1,
-          puc_code: Faker::Lorem.unique.word,
-          gap_code: 'ABC',
-          active: true
+        id: 1,
+        puc_code: Faker::Lorem.unique.word,
+        gap_code: 'ABC',
+        active: true
       }
     end
 

@@ -18,12 +18,16 @@ details = retrieve_from_local_store(:delivery_putaway) || {}
 items = %w[one two buckle my shoe]
 form = Crossbeams::RMDForm.new(details,
                                form_name: :putaway,
-                               progress: 'Delivery 123: 3 of 5 items complete' : nil,
+                               progress: 'Delivery 123: 3 of 5 items complete',
                                notes: 'Please scan the Delivery and the SKU numbers.',
                                scan_with_camera: @rmd_scan_with_camera,
                                caption: 'Delivery putaway',
+                               links: [{ caption: 'Cancel', url: '/back', prompt: 'Ok?' }],
+                               reset_button: true,
+                               step_and_total: [1, 2],
                                action: '/rmd/deliveries/putaways',
                                button_caption: 'Putaway')
+form.add_label(:business_process, 'Business process', 'DELIVERY')
 form.add_field(:delivery_number, 'Delivery', scan: 'key248_all', scan_type: :delivery)
 form.add_select(:choice, 'Choose', items: items, value: 'my', required: true, prompt: true)
 form.add_field(:sku_number, 'SKU', scan: 'key248_all', scan_type: :sku)
@@ -67,7 +71,13 @@ view(inline: form.render, layout: :layout_rmd)
 
 |form_state
 |The state of the form
-|Hash. Include current value of fields (and hidden `…_scan_field` values) when applicable. Can include `:errors` Hash and `:error_message` string.
+a|Hash.
+
+Include current value of fields (and hidden `…_scan_field` values) when applicable.
+
+Can include `:errors` Hash and `:error_message` string.
+
+Can also include `lookup_values` - a Hash of fieldname/values for setting the initial value of alookup (used when redisplaying a form with validation errors).
 |None. Required.
 
 |options - :form_name
@@ -85,6 +95,24 @@ view(inline: form.render, layout: :layout_rmd)
 |String
 |None.
 
+|options - :step_and_total
+|Current step number and total number of steps. Displays with the caption if one has been provided.
+a|Array (2D -- step, total)
+
+e.g. `[1, 2]` is step one of two.
+|None.
+
+|options - :links
+a|Links to display as buttons.
+
+Each hash has:
+
+* `:caption` the button caption.
+* `:url` the url to call.
+* `:prompt` -- optional - if present, the user will need to confirm the click.
+|Array of Hashes
+|None.
+
 |options - :notes
 |Text to display hints for the user.
 |String
@@ -100,9 +128,27 @@ view(inline: form.render, layout: :layout_rmd)
 |Boolean
 |`false`.
 
+|options - :reset_button
+|Should the form include a reset button to clear inputs to their original values.
+|Boolean
+|`true`.
+
 |===
 
 === Method: add_field
+
+[source,ruby]
+----
+form.add_field(:from_location, 'From location', scan: 'key248_all',
+               scan_type: :location, lookup: true)
+
+# Returns parameters (if form name was "location"):
+# => {
+# =>   location: { from_location: 'abc',
+# =>               from_location_scan_field: 'id' },
+# =>   lookup_values: { from_location: 'abc' }
+# => }
+----
 
 |===
 |attribute |description |possible values |default
@@ -123,9 +169,14 @@ view(inline: form.render, layout: :layout_rmd)
 |`true`
 
 |options - :data_type
-|The datatype of the input (`text`, `date` etc.)
+|The datatype of the input (`text`, `date`, `number` etc.)
 |String
 |`text`
+
+|options - :allow_decimals
+|Only applies to `data_type: 'number'`. If true, the user can input decimals. Ignored for any other data type.
+|Boolean
+|`false` (number input type will only accept integers)
 
 |options - :scan
 |Type of barcode symbology to accept.
@@ -157,6 +208,17 @@ a|String:
 
 === Method: add_select
 
+[source,ruby]
+----
+form.add_select(:business_process, 'Business process', items: processes,
+                value: processes.first, required: true, prompt: true)
+
+# Returns parameters (if form name was "location"):
+# => {
+# =>   location: { business_process: 'abc' }
+# => }
+----
+
 |===
 |attribute |description |possible values |default
 
@@ -178,7 +240,7 @@ a|String:
 |options - :value
 |The current (selected) value.
 |String
-|None.
+|None. If the form's `form_state` has a value for this field, it will be used.
 
 |options - :items
 |The items in the dropdown. Use a Hash to include option groups. Otherwise the array can be one or two dimensional (`[[display, value], [display, value]]`)
@@ -189,5 +251,46 @@ a|String:
 |If `true`, display a generic prompt. If a string, display the string as the prompt.
 |String or Booelan
 |None.
+
+|===
+
+=== Method: add_label
+
+[source,ruby]
+----
+form.add_label(:from_location, 'From location', 'CS1_BY1_RCB2')
+
+# Returns no parameters (no hidden_value provided).
+
+form.add_label(:from_location, 'From location', 'CS1_BY1_RCB2', 37)
+
+# Returns parameters (if form name was "location"):
+# => {
+# =>   location: { from_location: '37' }
+# => }
+----
+
+|===
+|attribute |description |possible values |default
+
+|name
+|The name of the field
+|String
+|None. Required.
+
+|label
+|The label for the field
+|String
+|None. Required.
+
+|value
+|The value to display as a label field
+|String
+|None. Required.
+
+|hidden_value
+|The value to set for a hidden input which will return as a parameter keyed by the field name.
+|String
+|None. If the form's `form_state` has a value for this field, it will be used.
 
 |===

@@ -1,0 +1,24 @@
+---
+:dataminer_definition: pm_subtypes
+:actions:
+- :url: "/masterfiles/packaging/pm_subtypes/$:id$"
+  :text: view
+  :icon: view-show
+  :title: View
+  :popup: true
+- :url: "/masterfiles/packaging/pm_subtypes/$:id$/edit"
+  :text: edit
+  :icon: edit
+  :title: Edit
+  :popup: true
+- :url: "/masterfiles/packaging/pm_subtypes/$:id$"
+  :text: delete
+  :icon: delete
+  :is_delete: true
+  :popup: true
+:page_controls:
+- :control_type: :link
+  :url: "/masterfiles/packaging/pm_subtypes/new"
+  :text: New Pm Subtype
+  :style: :button
+  :behaviour: :popup

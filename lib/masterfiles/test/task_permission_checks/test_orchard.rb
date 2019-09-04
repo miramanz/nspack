@@ -37,6 +37,5 @@ module MasterfilesApp
       res = MasterfilesApp::TaskPermissionCheck::Orchard.call(:delete, 1)
       assert res.success, 'Should be able to delete a orchard'
     end
-
   end
 end

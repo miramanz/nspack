@@ -14,7 +14,7 @@ module MasterfilesApp
       SeasonSchema.call(params)
     end
 
-    def create_season(params)
+    def create_season(params) # rubocop:disable Metrics/AbcSize
       res = validate_season_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 

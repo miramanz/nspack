@@ -20,6 +20,7 @@ module Masterfiles
               form.add_field :code
               form.add_field :description
               form.add_field :hs_code
+              form.add_field :requires_standard_counts
             end
           end
 

@@ -25,7 +25,7 @@ module UiRules
 
     def common_fields
       {
-        owner_party_role_id: { renderer: :select, options: MasterfilesApp::PartyRepo.new.for_select_party_roles, required: true },
+        owner_party_role_id: { renderer: :select, options: MasterfilesApp::PartyRepo.new.for_select_party_roles('FARM_OWNER'), required: true },
         farm_group_code: { required: true },
         description: {},
         active: { renderer: :checkbox }
@@ -51,6 +51,5 @@ module UiRules
     def farm_group_farms
       @repo.find_farm_group_farm_codes(@options[:id])
     end
-
   end
 end

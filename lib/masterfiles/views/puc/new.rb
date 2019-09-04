@@ -4,7 +4,7 @@ module Masterfiles
   module Farms
     module Puc
       class New
-        def self.call(parent_id,form_values: nil, form_errors: nil, remote: true)
+        def self.call(form_values: nil, form_errors: nil, remote: true)
           ui_rule = UiRules::Compiler.new(:puc, :new, form_values: form_values)
           rules   = ui_rule.compile
 
@@ -14,7 +14,7 @@ module Masterfiles
             page.form_errors form_errors
             page.form do |form|
               form.caption 'New Puc'
-              form.action "/masterfiles/farms/pucs"
+              form.action '/masterfiles/farms/pucs'
               form.remote! if remote
               form.add_field :puc_code
               form.add_field :gap_code

@@ -12,8 +12,8 @@ module Masterfiles
             page.form_object ui_rule.form_object
             page.form do |form|
               form.view_only!
-              form.add_field :fruit_actual_counts_for_pack_id
               form.add_field :size_reference
+              form.add_field :active
             end
           end
 

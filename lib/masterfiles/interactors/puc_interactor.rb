@@ -2,20 +2,7 @@
 
 module MasterfilesApp
   class PucInteractor < BaseInteractor
-
-    def repo
-      @repo ||= FarmRepo.new
-    end
-
-    def puc(id)
-      repo.find_puc(id)
-    end
-
-    def validate_puc_params(params)
-      PucSchema.call(params)
-    end
-
-    def create_puc(params)
+    def create_puc(params) # rubocop:disable Metrics/AbcSize
       res = validate_puc_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
@@ -53,7 +40,7 @@ module MasterfilesApp
     def delete_puc(id)
       name = puc(id).puc_code
       repo.transaction do
-        repo.delete_farms_pucs(@puc_id)
+        repo.delete_farms_pucs(id)
         repo.delete_puc(id)
         log_status('pucs', id, 'DELETED')
         log_transaction
@@ -68,5 +55,18 @@ module MasterfilesApp
       raise Crossbeams::TaskNotPermittedError, res.message unless res.success
     end
 
+    private
+
+    def repo
+      @repo ||= FarmRepo.new
+    end
+
+    def puc(id)
+      repo.find_puc(id)
+    end
+
+    def validate_puc_params(params)
+      PucSchema.call(params)
+    end
   end
 end

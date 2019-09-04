@@ -119,7 +119,7 @@ const crossbeamsGridEvents = {
    */
   saveSelectedRows: function saveSelectedRows(gridId, url, canBeCleared, saveMethod) {
     const gridOptions = crossbeamsGridStore.getGrid(gridId);
-    const ids = _.map(gridOptions.api.getSelectedRows(), m => m.id);
+    const ids = gridOptions.api.getSelectedRows().map(m => m.id);
     let msg;
     if (!canBeCleared && ids.length === 0) {
       crossbeamsUtils.alert({ prompt: 'You have not selected any items to submit!', type: 'error' });
@@ -706,6 +706,26 @@ const crossbeamsGridFormatters = {
     return String.fromCharCode(c.charCodeAt(0) + 1);
   },
 
+  // Is the last item in an array of context menu items a separator?
+  lastIsSeparator: (items) => {
+    if (!items || items.length < 1) {
+      return false;
+    }
+    if (!items[items.length - 1].value) {
+      return false;
+    }
+    return items[items.length - 1].value === '---';
+  },
+
+  // Go through a list of context items and remove any trailing separators.
+  removeTrailingSeparatorItems: (items) => {
+    let cleanItems = items;
+    while (crossbeamsGridFormatters.lastIsSeparator(cleanItems)) {
+      cleanItems = cleanItems.slice(0, -1);
+    }
+    return cleanItems;
+  },
+
   makeContextNode: function makeContextNode(key, prefix, items, item, params) {
     let node = {};
     let urlComponents = [];
@@ -744,7 +764,8 @@ const crossbeamsGridFormatters = {
       }
     }
     if (item.is_separator) {
-      if (items.length > 0 && _.last(items).value !== '---') {
+      // Add a separator - but only if the previous item is not also a separator.
+      if (items.length > 0 && items[items.length - 1].value !== '---') {
         return { key: `${prefix}${key}`, name: item.text, value: '---' };
       }
       return null;
@@ -773,7 +794,7 @@ const crossbeamsGridFormatters = {
           node.items.push(subnode);
         }
       });
-      node.items = _.dropRightWhile(node.items, ['value', '---']);
+      node.items = crossbeamsGridFormatters.removeTrailingSeparatorItems(node.items);
       if (node.items.length > 0) {
         return node;
       }
@@ -823,7 +844,7 @@ const crossbeamsGridFormatters = {
     });
     // If items are hidden, the last item(s) could be separators.
     // Remove them here.
-    items = _.dropRightWhile(items, ['value', '---']);
+    items = crossbeamsGridFormatters.removeTrailingSeparatorItems(items);
     if (items.length === 0) {
       return '';
     }
@@ -855,8 +876,29 @@ const crossbeamsGridFormatters = {
     return '<span class="ac_icon_uncheck">&nbsp;</span>';
   },
 
+  // Format a column to display as an icon.
+  // The column format is: "icon_name[,colour][,indent level]"
+  // - colour defaults to grey
+  // - indent level defaults to 0
+  iconFormatter: function iconFormatter(params) {
+    if (!params.data) { return null; }
+    if (params.value === '' || params.value === null) { return ''; }
+
+    const icoCol = params.value.split(',');
+    if (!icoCol[1]) icoCol.push('gray'); // default colour
+    if (!icoCol[2]) {                    // default indent from "level" column
+      if (params.data.level) {
+        icoCol.push(params.data.level - 1);
+      } else {
+        icoCol.push(0);
+      }
+    }
+    return `<span class="cbl-icon" style="color:${icoCol[1]};margin-left:${icoCol[2] * 0.75}rem">
+        <img src="/app_icons/${icoCol[0]}.svg" onload="SVGInject(this)">
+      </span>`;
+  },
+
   hrefInlineFormatter: function hrefInlineFormatter(params) {
-    // var rainPerTenMm = params.value / 10;
     return `<a href="/books/${params.value}/edit">edit</a>`;
   },
 
@@ -1205,6 +1247,9 @@ const crossbeamsGridStaticLoader = {
           if (col[attr] === 'crossbeamsGridFormatters.booleanFormatter') {
             newCol[attr] = crossbeamsGridFormatters.booleanFormatter;
           }
+          if (col[attr] === 'crossbeamsGridFormatters.iconFormatter') {
+            newCol[attr] = crossbeamsGridFormatters.iconFormatter;
+          }
           if (col[attr] === 'crossbeamsGridFormatters.hrefInlineFormatter') {
             newCol[attr] = crossbeamsGridFormatters.hrefInlineFormatter;
           }
@@ -1341,7 +1386,7 @@ const crossbeamsGridStaticLoader = {
 
           if (httpResult.multiselect_ids) {
             gridOptions.api.forEachNode((node) => {
-              if (node.data && _.includes(httpResult.multiselect_ids, node.data.id)) {
+              if (node.data && httpResult.multiselect_ids.includes(node.data.id)) {
                 node.setSelected(true);
               }
             });
@@ -1408,9 +1453,12 @@ const crossbeamsGridStaticLoader = {
         context: { domGridId: gridId },
         columnDefs: null,
         rowData: null,
-        enableColResize: true,
-        enableSorting: true,
-        enableFilter: true,
+        defaultColDef: {
+          resizable: true,
+          sortable: true,
+          filter: true,
+        },
+        enableCharts: true,
         enableRangeSelection: true,
         // enableStatusBar: true,
         sideBar,
@@ -1446,12 +1494,15 @@ const crossbeamsGridStaticLoader = {
     } else {
       gridOptions = {
         context: { domGridId: gridId },
-        // columnDefs: null,
         rowData: null,
-        enableColResize: true,
-        enableSorting: true,
-        enableFilter: true,
+        defaultColDef: {
+          resizable: true,
+          sortable: true,
+          filter: true,
+        },
         rowSelection: 'single',
+        popupParent: document.body,
+        enableCharts: true,
         enableRangeSelection: true,
         // singleClickEdit: true,
         statusBar: {

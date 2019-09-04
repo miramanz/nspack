@@ -19,15 +19,19 @@ module UiRules
       fields[:code] = { renderer: :label }
       fields[:description] = { renderer: :label }
       fields[:hs_code] = { renderer: :label, caption: 'HS code' }
+      fields[:requires_standard_counts] = { renderer: :label, as_boolean: true }
       fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields
       {
-        commodity_group_id: { renderer: :select, options: @repo.for_select_commodity_groups, disabled_options: @repo.for_select_inactive_commodity_groups },
+        commodity_group_id: { renderer: :select,
+                              options: @repo.for_select_commodity_groups,
+                              disabled_options: @repo.for_select_inactive_commodity_groups },
         code: { required: true },
         description: { required: true },
         hs_code: { required: true, caption: 'HS code' },
+        requires_standard_counts: { renderer: :checkbox },
         active: { renderer: :checkbox }
       }
     end
@@ -43,6 +47,7 @@ module UiRules
                                     code: nil,
                                     description: nil,
                                     hs_code: nil,
+                                    requires_standard_counts: true,
                                     active: true)
     end
   end

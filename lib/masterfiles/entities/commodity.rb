@@ -8,5 +8,7 @@ module MasterfilesApp
     attribute :description, Types::String
     attribute :hs_code, Types::String
     attribute :active, Types::Bool
+    attribute :commodity_group_code, Types::String
+    attribute :requires_standard_counts, Types::Bool
   end
 end

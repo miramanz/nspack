@@ -2,7 +2,7 @@
 :caption: Basic Pack Codes
 :sql: SELECT "basic_pack_codes"."id", "basic_pack_codes"."basic_pack_code", "basic_pack_codes"."description",
   "basic_pack_codes"."length_mm", "basic_pack_codes"."width_mm", "basic_pack_codes"."height_mm",
-  "basic_pack_codes"."created_at", "basic_pack_codes"."updated_at" FROM "basic_pack_codes"
+  "basic_pack_codes"."created_at", "basic_pack_codes"."updated_at", "basic_pack_codes"."active" FROM "basic_pack_codes"
 :limit: 
 :offset: 
 :columns:
@@ -122,6 +122,22 @@
     :hide: true
     :groupable: false
     :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 9
+    :caption: Active
+    :namespaced_name: basic_pack_codes.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
     :group_sum: false
     :group_avg: false
     :group_min: false

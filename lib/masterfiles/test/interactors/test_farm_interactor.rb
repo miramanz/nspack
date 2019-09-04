@@ -5,6 +5,7 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestFarmInteractor < MiniTestWithHooks
     include FarmsFactory
+    include PartyFactory
 
     def test_repo
       repo = interactor.send(:repo)
@@ -33,10 +34,12 @@ module MasterfilesApp
     end
 
     def test_update_farm
-      id = create_farm
-      attrs = interactor.send(:repo).find_hash(:farms, id).reject { |k, _| k == :id }
+      id = create_farm[:id]
+      attrs = interactor.send(:repo).find_farm(id)
+      attrs = attrs.to_h
       value = attrs[:farm_code]
       attrs[:farm_code] = 'a_change'
+      attrs[:puc_id] = create_puc
       res = interactor.update_farm(id, attrs)
       assert res.success, "#{res.message} : #{res.errors.inspect}"
       assert_instance_of(Farm, res.instance)
@@ -45,20 +48,23 @@ module MasterfilesApp
     end
 
     def test_update_farm_fail
-      id = create_farm
-      attrs = interactor.send(:repo).find_hash(:farms, id).reject { |k, _| %i[id farm_code].include?(k) }
+      id = create_farm[:id]
+      attrs = interactor.send(:repo).find_farm(id)
+      attrs = attrs.to_h
+      attrs.delete(:farm_code)
       value = attrs[:description]
       attrs[:description] = 'a_change'
       res = interactor.update_farm(id, attrs)
       refute res.success, "#{res.message} : #{res.errors.inspect}"
       assert_equal ['is missing'], res.errors[:farm_code]
-      after = interactor.send(:repo).find_hash(:farms, id)
+      after = interactor.send(:repo).find_farm(id)
+      after = after.to_h
       refute_equal 'a_change', after[:description]
       assert_equal value, after[:description]
     end
 
     def test_delete_farm
-      id = create_farm
+      id = create_farm[:id]
       assert_count_changed(:farms, -1) do
         res = interactor.delete_farm(id)
         assert res.success, res.message
@@ -68,22 +74,23 @@ module MasterfilesApp
     private
 
     def farm_attrs
-      party_role_id = create_party_role
+      party_role_id = create_party_role('O')[:id]
       production_region_id = create_production_region
       farm_group_id = create_farm_group
+      puc_id = create_puc
 
       {
-          id: 1,
-          owner_party_role_id: party_role_id,
-          pdn_region_id: production_region_id,
-          farm_group_id: farm_group_id,
-          farm_code: Faker::Lorem.unique.word,
-          description: 'ABC',
-          puc_id:  1,
-          farm_group_code: 'ABC',
-          owner_party_role: 'ABC',
-          pdn_region_production_region_code: 'ABC',
-          active: true
+        id: 1,
+        owner_party_role_id: party_role_id,
+        pdn_region_id: production_region_id,
+        farm_group_id: farm_group_id,
+        farm_code: Faker::Lorem.unique.word,
+        description: 'ABC',
+        puc_id: puc_id,
+        farm_group_code: 'ABC',
+        owner_party_role: 'ABC',
+        pdn_region_production_region_code: 'ABC',
+        active: true
       }
     end
 

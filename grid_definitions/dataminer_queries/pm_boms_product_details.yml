@@ -1,0 +1,363 @@
+---
+:caption: Pm Boms Products Details
+:sql: SELECT pm_boms_products.id, pm_boms_products.pm_product_id, pm_boms_products.pm_bom_id,
+  pm_boms_products.uom_id, pm_boms_products.quantity, pm_boms_products.created_at, "pm_boms_products"."active",
+  pm_boms_products.updated_at, pm_products.product_code, pm_products.erp_code, pm_products.description
+  AS product_description, pm_subtypes.subtype_code,pm_subtypes.description AS subtype_description,
+  pm_types.pm_type_code,pm_types.description AS pm_type_description, pm_boms.bom_code,
+  pm_boms.erp_bom_code, pm_boms.description AS pm_bom_description, uoms.uom_code FROM
+  pm_boms_products JOIN pm_products ON pm_products.id = pm_boms_products.pm_product_id
+  JOIN pm_subtypes ON pm_subtypes.id = pm_products.pm_subtype_id JOIN pm_types ON
+  pm_types.id = pm_subtypes.pm_type_id JOIN pm_boms ON pm_boms.id = pm_boms_products.pm_bom_id
+  JOIN uoms ON uoms.id = pm_boms_products.uom_id
+:limit: 
+:offset: 
+:external_settings:
+  :render_url: 
+:columns:
+  id:
+    :name: id
+    :sequence_no: 1
+    :caption: Id
+    :namespaced_name: pm_boms_products.id
+    :data_type: :integer
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: true
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  pm_product_id:
+    :name: pm_product_id
+    :sequence_no: 2
+    :caption: Pm product
+    :namespaced_name: pm_boms_products.pm_product_id
+    :data_type: :integer
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  pm_bom_id:
+    :name: pm_bom_id
+    :sequence_no: 3
+    :caption: Pm bom
+    :namespaced_name: pm_boms_products.pm_bom_id
+    :data_type: :integer
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  uom_id:
+    :name: uom_id
+    :sequence_no: 4
+    :caption: Unit of measure
+    :namespaced_name: pm_boms_products.uom_id
+    :data_type: :integer
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  quantity:
+    :name: quantity
+    :sequence_no: 5
+    :caption: Quantity
+    :namespaced_name: pm_boms_products.quantity
+    :data_type: :number
+    :width: 
+    :format: :delimited_1000
+    :hide: false
+    :pinned: 
+    :groupable: true
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  created_at:
+    :name: created_at
+    :sequence_no: 6
+    :caption: Created at
+    :namespaced_name: pm_boms_products.created_at
+    :data_type: :datetime
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  updated_at:
+    :name: updated_at
+    :sequence_no: 7
+    :caption: Updated at
+    :namespaced_name: pm_boms_products.updated_at
+    :data_type: :datetime
+    :width: 
+    :format: 
+    :hide: true
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  product_code:
+    :name: product_code
+    :sequence_no: 8
+    :caption: Product code
+    :namespaced_name: pm_products.product_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  erp_code:
+    :name: erp_code
+    :sequence_no: 9
+    :caption: Erp code
+    :namespaced_name: pm_products.erp_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: true
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  product_description:
+    :name: product_description
+    :sequence_no: 10
+    :caption: Product description
+    :namespaced_name: pm_products.description
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  subtype_code:
+    :name: subtype_code
+    :sequence_no: 11
+    :caption: Subtype code
+    :namespaced_name: pm_subtypes.subtype_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  subtype_description:
+    :name: subtype_description
+    :sequence_no: 12
+    :caption: Subtype description
+    :namespaced_name: pm_subtypes.description
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  pm_type_code:
+    :name: pm_type_code
+    :sequence_no: 13
+    :caption: Pm type code
+    :namespaced_name: pm_types.pm_type_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  pm_type_description:
+    :name: pm_type_description
+    :sequence_no: 14
+    :caption: Pm type description
+    :namespaced_name: pm_types.description
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  bom_code:
+    :name: bom_code
+    :sequence_no: 15
+    :caption: Bom code
+    :namespaced_name: pm_boms.bom_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: true
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  erp_bom_code:
+    :name: erp_bom_code
+    :sequence_no: 16
+    :caption: Erp bom code
+    :namespaced_name: pm_boms.erp_bom_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  pm_bom_description:
+    :name: pm_bom_description
+    :sequence_no: 17
+    :caption: Pm bom description
+    :namespaced_name: pm_boms.description
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  uom_code:
+    :name: uom_code
+    :sequence_no: 18
+    :caption: Unit of measure
+    :namespaced_name: uoms.uom_code
+    :data_type: :string
+    :width: 
+    :format: 
+    :hide: false
+    :pinned: 
+    :groupable: false
+    :group_by_seq: 
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+  active:
+    :name: active
+    :sequence_no: 19
+    :caption: Active
+    :namespaced_name: pm_boms_products.active
+    :data_type: :boolean
+    :width:
+    :format:
+    :hide: false
+    :pinned:
+    :groupable: true
+    :group_by_seq:
+    :group_sum: false
+    :group_avg: false
+    :group_min: false
+    :group_max: false
+:query_parameter_definitions:
+- :column: pm_boms_products.pm_product_id
+  :caption: Pm product
+  :data_type: :integer
+  :control_type: :list
+  :default_value: 
+  :ordered_list: true
+  :ui_priority: 1
+  :list_def: SELECT product_code, id FROM pm_products ORDER BY product_code
+- :column: pm_boms_products.pm_bom_id
+  :caption: Pm bom
+  :data_type: :integer
+  :control_type: :list
+  :default_value: 
+  :ordered_list: true
+  :ui_priority: 2
+  :list_def: SELECT bom_code, id FROM pm_boms ORDER BY bom_code
+- :column: pm_boms_products.uom_id
+  :caption: Unit of measure
+  :data_type: :integer
+  :control_type: :list
+  :default_value: 
+  :ordered_list: true
+  :ui_priority: 4
+  :list_def: SELECT uom_code, uoms.id FROM uoms JOIN uom_types ON uom_types.id = uoms.uom_type_id
+    WHERE uom_types.code = 'PACK MATERIAL' ORDER BY uom_code
+- :column: pm_products.pm_subtype_id
+  :caption: Pm subtype
+  :data_type: :integer
+  :control_type: :list
+  :default_value: 
+  :ordered_list: true
+  :ui_priority: 3
+  :list_def: SELECT subtype_code, id FROM pm_subtypes ORDER BY subtype_code
+- :column: pm_subtypes.pm_type_id
+  :caption: Pm type
+  :data_type: :integer
+  :control_type: :list
+  :default_value: 
+  :ordered_list: true
+  :ui_priority: 2
+  :list_def: SELECT pm_type_code, id FROM pm_types ORDER BY pm_type_code

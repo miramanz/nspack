@@ -16,7 +16,7 @@ module UiRules
       form_name 'orchard'
     end
 
-    def set_show_fields
+    def set_show_fields # rubocop:disable Metrics/AbcSize
       farm_id_label = @repo.find_farm(@form_object.farm_id)&.farm_code
       puc_id_label = @repo.find_puc(@form_object.puc_id)&.puc_code
       fields[:farm_id] = { renderer: :label, with_value: farm_id_label, caption: 'Farm' }
@@ -28,24 +28,24 @@ module UiRules
     end
 
     def common_fields
-      farm_id = @options[:farm_id] ? @options[:farm_id] : @repo.find_orchard(@options[:id]).farm_id
+      farm_id = @options[:farm_id] || @repo.find_orchard(@options[:id]).farm_id
       farm_id_label = @repo.find_farm(farm_id)&.farm_code
       {
-          farm: { renderer: :label, with_value: farm_id_label, caption: 'Farm', readonly: true },
-          farm_id: { renderer: :hidden, value: farm_id },
-          puc_id: { renderer: :select,
-                    options: @repo.selected_farm_pucs(farm_id),
-                    disabled_options: @repo.for_select_inactive_pucs,
-                    caption: 'Puc',
-                    required: true },
-          orchard_code: { required: true },
-          description: {},
-          active: { renderer: :checkbox },
-          cultivar_ids: { renderer: :multi,
-                          options: MasterfilesApp::CultivarRepo.new.for_select_cultivars,
-                          selected: @form_object.cultivar_ids ,
-                          caption: 'Cultivars',
-                          required: true }
+        farm: { renderer: :label, with_value: farm_id_label, caption: 'Farm', readonly: true },
+        farm_id: { renderer: :hidden, value: farm_id },
+        puc_id: { renderer: :select,
+                  options: @repo.selected_farm_pucs(farm_id),
+                  disabled_options: @repo.for_select_inactive_pucs,
+                  caption: 'Puc',
+                  required: true },
+        orchard_code: { required: true },
+        description: {},
+        active: { renderer: :checkbox },
+        cultivar_ids: { renderer: :multi,
+                        options: MasterfilesApp::CultivarRepo.new.for_select_cultivars,
+                        selected: @form_object.cultivar_ids,
+                        caption: 'Cultivars',
+                        required: true }
       }
     end
 
@@ -76,6 +76,5 @@ module UiRules
     def cultivar_names
       @repo.find_cultivar_names(@options[:id])
     end
-
   end
 end

@@ -75,7 +75,9 @@ module MasterfilesApp
         code: Faker::Lorem.unique.word,
         description: 'ABC',
         hs_code: 'ABC',
-        active: true
+        requires_standard_counts: false,
+        active: true,
+        commodity_group_code: 'ABC'
       }
     end
 

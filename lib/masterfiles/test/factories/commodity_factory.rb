@@ -10,8 +10,7 @@ module MasterfilesApp
         description: Faker::Lorem.word,
         hs_code: Faker::Lorem.word,
         active: true,
-        created_at: '2010-01-01 12:00',
-        updated_at: '2010-01-01 12:00'
+        requires_standard_counts: false
       }
       DB[:commodities].insert(default.merge(opts))
     end
@@ -20,9 +19,7 @@ module MasterfilesApp
       default = {
         code: Faker::Lorem.unique.word,
         description: Faker::Lorem.word,
-        active: true,
-        created_at: '2010-01-01 12:00',
-        updated_at: '2010-01-01 12:00'
+        active: true
       }
       DB[:commodity_groups].insert(default.merge(opts))
     end

@@ -15,5 +15,6 @@ module MasterfilesApp
     attribute :minimum_weight_gm, Types::Float
     attribute :maximum_weight_gm, Types::Float
     attribute :average_weight_gm, Types::Float
+    attribute? :active, Types::Bool
   end
 end

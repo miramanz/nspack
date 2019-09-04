@@ -21,12 +21,15 @@ module UiRules
       fields[:cultivar_group_id] = { renderer: :label, with_value: cultivar_group_id_label }
       fields[:cultivar_name] = { renderer: :label }
       fields[:description] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields
       {
         commodity_id: { renderer: :select, options: MasterfilesApp::CommodityRepo.new.for_select_commodities },
-        cultivar_group_id: { renderer: :select, options: @repo.for_select_cultivar_groups },
+        cultivar_group_id: { renderer: :select,
+                             options: @repo.for_select_cultivar_groups,
+                             disabled_options: @repo.for_select_inactive_cultivar_groups },
         cultivar_name: { required: true },
         description: {}
       }

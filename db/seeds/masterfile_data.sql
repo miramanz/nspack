@@ -13,3 +13,8 @@ INSERT INTO roles (name) VALUES ('IMPLEMENTATION_OWNER');
 INSERT INTO roles (name) VALUES ('OTHER');
 -- INSERT INTO roles (name) VALUES ('CUSTOMER');
 -- INSERT INTO roles (name) VALUES ('SUPPLIER');
+
+
+-- UNITS OF MEASURE
+INSERT INTO uom_types (code) VALUES ('PACK MATERIAL');
+-- INSERT INTO uom_types (code) VALUES ('INVENTORY'); Already in use in Pack Material

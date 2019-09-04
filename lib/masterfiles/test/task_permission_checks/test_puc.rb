@@ -32,6 +32,5 @@ module MasterfilesApp
       res = MasterfilesApp::TaskPermissionCheck::Puc.call(:delete, 1)
       assert res.success, 'Should be able to delete a puc'
     end
-    
   end
 end

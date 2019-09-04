@@ -17,6 +17,7 @@ module UiRules
     def set_show_fields
       fields[:marketing_variety_code] = { renderer: :label }
       fields[:description] = { renderer: :label }
+      fields[:active] = { renderer: :label, as_boolean: true }
     end
 
     def common_fields

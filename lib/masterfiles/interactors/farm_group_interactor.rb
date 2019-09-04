@@ -2,19 +2,7 @@
 
 module MasterfilesApp
   class FarmGroupInteractor < BaseInteractor
-    def repo
-      @repo ||= FarmRepo.new
-    end
-
-    def farm_group(id)
-      repo.find_farm_group(id)
-    end
-
-    def validate_farm_group_params(params)
-      FarmGroupSchema.call(params)
-    end
-
-    def create_farm_group(params)
+    def create_farm_group(params) # rubocop:disable Metrics/AbcSize
       res = validate_farm_group_params(params)
       return validation_failed_response(res) unless res.messages.empty?
 
@@ -63,6 +51,20 @@ module MasterfilesApp
     def assert_permission!(task, id = nil)
       res = TaskPermissionCheck::FarmGroup.call(task, id)
       raise Crossbeams::TaskNotPermittedError, res.message unless res.success
+    end
+
+    private
+
+    def repo
+      @repo ||= FarmRepo.new
+    end
+
+    def farm_group(id)
+      repo.find_farm_group(id)
+    end
+
+    def validate_farm_group_params(params)
+      FarmGroupSchema.call(params)
     end
   end
 end

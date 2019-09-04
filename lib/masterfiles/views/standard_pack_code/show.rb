@@ -13,6 +13,7 @@ module Masterfiles
             page.form do |form|
               form.view_only!
               form.add_field :standard_pack_code
+              form.add_field :active
             end
           end
 

@@ -47,6 +47,5 @@ module UiRules
     def puc_farm_codes
       @repo.find_puc_farm_codes(@options[:id])
     end
-
   end
 end

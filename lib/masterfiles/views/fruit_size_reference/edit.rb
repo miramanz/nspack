@@ -16,7 +16,6 @@ module Masterfiles
               form.action "/masterfiles/fruit/fruit_size_references/#{id}"
               form.remote!
               form.method :update
-              form.add_field :fruit_actual_counts_for_pack_id
               form.add_field :size_reference
             end
           end

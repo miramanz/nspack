@@ -5,7 +5,6 @@ module MasterfilesApp
     configure { config.type_specs = true }
 
     optional(:id, :integer).filled(:int?)
-    required(:fruit_actual_counts_for_pack_id, :integer).filled(:int?)
     required(:size_reference, Types::StrippedString).filled(:str?)
   end
 end

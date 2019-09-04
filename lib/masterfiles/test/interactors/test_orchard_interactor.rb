@@ -5,6 +5,9 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestOrchardInteractor < MiniTestWithHooks
     include FarmsFactory
+    include PartyFactory
+    include CommodityFactory
+    include CultivarFactory
 
     def test_repo
       repo = interactor.send(:repo)
@@ -34,7 +37,8 @@ module MasterfilesApp
 
     def test_update_orchard
       id = create_orchard
-      attrs = interactor.send(:repo).find_hash(:orchards, id).reject { |k, _| k == :id }
+      attrs = interactor.send(:repo).find_orchard(id)
+      attrs = attrs.to_h
       value = attrs[:orchard_code]
       attrs[:orchard_code] = 'a_change'
       res = interactor.update_orchard(id, attrs)
@@ -46,13 +50,16 @@ module MasterfilesApp
 
     def test_update_orchard_fail
       id = create_orchard
-      attrs = interactor.send(:repo).find_hash(:orchards, id).reject { |k, _| %i[id orchard_code].include?(k) }
+      attrs = interactor.send(:repo).find_orchard(id)
+      attrs = attrs.to_h
+      attrs.delete(:orchard_code)
       value = attrs[:description]
       attrs[:description] = 'a_change'
       res = interactor.update_orchard(id, attrs)
       refute res.success, "#{res.message} : #{res.errors.inspect}"
       assert_equal ['is missing'], res.errors[:orchard_code]
-      after = interactor.send(:repo).find_hash(:orchards, id)
+      after = interactor.send(:repo).find_orchard(id)
+      after = after.to_h
       refute_equal 'a_change', after[:description]
       assert_equal value, after[:description]
     end
@@ -68,19 +75,20 @@ module MasterfilesApp
     private
 
     def orchard_attrs
-      farm_id = create_farm
+      farm_id = create_farm[:id]
       puc_id = create_puc
+      cultivar_id = create_cultivar
 
       {
-          id: 1,
-          farm_id: farm_id,
-          puc_id: puc_id,
-          orchard_code: Faker::Lorem.unique.word,
-          description: 'ABC',
-          cultivar_ids: [1, 2, 3],
-          puc_code: 'ABC',
-          cultivar_names: 'ABC',
-          active: true
+        id: 1,
+        farm_id: farm_id,
+        puc_id: puc_id,
+        orchard_code: Faker::Lorem.unique.word,
+        description: 'ABC',
+        cultivar_ids: [cultivar_id],
+        puc_code: 'ABC',
+        cultivar_names: 'ABC',
+        active: true
       }
     end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength
-class Nspack < Roda
+class Nspack < Roda # rubocop:disable Metrics/ClassLength
   route 'calendar', 'masterfiles' do |r|
     # SEASON GROUPS
     # --------------------------------------------------------------------------

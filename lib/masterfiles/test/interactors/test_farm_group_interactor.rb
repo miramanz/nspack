@@ -5,6 +5,7 @@ require File.join(File.expand_path('../../../../test', __dir__), 'test_helper')
 module MasterfilesApp
   class TestFarmGroupInteractor < MiniTestWithHooks
     include FarmsFactory
+    include PartyFactory
 
     def test_repo
       repo = interactor.send(:repo)
@@ -68,14 +69,14 @@ module MasterfilesApp
     private
 
     def farm_group_attrs
-      party_role_id = create_party_role
+      party_role_id = create_party_role('O')[:id]
 
       {
-          id: 1,
-          owner_party_role_id: party_role_id,
-          farm_group_code: Faker::Lorem.unique.word,
-          description: 'ABC',
-          active: true
+        id: 1,
+        owner_party_role_id: party_role_id,
+        farm_group_code: Faker::Lorem.unique.word,
+        description: 'ABC',
+        active: true
       }
     end
 

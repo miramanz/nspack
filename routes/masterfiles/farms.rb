@@ -2,7 +2,7 @@
 
 # rubocop:disable Metrics/BlockLength
 
-class Nspack < Roda
+class Nspack < Roda # rubocop:disable Metrics/ClassLength
   route 'farms', 'masterfiles' do |r|
     # PRODUCTION REGIONS
     # --------------------------------------------------------------------------
@@ -28,8 +28,7 @@ class Nspack < Roda
         r.patch do     # UPDATE
           res = interactor.update_production_region(id, params[:production_region])
           if res.success
-            update_grid_row(id, changes: { production_region_code: res.instance[:production_region_code], description: res.instance[:description] },
-                            notice: res.message)
+            update_grid_row(id, changes: { production_region_code: res.instance[:production_region_code], description: res.instance[:description] }, notice: res.message)
           else
             re_show_form(r, res) { Masterfiles::Farms::ProductionRegion::Edit.call(id, form_values: params[:production_region], form_errors: res.errors) }
           end
@@ -97,8 +96,7 @@ class Nspack < Roda
         r.patch do     # UPDATE
           res = interactor.update_farm_group(id, params[:farm_group])
           if res.success
-            update_grid_row(id, changes: { owner_party_role_id: res.instance[:owner_party_role_id], farm_group_code: res.instance[:farm_group_code], description: res.instance[:description] },
-                            notice: res.message)
+            update_grid_row(id, changes: { owner_party_role_id: res.instance[:owner_party_role_id], farm_group_code: res.instance[:farm_group_code], description: res.instance[:description] }, notice: res.message)
           else
             re_show_form(r, res) { Masterfiles::Farms::FarmGroup::Edit.call(id, form_values: params[:farm_group], form_errors: res.errors) }
           end
@@ -251,9 +249,7 @@ class Nspack < Roda
           end
         end
       end
-
     end
-
     r.on 'farms' do
       interactor = MasterfilesApp::FarmInteractor.new(current_user, {}, { route_url: request.path }, {})
       r.on 'new' do    # NEW
@@ -286,11 +282,9 @@ class Nspack < Roda
         end
       end
     end
-
-    #ORCHARDS
+    # ORCHARDS
     r.on 'orchards', Integer do |id|
       interactor = MasterfilesApp::OrchardInteractor.new(current_user, {}, { route_url: request.path }, {})
-
       # Check for notfound:
       r.on !interactor.exists?(:orchards, id) do
         handle_not_found(r)
@@ -343,10 +337,9 @@ class Nspack < Roda
       end
     end
 
-    #PUCS
+    # PUCS
     r.on 'pucs', Integer do |id|
       interactor = MasterfilesApp::PucInteractor.new(current_user, {}, { route_url: request.path }, {})
-
       # Check for notfound:
       r.on !interactor.exists?(:pucs, id) do
         handle_not_found(r)
@@ -366,8 +359,7 @@ class Nspack < Roda
         r.patch do     # UPDATE
           res = interactor.update_puc(id, params[:puc])
           if res.success
-            update_grid_row(id, changes: { puc_code: res.instance[:puc_code], gap_code: res.instance[:gap_code] },
-                            notice: res.message)
+            update_grid_row(id, changes: { puc_code: res.instance[:puc_code], gap_code: res.instance[:gap_code] }, notice: res.message)
           else
             re_show_form(r, res) { Masterfiles::Farms::Puc::Edit.call(id, form_values: params[:puc], form_errors: res.errors) }
           end
@@ -411,255 +403,6 @@ class Nspack < Roda
         end
       end
     end
-
-    # RMT CONTAINER TYPES
-    # --------------------------------------------------------------------------
-    r.on 'rmt_container_types', Integer do |id|
-      interactor = MasterfilesApp::RmtContainerTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
-
-      # Check for notfound:
-      r.on !interactor.exists?(:rmt_container_types, id) do
-        handle_not_found(r)
-      end
-
-      r.on 'edit' do   # EDIT
-        check_auth!('farms', 'edit')
-        interactor.assert_permission!(:edit, id)
-        show_partial { Masterfiles::Farms::RmtContainerType::Edit.call(id) }
-      end
-
-      # r.on 'complete' do
-      #   r.get do
-      #     check_auth!('farms', 'edit')
-      #     interactor.assert_permission!(:complete, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerType::Complete.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.complete_a_rmt_container_type(id, params[:rmt_container_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerType::Complete.call(id, params[:rmt_container_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'approve' do
-      #   r.get do
-      #     check_auth!('farms', 'approve')
-      #     interactor.assert_permission!(:approve, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerType::Approve.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.approve_or_reject_a_rmt_container_type(id, params[:rmt_container_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerType::Approve.call(id, params[:rmt_container_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'reopen' do
-      #   r.get do
-      #     check_auth!('farms', 'edit')
-      #     interactor.assert_permission!(:reopen, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerType::Reopen.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.reopen_a_rmt_container_type(id, params[:rmt_container_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerType::Reopen.call(id, params[:rmt_container_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      r.is do
-        r.get do       # SHOW
-          check_auth!('farms', 'read')
-          show_partial { Masterfiles::Farms::RmtContainerType::Show.call(id) }
-        end
-        r.patch do     # UPDATE
-          res = interactor.update_rmt_container_type(id, params[:rmt_container_type])
-          if res.success
-            update_grid_row(id, changes: { container_type_code: res.instance[:container_type_code], description: res.instance[:description] },
-                            notice: res.message)
-          else
-            re_show_form(r, res) { Masterfiles::Farms::RmtContainerType::Edit.call(id, form_values: params[:rmt_container_type], form_errors: res.errors) }
-          end
-        end
-        r.delete do    # DELETE
-          check_auth!('farms', 'delete')
-          interactor.assert_permission!(:delete, id)
-          res = interactor.delete_rmt_container_type(id)
-          if res.success
-            delete_grid_row(id, notice: res.message)
-          else
-            show_json_error(res.message, status: 200)
-          end
-        end
-      end
-    end
-
-    r.on 'rmt_container_types' do
-      interactor = MasterfilesApp::RmtContainerTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
-      r.on 'new' do    # NEW
-        check_auth!('farms', 'new')
-        show_partial_or_page(r) { Masterfiles::Farms::RmtContainerType::New.call(remote: fetch?(r)) }
-      end
-      r.post do        # CREATE
-        res = interactor.create_rmt_container_type(params[:rmt_container_type])
-        if res.success
-          row_keys = %i[
-            id
-            container_type_code
-            description
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
-        else
-          re_show_form(r, res, url: '/masterfiles/farms/rmt_container_types/new') do
-            Masterfiles::Farms::RmtContainerType::New.call(form_values: params[:rmt_container_type],
-                                                           form_errors: res.errors,
-                                                           remote: fetch?(r))
-          end
-        end
-      end
-    end
-
-    # RMT CONTAINER MATERIAL TYPES
-    # --------------------------------------------------------------------------
-    r.on 'rmt_container_material_types', Integer do |id|
-      interactor = MasterfilesApp::RmtContainerMaterialTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
-
-      # Check for notfound:
-      r.on !interactor.exists?(:rmt_container_material_types, id) do
-        handle_not_found(r)
-      end
-
-      r.on 'edit' do   # EDIT
-        check_auth!('farms', 'edit')
-        interactor.assert_permission!(:edit, id)
-        show_partial { Masterfiles::Farms::RmtContainerMaterialType::Edit.call(id) }
-      end
-
-      # r.on 'complete' do
-      #   r.get do
-      #     check_auth!('farms', 'edit')
-      #     interactor.assert_permission!(:complete, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerMaterialType::Complete.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.complete_a_rmt_container_material_type(id, params[:rmt_container_material_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerMaterialType::Complete.call(id, params[:rmt_container_material_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'approve' do
-      #   r.get do
-      #     check_auth!('farms', 'approve')
-      #     interactor.assert_permission!(:approve, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerMaterialType::Approve.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.approve_or_reject_a_rmt_container_material_type(id, params[:rmt_container_material_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerMaterialType::Approve.call(id, params[:rmt_container_material_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      # r.on 'reopen' do
-      #   r.get do
-      #     check_auth!('farms', 'edit')
-      #     interactor.assert_permission!(:reopen, id)
-      #     show_partial { Masterfiles::Farms::RmtContainerMaterialType::Reopen.call(id) }
-      #   end
-
-      #   r.post do
-      #     res = interactor.reopen_a_rmt_container_material_type(id, params[:rmt_container_material_type])
-      #     if res.success
-      #       flash[:notice] = res.message
-      #       redirect_to_last_grid(r)
-      #     else
-      #       re_show_form(r, res) { Masterfiles::Farms::RmtContainerMaterialType::Reopen.call(id, params[:rmt_container_material_type], res.errors) }
-      #     end
-      #   end
-      # end
-
-      r.is do
-        r.get do       # SHOW
-          check_auth!('farms', 'read')
-          show_partial { Masterfiles::Farms::RmtContainerMaterialType::Show.call(id) }
-        end
-        r.patch do     # UPDATE
-          res = interactor.update_rmt_container_material_type(id, params[:rmt_container_material_type])
-          if res.success
-            update_grid_row(id, changes: { rmt_container_type_id: res.instance[:rmt_container_type_id], container_material_type_code: res.instance[:container_material_type_code], description: res.instance[:description] },
-                            notice: res.message)
-          else
-            re_show_form(r, res) { Masterfiles::Farms::RmtContainerMaterialType::Edit.call(id, form_values: params[:rmt_container_material_type], form_errors: res.errors) }
-          end
-        end
-        r.delete do    # DELETE
-          check_auth!('farms', 'delete')
-          interactor.assert_permission!(:delete, id)
-          res = interactor.delete_rmt_container_material_type(id)
-          if res.success
-            delete_grid_row(id, notice: res.message)
-          else
-            show_json_error(res.message, status: 200)
-          end
-        end
-      end
-    end
-
-    r.on 'rmt_container_material_types' do
-      interactor = MasterfilesApp::RmtContainerMaterialTypeInteractor.new(current_user, {}, { route_url: request.path }, {})
-      r.on 'new' do    # NEW
-        check_auth!('farms', 'new')
-        show_partial_or_page(r) { Masterfiles::Farms::RmtContainerMaterialType::New.call(remote: fetch?(r)) }
-      end
-      r.post do        # CREATE
-        res = interactor.create_rmt_container_material_type(params[:rmt_container_material_type])
-        if res.success
-          row_keys = %i[
-            id
-            rmt_container_type_id
-            container_material_type_code
-            description
-          ]
-          add_grid_row(attrs: select_attributes(res.instance, row_keys),
-                       notice: res.message)
-        else
-          re_show_form(r, res, url: '/masterfiles/farms/rmt_container_material_types/new') do
-            Masterfiles::Farms::RmtContainerMaterialType::New.call(form_values: params[:rmt_container_material_type],
-                                                                   form_errors: res.errors,
-                                                                   remote: fetch?(r))
-          end
-        end
-      end
-    end
-
   end
 end
-
 # rubocop:enable Metrics/BlockLength
